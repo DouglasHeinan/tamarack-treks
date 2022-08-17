@@ -66,6 +66,11 @@ def main():
             return redirect(url_for("home"))
         return render_template("add_trail.html", form=form)
 
+    @app.route("/view_trail/<int:trail_id>")
+    def view_trail(trail_id):
+        requested_trail = Trails.query.get(trail_id)
+        return render_template("view_trail.html", trail=requested_trail)
+
     @app.context_processor
     def copyright_year():
         return dict(year=date.today().year)  # Copyright footer variable
