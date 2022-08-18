@@ -11,7 +11,7 @@
             <h5>Elevation Gain: {{ trail.elev_change }} feet</h5>
         </div>
         <div class="col-sm-4 align-left">
-            <a href="#"><h5>Directions to the Trail Head</h5></a>
+            <a href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank"><h5>Directions to the Trail Head</h5></a>
         </div>
     </div>
     <div>
@@ -19,6 +19,5 @@
     </div>
 </div>
 
-<!--https://www.google.com/maps/dir/Missoula,+MT+59801/46.84762,-113.98696/@46.8487922,-113.9892089,17z/data=!3m1!4b1!4m8!4m7!1m5!1m1!1s0x535dcdb38267cfef:0x161fc621a4184ac7!2m2!1d-113.9869641!2d46.8500521!1m0-->
 
 {% include "footer.html" %}
