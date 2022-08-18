@@ -7,12 +7,16 @@ from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired, URL
 from wtforms import StringField, SubmitField
 from datetime import date
+import smtplib
 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ["SECRET_KEY"]
 ckeditor = CKEditor(app)
 Bootstrap(app)
+
+EMAIL = os.environ["EMAIL"]
+EMAIL_PW = os.environ["EMAIL_PW"]
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///outdoors.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -39,6 +43,13 @@ def main():
         img = StringField("Image URL", validators=[DataRequired(), URL()])
         hiking_distance = StringField("Hiking Distance in Miles", validators=[DataRequired()])
         elevation_change = StringField("Elevation Change", validators=[DataRequired()])
+        submit_button = SubmitField("Submit")
+
+    class ContactForm(FlaskForm):
+        name = StringField("Name", validators=[DataRequired()])
+        email = StringField("Email", validators=[DataRequired()])
+        subject = StringField("Subject", validators=[DataRequired()])
+        message = CKEditorField("Message", validators=[DataRequired()])
         submit_button = SubmitField("Submit")
 
     db.create_all()
@@ -70,6 +81,26 @@ def main():
     def view_trail(trail_id):
         requested_trail = Trails.query.get(trail_id)
         return render_template("view_trail.html", trail=requested_trail)
+
+    @app.route("/contact", methods=["GET", "POST"])
+    def contact():
+        form = ContactForm()
+        if form.validate_on_submit():
+            name = form.name.data,
+            email = form.email.data,
+            subject = form.subject.data,
+            message = form.message.data
+
+            with smtplib.SMTP("smtp.mail.yahoo.com") as connection:
+                connection.starttls()
+                connection.login(user=EMAIL, password=EMAIL_PW)
+                connection.sendmail(
+                    from_addr=EMAIL,
+                    to_addrs=EMAIL,
+                    msg=f"Subject: {subject}\n\nSent by:{name}, {email}\n{message}"
+                )
+            return redirect(url_for("home"))
+        return render_template("contact.html", form=form)
 
     @app.context_processor
     def copyright_year():

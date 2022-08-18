@@ -5,10 +5,9 @@
 
 <div class="container">
     {{ ckeditor.load() }}
-    {{ ckeditor.config(name="description") }}
+    {{ ckeditor.config(name="message") }}
     {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "success"}) }}
 </div>
-
 
 {% include "footer.html" %}
 {% endblock %}
