@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditor, CKEditorField
 from wtforms.validators import DataRequired, URL
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from datetime import date
 import smtplib
 
@@ -17,6 +17,8 @@ Bootstrap(app)
 
 EMAIL = os.environ["EMAIL"]
 EMAIL_PW = os.environ["EMAIL_PW"]
+
+GEAR_CATEGORIES = ["Tents", "Sleeping Bags", "Hiking Poles"]
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///outdoors.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -35,6 +37,14 @@ def main():
         hiking_dist = db.Column(db.Float, nullable=False)
         elev_change = db.Column(db.Integer, nullable=False)
 
+    class Gear(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String(100), unique=True, nullable=False)
+        category = db.Column(db.String(100), nullable=False)
+        img_url = db.Column(db.String(250), unique=True, nullable=False)
+        rating = db.Column(db.Float, nullable=False)
+        review = db.Column(db.Text, nullable=False)
+
     class AddTrailForm(FlaskForm):
         name = StringField("Trail Name", validators=[DataRequired()])
         description = CKEditorField("Description", validators=[DataRequired()])
@@ -52,12 +62,21 @@ def main():
         message = CKEditorField("Message", validators=[DataRequired()])
         submit_button = SubmitField("Submit")
 
+    class GearForm(FlaskForm):
+        name = StringField("Name of Piece", validators=[DataRequired()])
+        category = SelectField("Gear Category", choices=GEAR_CATEGORIES, validators=[DataRequired()])
+        img_url = StringField("Image URL", validators=[DataRequired()])
+        rating = StringField("Gear Rating", validators=[DataRequired()])
+        review = CKEditorField("Review", validators=[DataRequired()])
+        submit_button = SubmitField("Submit")
+
     db.create_all()
 
     @app.route("/")
     def home():
         saved_trails = db.session.query(Trails).all()
-        return render_template("index.html", all_trails=saved_trails)
+        saved_gear = db.session.query(Gear).all()
+        return render_template("index.html", all_trails=saved_trails, all_gear=saved_gear)
 
     @app.route("/add_trail", methods=["GET", "POST"])
     def new_trail():
@@ -101,6 +120,31 @@ def main():
                 )
             return redirect(url_for("home"))
         return render_template("contact.html", form=form)
+
+    @app.route("/about")
+    def about():
+        return render_template("about.html")
+
+    @app.route("/new_gear_review", methods=["GET", "POST"])
+    def new_gear_review():
+        form = GearForm()
+        if form.validate_on_submit():
+            new_gear_review = Gear(
+            name=form.name.data,
+            category=form.category.data,
+            img_url =form.img_url.data,
+            rating=form.rating.data,
+            review=form.review.data
+            )
+            db.session.add(new_gear_review)
+            db.session.commit()
+            return redirect(url_for("home"))
+        return render_template("new_gear_review.html", form=form)
+
+    @app.route("/view_gear/<int:gear_id>")
+    def view_gear(gear_id):
+        requested_gear = Gear.query.get(gear_id)
+        return render_template("view_gear.html", gear=requested_gear)
 
     @app.context_processor
     def copyright_year():

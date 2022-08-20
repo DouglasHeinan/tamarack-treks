@@ -1,18 +1,30 @@
 {% include "header.html" %}
 
 
-            <h1>This is Doug's Hiking Blog</h1>
-            <p>If you love reading about gear, camp sites, trails, and the outdoors, you've come to the right place!</p>
-        </div>
+<h1>This is Doug's Hiking Blog</h1>
+<p>If you love reading about gear, camp sites, trails, and the outdoors, you've come to the right place!</p>
 
-        <ul>
-            {% for trail in all_trails %}
-            <li><a href="{{ url_for('view_trail', trail_id=trail.id) }}">{{trail.name}}</a></li>
-            {% endfor %}
-        </ul>
+<div>
+    <h3>Reviewed Trails</h3>
+    <ul>
+        {% for trail in all_trails %}
+        <li><a href="{{ url_for('view_trail', trail_id=trail.id) }}">{{trail.name}}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('new_trail') }}">
+        Add a new trail!
+    </a>
+</div>
 
-
-        <a href="{{ url_for('new_trail') }}">
-            Add a new trail!
-        </a>
+<div class="mt-5">
+    <h3>Reviewed Gear</h3>
+    <ul>
+        {% for gear in all_gear %}
+        <li><a href="{{ url_for('view_gear', gear_id=gear.id) }}">{{gear.name}}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('new_gear_review') }}">
+        Add a new gear review!
+    </a>
+</div>
 {% include "footer.html" %}
