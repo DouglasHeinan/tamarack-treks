@@ -5,7 +5,7 @@
 
 <div class="container">
     {{ ckeditor.load() }}
-    {{ ckeditor.config(name="message") }}
+    {{ ckeditor.config(name="review") }}
     {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "success"}) }}
 </div>
 

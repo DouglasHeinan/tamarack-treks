@@ -1,7 +1,7 @@
 {% include "header.html" %}
 
 
-<h1>This is Doug's Hiking Blog</h1>
+<h1>Welcome to Placeholder</h1>
 
 {% if logged_in: %}
   <h3>Hi {{ current_user.username }}!</h3>
@@ -10,26 +10,30 @@
 <p>If you love reading about gear, camp sites, trails, and the outdoors, you've come to the right place!</p>
 
 <div>
-    <h3>Reviewed Trails</h3>
+    <h3>RTrail Reviews</h3>
     <ul>
         {% for trail in all_trails %}
         <li><a href="{{ url_for('view_trail', trail_id=trail.id) }}">{{trail.name}}</a></li>
         {% endfor %}
     </ul>
-    <a href="{{ url_for('new_trail') }}">
+    {% if current_user.id == 1 %}
+    <a class="btn btn-success" href="{{ url_for('new_trail') }}">
         Add a new trail!
     </a>
+    {% endif %}
 </div>
 
 <div class="mt-5">
-    <h3>Reviewed Gear</h3>
+    <h3>Gear Reviews</h3>
     <ul>
         {% for gear in all_gear %}
         <li><a href="{{ url_for('view_gear', gear_id=gear.id) }}">{{gear.name}}</a></li>
         {% endfor %}
     </ul>
-    <a href="{{ url_for('new_gear_review') }}">
-        Add a new gear review!
+    {% if current_user.id == 1 %}
+    <a class="btn btn-success" href="{{ url_for('new_gear_review') }}">
+        Admin add new gear review!
     </a>
+    {% endif %}
 </div>
 {% include "footer.html" %}

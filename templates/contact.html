@@ -4,6 +4,7 @@
 {% include "header.html" %}
 
 <div class="container">
+    <h2 class="mt-3 mb-3">Contact Us!</h2>
     {{ ckeditor.load() }}
     {{ ckeditor.config(name="message") }}
     {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "success"}) }}
