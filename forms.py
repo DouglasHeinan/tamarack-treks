@@ -1,9 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired, URL, Length
+from wtforms.validators import DataRequired, URL, Length, Email
 from wtforms import StringField, SubmitField, SelectField, PasswordField
 from flask_ckeditor import CKEditorField
 
 GEAR_CATEGORIES = ["Tents", "Sleeping Bags", "Hiking Poles"]
+
+
+class SignUpForm(FlaskForm):
+
+    username = StringField("Username", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=50)])
+    verify_password = PasswordField("Verify Password", validators=[DataRequired()])
+    submit_button = SubmitField("Submit")
 
 
 class LoginForm(FlaskForm):

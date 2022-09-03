@@ -7,9 +7,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from sqlalchemy.orm import relationship
 from datetime import date
+from forms import LoginForm, AddTrailForm, CommentForm, GearForm, ContactForm, SignUpForm
 import smtplib
-from forms import LoginForm, AddTrailForm, CommentForm, GearForm, ContactForm
 import os
+from datetime import timedelta
+from threading import Thread
 
 
 app = Flask(__name__)
@@ -26,6 +28,8 @@ db = SQLAlchemy(app)
 
 EMAIL = os.environ["EMAIL"]
 EMAIL_PW = os.environ["EMAIL_PW"]
+
+DELTA = timedelta(days=30)
 
 
 def main():
@@ -47,6 +51,7 @@ def main():
         id = db.Column(db.Integer, primary_key=True)
         username = db.Column(db.String(25), unique=True, nullable=False)
         password = db.Column(db.String(25), nullable=False)
+        email = db.Column(db.String(100), nullable=False)
         trail_page_comments = relationship("TrailComments", back_populates="commenter")
         gear_page_comments = relationship("GearComments", back_populates="commenter")
 
@@ -96,12 +101,13 @@ def main():
     def home():
         saved_trails = db.session.query(Trails).all()
         saved_gear = db.session.query(Gear).all()
+        print("home user logged in?" + str(current_user.is_authenticated))
         return render_template("index.html", all_trails=saved_trails, all_gear=saved_gear,
                                logged_in=current_user.is_authenticated)
 
     @app.route("/sign_up", methods=["GET", "POST"])
     def sign_up():
-        form = LoginForm()
+        form = SignUpForm()
         if form.validate_on_submit():
             if User.query.filter_by(username=form.username.data).first():
                 flash("You've already signed up!")
@@ -111,9 +117,13 @@ def main():
                 method="pbkdf2:sha256",
                 salt_length=8
             )
+            if form.password.data != form.verify_password.data:
+                flash("Passwords Must Match")
+                return redirect(url_for("sign_up"))
             new_user = User(
                 username=form.username.data,
-                password=hashed_pw
+                password=hashed_pw,
+                email=form.email.data
             )
             db.session.add(new_user)
             db.session.commit()
@@ -134,7 +144,8 @@ def main():
             if not check_password_hash(user.password, password):
                 flash("Password incorrect. Please Try again.")
                 return redirect(url_for("login"))
-            login_user(user)
+            login_user(user, remember=True, duration=DELTA)
+            print("user logged in?" + str(current_user.is_authenticated))
             return redirect(url_for("home"))
         return render_template("login.html", form=form, logged_in=current_user.is_authenticated)
 
@@ -181,6 +192,21 @@ def main():
             form.comment_text.data = ""
         return render_template("view_trail.html", trail=requested_trail, form=form, current_user=current_user)
 
+    def send_email(name, message, subject, email):
+        print("starting to send email")
+        with smtplib.SMTP("smtp.mail.yahoo.com") as connection:
+            print("Initiating TLS")
+            connection.starttls()
+            print("logging in")
+            connection.login(user=EMAIL, password=EMAIL_PW)
+            print("sending email")
+            connection.sendmail(
+                from_addr=EMAIL,
+                to_addrs=EMAIL,
+                msg=f"Subject: {subject}\n\nSent by:{name}, {email}\n{message}</body></html>"
+            )
+            print("done")
+
     @app.route("/contact", methods=["GET", "POST"])
     def contact():
         form = ContactForm()
@@ -189,15 +215,9 @@ def main():
             email = form.email.data,
             subject = form.subject.data,
             message = form.message.data
-
-            with smtplib.SMTP("smtp.mail.yahoo.com") as connection:
-                connection.starttls()
-                connection.login(user=EMAIL, password=EMAIL_PW)
-                connection.sendmail(
-                    from_addr=EMAIL,
-                    to_addrs=EMAIL,
-                    msg=f"Subject: {subject}\n\nSent by:{name}, {email}\n{message}"
-                )
+            thread = Thread(target=send_email, args=(name, message, subject, email))
+            thread.daemon = True
+            thread.start()
             return redirect(url_for("home"))
         return render_template("contact.html", form=form)
 
@@ -226,6 +246,7 @@ def main():
     def view_gear(gear_id):
         form = CommentForm()
         requested_gear = Gear.query.get(gear_id)
+        print("user view_gear logged in?" + str(current_user.is_authenticated))
         if form.validate_on_submit():
             if not current_user.is_authenticated:
                 flash("You must be logged in to comment.")

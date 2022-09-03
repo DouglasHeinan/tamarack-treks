@@ -3,6 +3,10 @@
 {% block content %}
 {% include "header.html" %}
 
+{% if current_user.is_authenticated: %}
+  <h3>Hi {{ current_user.username }}!</h3>
+{% endif %}
+
 <div class="container-fluid text-center">
     <img src="{{ gear.img_url }}" class="img-fluid rounded img-size mb-2">
     <h2>{{ gear.name.title() }}</h2>
@@ -19,7 +23,7 @@
         </div>
     </div>
     <div class="mt-5">
-            {{ gear.review|safe }}
+            {{ gear.review }}
     </div>
 </div>
 

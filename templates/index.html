@@ -10,7 +10,7 @@
 <p>If you love reading about gear, camp sites, trails, and the outdoors, you've come to the right place!</p>
 
 <div>
-    <h3>RTrail Reviews</h3>
+    <h3>Trail Reviews</h3>
     <ul>
         {% for trail in all_trails %}
         <li><a href="{{ url_for('view_trail', trail_id=trail.id) }}">{{trail.name}}</a></li>
