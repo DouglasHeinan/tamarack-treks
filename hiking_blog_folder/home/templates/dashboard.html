@@ -3,6 +3,14 @@
 
 <h1>Welcome to Placeholder</h1>
 
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 {% if logged_in: %}
   <h3>Hi {{ current_user.username }}!</h3>
 {% endif %}
