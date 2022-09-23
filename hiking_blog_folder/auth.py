@@ -22,17 +22,17 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data)
+        user = User.query.filter_by(username=form.username.data).first()
         if not user:
             flash("That username does not exist. Please try again.")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth_bp.login"))
         if not user.check_password(password=form.password.data):
             flash("Password incorrect. Please Try again.")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth_bp.login"))
         login_user(user, remember=True, duration=DELTA)
         print("user logged in?" + str(current_user.is_authenticated))
         next_page = request.args.get("next")
-        return redirect(next_page or url_for("home"))
+        return redirect(next_page or url_for("home_bp.home"))
     return render_template("login.html", form=form, logged_in=current_user.is_authenticated)
 
 
@@ -42,10 +42,10 @@ def sign_up():
     if form.validate_on_submit():
         if User.query.filter_by(username=form.username.data).first():
             flash("You've already signed up!")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth_bp.login"))
         if form.password.data != form.verify_password.data:
             flash("Passwords Must Match")
-            return redirect(url_for("sign_up"))
+            return redirect(url_for("auth_bp.sign_up"))
         new_user = User(
             username=form.username.data,
             email=form.email.data
@@ -54,7 +54,7 @@ def sign_up():
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        return redirect(url_for("home"))
+        return redirect(url_for("home_bp.home"))
     return render_template("sign_up.html", form=form, logged_in=current_user.is_authenticated)
 
 

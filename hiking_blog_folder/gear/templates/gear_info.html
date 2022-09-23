@@ -1,0 +1,9 @@
+{% include "header.html" %}
+
+
+
+{% for company in info %}
+<p>{{ company }}: <a class="btn btn-sm btn-success" href="{{ info[company]['link'] }}" target="_blank">{{ info[company]["price"] }}</a></p>
+
+{% endfor %}
+{% include "footer.html" %}

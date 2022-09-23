@@ -27,7 +27,7 @@ def add_trail():
         )
         db.session.add(new_hiking_trail)
         db.session.commit()
-        return redirect(url_for("home"))
+        return redirect(url_for("home_bp.home"))
     return render_template("add_trail.html", form=form)
 
 
@@ -38,7 +38,7 @@ def view_trail(trail_id):
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth_bp.login"))
         new_comment = TrailComments(
             text=form.comment_text.data,
             commenter=current_user,

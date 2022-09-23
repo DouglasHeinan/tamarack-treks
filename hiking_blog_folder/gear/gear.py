@@ -3,6 +3,7 @@ from flask_login import current_user
 from ..forms import CommentForm, GearForm
 from ..models import Gear, GearComments, db
 from ..auth import admin_only
+from .product_info import amazon_info, rei_info, backcountry_info
 
 gear_bp = Blueprint(
     "gear_bp", __name__,
@@ -25,7 +26,7 @@ def add_gear():
         )
         db.session.add(new_review_gear)
         db.session.commit()
-        return redirect(url_for("home"))
+        return redirect(url_for("home_bp.home"))
     return render_template("add_gear.html", form=form)
 
 
@@ -37,7 +38,7 @@ def view_gear(gear_id):
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
-            return redirect(url_for("login"))
+            return redirect(url_for("auth_bp.login"))
         new_comment = GearComments(
             text=form.comment_text.data,
             commenter=current_user,
@@ -47,3 +48,20 @@ def view_gear(gear_id):
         db.session.commit()
         form.comment_text.data = ""
     return render_template("view_gear.html", gear=requested_gear, form=form, current_user=current_user)
+
+
+@gear_bp.route("/view_prices/<gear_id>")
+def view_prices(gear_id):
+    gear = Gear.query.get(gear_id)
+    amazon_url, amazon_price = amazon_info(gear.name)
+    rei_url, rei_price = rei_info(gear.name)
+    backcountry_url, backcountry_price = backcountry_info(gear.name)
+    info = {
+        "amazon": {"price": amazon_price,
+                   "link": amazon_url},
+        "rei": {"price": rei_price,
+                "link": rei_url},
+        "backcountry": {"price": backcountry_price,
+                        "link": backcountry_url}
+    }
+    return render_template("gear_info.html", gear=gear, info=info)

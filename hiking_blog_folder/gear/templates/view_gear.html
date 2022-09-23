@@ -3,12 +3,17 @@
 {% block content %}
 {% include "header.html" %}
 
+
 {% if current_user.is_authenticated: %}
-  <h3>Hi {{ current_user.username }}!</h3>
+    <div class="header">
+        <h3 class="mb-5 mt-3">Hi {{ current_user.username }}!</h3>
+    </div>
 {% endif %}
 
-<div class="container-fluid text-center">
+<div class="gear-img">
     <img src="{{ gear.img_url }}" class="img-fluid rounded img-size mb-2">
+</div>
+<div class="container-fluid">
     <h2>{{ gear.name.title() }}</h2>
     <div class="row mt-3">
         <div class="col-sm-4 align-right">
@@ -18,12 +23,12 @@
             <h5>Category: {{ gear.category }}</h5>
         </div>
         <div class="col-sm-4 align-left">
-            <a href="#"
+            <a href="{{ url_for('gear_bp.view_prices', gear_id=gear.id) }}"
                target="_blank"><h5>Check availability of this item.</h5></a>
         </div>
     </div>
     <div class="mt-5">
-            {{ gear.review }}
+            {{ gear.review|safe }}
     </div>
 </div>
 

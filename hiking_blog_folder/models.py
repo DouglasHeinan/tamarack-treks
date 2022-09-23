@@ -15,7 +15,7 @@ class User(UserMixin, db.Model):
 
     def set_password(self, password):
         self.password = generate_password_hash(
-            password.data,
+            password,
             method="pbkdf2:sha256",
             salt_length=8
         )

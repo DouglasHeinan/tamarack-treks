@@ -43,7 +43,7 @@ class ContactForm(FlaskForm):
 class GearForm(FlaskForm):
     name = StringField("Name of Piece", validators=[DataRequired()])
     category = SelectField("Gear Category", choices=GEAR_CATEGORIES, validators=[DataRequired()])
-    img_url = StringField("Image URL", validators=[DataRequired()])
+    img_url = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
     review = CKEditorField("Review", validators=[DataRequired()])
     submit_button = SubmitField("Submit")

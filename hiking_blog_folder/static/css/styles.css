@@ -1,5 +1,10 @@
-.img-size {
-    width:70%;
-    height:500px;
+.gear-img {
+    height: 200px;
+    width: 200px;
+    overflow: hidden;
+    margin: 0 auto;
 }
 
+.header {
+    margin: 0 auto
+}
