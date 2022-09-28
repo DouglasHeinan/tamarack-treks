@@ -1,9 +1,10 @@
 from flask import render_template, redirect, url_for, flash, Blueprint
 from flask_login import current_user
-from ..forms import CommentForm, GearForm
-from ..models import Gear, GearComments, db
-from ..auth import admin_only
-from .product_info import amazon_info, rei_info, backcountry_info
+from hiking_blog.forms import CommentForm, GearForm
+from hiking_blog.models import Gear, GearComments
+from hiking_blog.auth import admin_only
+from hiking_blog.gear.product_info import amazon_info, rei_info, backcountry_info
+from hiking_blog.db import db
 
 gear_bp = Blueprint(
     "gear_bp", __name__,
@@ -22,7 +23,10 @@ def add_gear():
             category=form.category.data,
             img_url =form.img_url.data,
             rating=form.rating.data,
-            review=form.review.data
+            review=form.review.data,
+            amazon_url=form.amazon_url.data,
+            rei_url=form.rei_url.data,
+            backcountry_url=form.backcountry_url.data
         )
         db.session.add(new_review_gear)
         db.session.commit()

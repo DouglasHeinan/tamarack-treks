@@ -1,10 +1,11 @@
-from . import db
+from hiking_blog.db import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 
 
 class User(UserMixin, db.Model):
+    print("models")
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -45,6 +46,9 @@ class Gear(db.Model):
     img_url = db.Column(db.String(250), unique=True, nullable=False)
     rating = db.Column(db.Float, nullable=False)
     review = db.Column(db.Text, nullable=False)
+    amazon_url = db.Column(db.String(250), nullable=False)
+    rei_url = db.Column(db.String(250), nullable=False)
+    backcountry_url = db.Column(db.String(250), nullable=False)
     comments = relationship("GearComments", back_populates="parent_gear_posts")
 
 
@@ -66,4 +70,6 @@ class GearComments(UserMixin, db.Model):
     commenter = relationship("User", back_populates="gear_page_comments")
     gear_id = db.Column(db.Integer, db.ForeignKey("gear_rev.id"))
     parent_gear_posts = relationship("Gear", back_populates="comments")
+
+
 

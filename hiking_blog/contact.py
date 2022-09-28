@@ -5,8 +5,9 @@ from threading import Thread
 import os
 
 
-EMAIL = os.environ["EMAIL"]
-EMAIL_PW = os.environ["EMAIL_PW"]
+# RESET ENVIRON VARIABLES!!!!!!!!
+EMAIL = "dougheinan@yahoo.com"
+EMAIL_PW = "blah"
 
 contact_bp = Blueprint(
     "contact_bp", __name__

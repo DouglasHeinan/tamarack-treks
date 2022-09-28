@@ -46,6 +46,9 @@ class GearForm(FlaskForm):
     img_url = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
     review = CKEditorField("Review", validators=[DataRequired()])
+    amazon_url = StringField("Amazon Link", validators=[DataRequired(), URL()])
+    rei_url = StringField("REI Link", validators=[DataRequired(), URL()])
+    backcountry_url = StringField("Backcountry Link", validators=[DataRequired(), URL()])
     submit_button = SubmitField("Submit")
 
 

@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template
 from flask_login import current_user
-from ..models import db, Trails, Gear
+from hiking_blog.models import Trails, Gear
 from datetime import date
-
+from hiking_blog.db import db
 
 home_bp = Blueprint(
     "home_bp",
@@ -14,6 +14,9 @@ home_bp = Blueprint(
 
 @home_bp.route("/")
 def home():
+    """
+    Renders home page for user.
+    """
     saved_trails = db.session.query(Trails).all()
     saved_gear = db.session.query(Gear).all()
     print("home user logged in = " + str(current_user.is_authenticated))

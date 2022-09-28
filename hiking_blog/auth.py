@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template, redirect, flash, request, url_for, abort
-from .forms import SignUpForm, LoginForm
+from hiking_blog.forms import SignUpForm, LoginForm
 from flask_login import login_required, logout_user, current_user, login_user
-from .models import db, User
+from hiking_blog.models import User
 from functools import wraps
-from . import login_manager
+from hiking_blog.login_manager import login_manager
 from datetime import timedelta
+from hiking_blog.db import db
 
 
-DELTA = timedelta(days=30)
+DAYS_BEFORE_LOGOUT = timedelta(days=30)
 
 
 auth_bp = Blueprint(
@@ -29,7 +30,7 @@ def login():
         if not user.check_password(password=form.password.data):
             flash("Password incorrect. Please Try again.")
             return redirect(url_for("auth_bp.login"))
-        login_user(user, remember=True, duration=DELTA)
+        login_user(user, remember=True, duration=DAYS_BEFORE_LOGOUT)
         print("user logged in?" + str(current_user.is_authenticated))
         next_page = request.args.get("next")
         return redirect(next_page or url_for("home_bp.home"))
