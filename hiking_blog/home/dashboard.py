@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template
 from flask_login import current_user
 from hiking_blog.models import Trails, Gear
-from datetime import date
 from hiking_blog.db import db
 
 home_bp = Blueprint(
@@ -29,6 +28,6 @@ def about():
     return render_template("about.html")
 
 
-@home_bp.context_processor
-def copyright_year():
-    return dict(year=date.today().year)  # Footer copyright variable
+# @app.context_processor
+# def copyright_year():
+#     return dict(year=date.today().year)  # Footer copyright variable

@@ -1,13 +1,12 @@
 from flask import render_template, redirect, url_for, Blueprint
-from .forms import ContactForm
+from hiking_blog.forms import ContactForm
 import smtplib
 from threading import Thread
 import os
 
 
-# RESET ENVIRON VARIABLES!!!!!!!!
-EMAIL = "dougheinan@yahoo.com"
-EMAIL_PW = "blah"
+EMAIL = os.environ["EMAIL"]
+EMAIL_PW = os.environ["EMAIL_PW"]
 
 contact_bp = Blueprint(
     "contact_bp", __name__

@@ -1,3 +1,5 @@
+"""The collection of database tables used in this application."""
+
 from hiking_blog.db import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -5,7 +7,7 @@ from sqlalchemy.orm import relationship
 
 
 class User(UserMixin, db.Model):
-    print("models")
+    """A class used to represent a user."""
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -15,6 +17,15 @@ class User(UserMixin, db.Model):
     gear_page_comments = relationship("GearComments", back_populates="commenter")
 
     def set_password(self, password):
+        """
+        Generates a hashed password for the user.
+
+        Parameters
+        ----------
+        password : str
+            The password input by the user.
+        """
+
         self.password = generate_password_hash(
             password,
             method="pbkdf2:sha256",
@@ -22,10 +33,20 @@ class User(UserMixin, db.Model):
         )
 
     def check_password(self, password):
+        """
+        Compares the values from two password fields input by the user to confirm they match.
+
+        Parameters
+        ----------
+        password : str
+            The password input by the user.
+        """
+
         return check_password_hash(self.password, password)
 
 
 class Trails(db.Model):
+    """A class used to represent a trail information and review page."""
     __tablename__ = "trails"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
@@ -39,6 +60,7 @@ class Trails(db.Model):
 
 
 class Gear(db.Model):
+    """A class used to represent a gear information and review page."""
     __tablename__ = "gear_rev"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
@@ -53,6 +75,7 @@ class Gear(db.Model):
 
 
 class TrailComments(UserMixin, db.Model):
+    """A class used to represent the accumulated comments from the trail pages."""
     __tablename__ = "trail_comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
@@ -63,6 +86,7 @@ class TrailComments(UserMixin, db.Model):
 
 
 class GearComments(UserMixin, db.Model):
+    """A class used to represent the accumulated comments from the gear pages."""
     __tablename__ = "gear_comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
@@ -70,6 +94,3 @@ class GearComments(UserMixin, db.Model):
     commenter = relationship("User", back_populates="gear_page_comments")
     gear_id = db.Column(db.Integer, db.ForeignKey("gear_rev.id"))
     parent_gear_posts = relationship("Gear", back_populates="comments")
-
-
-

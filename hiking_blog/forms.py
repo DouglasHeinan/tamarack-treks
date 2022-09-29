@@ -1,3 +1,5 @@
+"""The collection of form classes used in this application."""
+
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, URL, Length, Email
 from wtforms import StringField, SubmitField, SelectField, PasswordField
@@ -7,6 +9,11 @@ GEAR_CATEGORIES = ["Tents", "Sleeping Bags", "Hiking Poles"]
 
 
 class SignUpForm(FlaskForm):
+    """
+    A class used for the applications sign-up form.
+
+    When submitted, the provided information is added to the database in the user table.
+    """
 
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired(), Email()])
@@ -16,12 +23,24 @@ class SignUpForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    """
+    A class used for the application's login form.
+
+    When submitted, the provided information is compared against information in the database to log the user in.
+    """
+
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=50)])
     submit_button = SubmitField("Submit")
 
 
 class AddTrailForm(FlaskForm):
+    """
+    A class used for the application's add_trail form, accessible only if the user is admin.
+
+    When submitted, the information provided will be added to the trails table of the database.
+    """
+
     name = StringField("Trail Name", validators=[DataRequired()])
     description = CKEditorField("Description", validators=[DataRequired()])
     latitude = StringField("Latitude", validators=[DataRequired()])
@@ -33,6 +52,8 @@ class AddTrailForm(FlaskForm):
 
 
 class ContactForm(FlaskForm):
+    """A class used for the application's contact form."""
+
     name = StringField("Name", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     subject = StringField("Subject", validators=[DataRequired()])
@@ -41,6 +62,12 @@ class ContactForm(FlaskForm):
 
 
 class GearForm(FlaskForm):
+    """
+    A class used for the application's gear form, accessible only if the user is admin.
+
+    When submitted, the information provided will be added to the gear table of the database.
+    """
+
     name = StringField("Name of Piece", validators=[DataRequired()])
     category = SelectField("Gear Category", choices=GEAR_CATEGORIES, validators=[DataRequired()])
     img_url = StringField("Image URL", validators=[DataRequired(), URL()])
@@ -53,5 +80,7 @@ class GearForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
+    """A class used for the application's comment form."""
+
     comment_text = CKEditorField("Comment", validators=[DataRequired()])
     submit = SubmitField("Submit")
