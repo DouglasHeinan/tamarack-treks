@@ -1,3 +1,4 @@
+
 from flask import Flask
 from hiking_blog import db
 from flask_ckeditor import CKEditor
@@ -8,8 +9,10 @@ from datetime import date
 
 def init_app():
     """
-    Initialises the app, creates the database, registers the flask blueprints from
-    each of the packages, and finally runs the app.
+    Initialises and runs the app.
+
+    Configures the app using the config file, registers the flask blueprints from each of the packages, creates the
+    database, and runs the app.
     """
     ckeditor = CKEditor()
     bootstrap = Bootstrap()

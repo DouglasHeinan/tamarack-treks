@@ -1,8 +1,10 @@
+"""The applications config file."""
 import os
 
 
 class Config:
-    # config variables
+    """A class containing all the configuration variables used in app.py."""
+    # flask
     FLASK_ENV = "development"
     TESTING = True
     SECRET_KEY = os.environ["SECRET_KEY"]
