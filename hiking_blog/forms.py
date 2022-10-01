@@ -34,6 +34,25 @@ class LoginForm(FlaskForm):
     submit_button = SubmitField("Submit")
 
 
+class PasswordRecoveryForm(FlaskForm):
+    """A class used for creating a password recovery form."""
+    username = StringField("Username", validators=[DataRequired()])
+    submit_button = SubmitField("Submit")
+
+
+class VerificationForm(FlaskForm):
+    """A class used for creating a password verification form."""
+    verification_code = StringField("Verification Code", validators=[DataRequired(), Length(min=8, max=8)])
+    submit_button = SubmitField("Submit")
+
+
+class ChangePasswordForm(FlaskForm):
+    """A class used for creating a password reset form."""
+    new_password = PasswordField("New Password", validators=[DataRequired(), Length(min=8, max=50)])
+    verify_password = PasswordField("New Password", validators=[DataRequired()])
+    submit_button = SubmitField("Submit")
+
+
 class AddTrailForm(FlaskForm):
     """
     A class used for the application's add_trail form, accessible only if the user is admin.

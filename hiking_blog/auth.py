@@ -3,15 +3,23 @@ This file handles all user signup/login/logout activities of the application.
 """
 
 from flask import Blueprint, render_template, redirect, flash, request, url_for, abort
-from hiking_blog.forms import SignUpForm, LoginForm
 from flask_login import login_required, logout_user, current_user, login_user
-from hiking_blog.models import User
+from flask_mail import Message
 from functools import wraps
+from hiking_blog.forms import SignUpForm, LoginForm, PasswordRecoveryForm, ChangePasswordForm, VerificationForm
 from hiking_blog.login_manager import login_manager
-from datetime import timedelta
 from hiking_blog.db import db
+from hiking_blog.models import User
+from hiking_blog.mail import mail
+from datetime import timedelta
+import random
+# from threading import Thread
 
-
+CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+              'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+              'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+              '!', '#', '$', '%', '&', '*', '+']
+PW_RESET_MESSAGE = "Here is your password reset code:"
 DAYS_BEFORE_LOGOUT = timedelta(days=30)
 
 
@@ -77,6 +85,67 @@ def sign_up():
         login_user(new_user)
         return redirect(url_for("home_bp.home"))
     return render_template("sign_up.html", form=form, logged_in=current_user.is_authenticated)
+
+
+@auth_bp.route("/password_recovery", methods=["GET", "POST"])
+def password_recovery():
+    form = PasswordRecoveryForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if not user:
+            flash("That username has not yet been created.")
+            return redirect(url_for("auth_bp.sign_up"))
+        if current_user.is_authenticated:
+            flash("You are already logged in.")
+            return redirect(url_for("home_bp.home"))
+
+        user_email = user.email
+        password_code = password_reset_code_generator()
+        msg = Message(
+            recipients=[user_email]
+        )
+        msg.body = f"{PW_RESET_MESSAGE} {password_code}"
+        mail.send(msg)
+        print(msg.body)
+        return redirect(url_for("auth_bp.change_password_verify", username=user.username, password_code=password_code))
+    return render_template("password_recovery.html", form=form)
+
+
+def password_reset_code_generator():
+    """Generates a random 8 digit security code to verify the user during a password reset."""
+    password_characters = [random.choice(CHARACTERS) for i in range(8)]
+    random.shuffle(password_characters)
+    password_verification = "".join(password_characters)
+    return password_verification
+
+
+@auth_bp.route("/change_password_verify", methods=["GET", "POST"])
+def change_password_verify():
+    password_code = request.args["password_code"]
+    username = request.args["username"]
+    user = User.query.filter_by(username=username).first()
+    form = VerificationForm()
+    if form.validate_on_submit():
+        if form.verification_code.data != password_code:
+            flash("That code is incorrect!")
+            return redirect(url_for("auth_bp.change_password_verify", username=username, password_code=password_code))
+        return redirect(url_for("auth_bp.change_password", username=user.username))
+    return render_template("change_password_verify.html", form=form, user=user)
+
+
+@auth_bp.route("/change_password", methods=["GET", "POST"])
+def change_password():
+    username = request.args["username"]
+    user = User.query.filter_by(username=username).first()
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if form.new_password.data != form.verify_password.data:
+            flash("Passwords do not match!")
+            return redirect(url_for("auth_bp.change_password", username=username))
+        user.set_password(form.new_password.data)
+        db.session.commit()
+        return redirect(url_for("auth_bp.login"))
+    return render_template("change_password.html", form=form)
 
 
 @auth_bp.route("/logout")

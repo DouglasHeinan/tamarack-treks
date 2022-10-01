@@ -1,9 +1,8 @@
 
 from flask import Flask
-from hiking_blog import db
 from flask_ckeditor import CKEditor
 from flask_bootstrap import Bootstrap
-from hiking_blog import login_manager
+from hiking_blog import login_manager, db, mail
 from datetime import date
 
 
@@ -19,6 +18,7 @@ def init_app():
     app = Flask(__name__)
     app.config.from_object("config.Config")
 
+    mail.create_mail(app)
     login_manager.create_login_manager(app)
     ckeditor.init_app(app)
     bootstrap.init_app(app)
@@ -47,9 +47,7 @@ if __name__ == "__main__":
 
     @app.context_processor
     def copyright_year():
-        """
-        Keeps footer copyright date current on every page of the app.
-        """
+        """Keeps footer copyright date current on every page of the app."""
         return dict(year=date.today().year)
 
     app.run(debug=True)

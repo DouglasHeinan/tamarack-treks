@@ -11,6 +11,14 @@ class Config:
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"
 
+    # mail
+    MAIL_SERVER = "smtp.mail.yahoo.com"
+    MAIL_PORT = 465
+    MAIL_DEFAULT_SENDER = os.environ["EMAIL"]
+    MAIL_PASSWORD = os.environ["EMAIL_PW"]
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+
     # Database
     SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI"]
     SQLALCHEMY_TRACK_MODIFICATIONS = False
