@@ -1,4 +1,4 @@
-
+"""Sets configurations and runs the app."""
 from flask import Flask
 from flask_ckeditor import CKEditor
 from flask_bootstrap import Bootstrap
@@ -39,15 +39,14 @@ def init_app():
 
         db.create_db()
 
+        @app.context_processor
+        def copyright_year():
+            """Keeps footer copyright date current on every page of the app."""
+            return dict(year=date.today().year)
+
         return app
 
 
 if __name__ == "__main__":
     app = init_app()
-
-    @app.context_processor
-    def copyright_year():
-        """Keeps footer copyright date current on every page of the app."""
-        return dict(year=date.today().year)
-
     app.run(debug=True)

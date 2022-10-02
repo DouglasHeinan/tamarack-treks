@@ -15,9 +15,11 @@ class Config:
     MAIL_SERVER = "smtp.mail.yahoo.com"
     MAIL_PORT = 465
     MAIL_DEFAULT_SENDER = os.environ["EMAIL"]
+    MAIL_USERNAME = os.environ["EMAIL"]
     MAIL_PASSWORD = os.environ["EMAIL_PW"]
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
+    MAIL_SUPPRESS_SEND = False
 
     # Database
     SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI"]
