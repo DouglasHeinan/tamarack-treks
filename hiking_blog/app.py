@@ -23,8 +23,13 @@ def init_app():
     ckeditor.init_app(app)
     bootstrap.init_app(app)
 
+    @app.context_processor
+    def copyright_year():
+        """Keeps footer copyright date current on every page of the app."""
+        return dict(year=date.today().year)
+
     with app.app_context():
-        db.instantiate_db(app)
+        db.init_db(app)
 
         from hiking_blog.home import dashboard
         from hiking_blog.gear import gear
@@ -38,11 +43,6 @@ def init_app():
         app.register_blueprint(auth.auth_bp)
 
         db.create_db()
-
-        @app.context_processor
-        def copyright_year():
-            """Keeps footer copyright date current on every page of the app."""
-            return dict(year=date.today().year)
 
         return app
 

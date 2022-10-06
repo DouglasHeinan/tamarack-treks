@@ -3,7 +3,12 @@
 
 <div class="mt-3">
 {% for company in info %}
-    <p>{{ company }}: <a class="btn btn-success" href="{{ info[company]['link'] }}" target="_blank">{{ info[company]["price"] }}</a></p>
+    <p>
+        {{ company }}:
+        <a class="btn btn-success" href="{{ info[company]['link'] }}" target="_blank">
+            {{ info[company]["price"] }}
+        </a>
+    </p>
 
 {% endfor %}
 </div>

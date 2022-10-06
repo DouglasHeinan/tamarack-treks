@@ -43,6 +43,7 @@ def login():
             return redirect(url_for("auth_bp.login"))
         if not user.check_password(password=form.password.data):
             flash("Password incorrect. Please Try again.")
+            form.username.data = user.username
             return redirect(url_for("auth_bp.login"))
         login_user(user, remember=True, duration=DAYS_BEFORE_LOGOUT)
         next_page = request.args.get("next")

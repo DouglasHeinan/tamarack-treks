@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = None
 
 
-def instantiate_db(app):
+def init_db(app):
     """Instantiates db and initialises the database."""
     global db
     db = SQLAlchemy()
