@@ -5,7 +5,7 @@ This file handles all user signup/login/logout activities of the application.
 from flask import Blueprint, render_template, redirect, flash, request, url_for, abort
 from flask_login import login_required, logout_user, current_user, login_user
 from functools import wraps
-from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, VerificationForm
+from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, VerificationForm, AddAdminForm
 from hiking_blog.login_manager import login_manager
 from hiking_blog.db import db
 from hiking_blog.models import User
@@ -16,7 +16,9 @@ DAYS_BEFORE_LOGOUT = timedelta(days=30)
 
 
 auth_bp = Blueprint(
-    "auth_bp", __name__
+    "auth_bp", __name__,
+    template_folder="templates",
+    static_folder="static"
 )
 
 
@@ -62,6 +64,10 @@ def sign_up():
     """
     form = SignUpForm()
     if form.validate_on_submit():
+        admin = False
+        all_users = User.query.all()
+        if all_users is None:
+            admin = True
         if User.query.filter_by(username=form.username.data).first():
             flash("You've already signed up!")
             return redirect(url_for("auth_bp.login"))
@@ -70,7 +76,8 @@ def sign_up():
             return redirect(url_for("auth_bp.sign_up"))
         new_user = User(
             username=form.username.data,
-            email=form.email.data
+            email=form.email.data,
+            is_admin = admin
         )
         new_user.set_password(form.password.data)
         db.session.add(new_user)
@@ -152,7 +159,22 @@ def admin_only(f):
 
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.id != 1:
+        if not current_user.is_admin:
             return abort(403)
         return f(*args, **kwargs)
     return decorated_function
+
+
+@admin_only
+@auth_bp.route("/add_admin", methods=["GET", "POST"])
+def add_admin():
+    form = AddAdminForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if not user:
+            flash("That username does not exist. Please try again.")
+            return redirect(url_for("auth_bp.login"))
+        user.is_admin = True
+        db.session.commit()
+        return redirect(url_for("home_bp.home"))
+    return render_template("add_admin.html")

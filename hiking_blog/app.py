@@ -2,7 +2,7 @@
 from flask import Flask
 from flask_ckeditor import CKEditor
 from flask_bootstrap import Bootstrap
-from hiking_blog import login_manager, db, mail
+from hiking_blog import login_manager, db, mail, data_scraper
 from datetime import date
 
 
@@ -13,6 +13,7 @@ def init_app():
     Configures the app using the config file, registers the flask blueprints from each of the packages, creates the
     database, and runs the app.
     """
+
     ckeditor = CKEditor()
     bootstrap = Bootstrap()
     app = Flask(__name__)
@@ -32,9 +33,10 @@ def init_app():
         db.init_db(app)
 
         from hiking_blog.home import dashboard
-        from hiking_blog.gear import gear
+        from hiking_blog.gear import gear, gear_prices
         from hiking_blog.trails import trails
-        from hiking_blog import contact, auth
+        from hiking_blog.auth import auth
+        from hiking_blog import contact
 
         app.register_blueprint(dashboard.home_bp)
         app.register_blueprint(gear.gear_bp)
@@ -43,6 +45,7 @@ def init_app():
         app.register_blueprint(auth.auth_bp)
 
         db.create_db()
+        # data_scraper.async_update_gear_info(gear_prices.update_gear_prices)
 
         return app
 

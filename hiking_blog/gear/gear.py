@@ -3,8 +3,7 @@ from flask import render_template, redirect, url_for, flash, Blueprint
 from flask_login import current_user
 from hiking_blog.forms import CommentForm, GearForm
 from hiking_blog.models import Gear, GearComments
-from hiking_blog.auth import admin_only
-from hiking_blog.gear.gear_prices import amazon_price_query, rei_price_query, backcountry_price_query
+from hiking_blog.auth.auth import admin_only
 from hiking_blog.db import db
 
 gear_bp = Blueprint(
@@ -32,11 +31,48 @@ def add_gear():
             img_url =form.img_url.data,
             rating=form.rating.data,
             review=form.review.data,
-            amazon_url=form.amazon_url.data,
+            moosejaw_url=form.moosejaw_url.data,
+            moosejaw_price=form.moosejaw_price.data,
             rei_url=form.rei_url.data,
-            backcountry_url=form.backcountry_url.data
+            rei_price=form.rei_price.data,
+            backcountry_url=form.backcountry_url.data,
+            backcountry_price=form.backcountry_price.data
         )
         db.session.add(new_review_gear)
+        db.session.commit()
+        return redirect(url_for("home_bp.home"))
+    return render_template("add_gear.html", form=form)
+
+
+@gear_bp.route("/edit_gear/<int:gear_id>", methods=["GET", "POST"])
+@admin_only
+def edit_gear(gear_id):
+    """
+    Allows a user with admin privileges to edit a gear entry in the database.
+
+    When the form is submitted, its info is entered into the gear table of the database and the user is redirected to
+    the home page.
+    """
+
+    gear = Gear.query.get(gear_id)
+    form = GearForm()
+
+    form.name.data = gear.name
+    form.category.data = gear.category
+    form.img_url.data = gear.img_url
+    form.rating.data = gear.rating
+    form.review.data = gear.review
+    form.moosejaw_url.data = gear.moosejaw_url
+    form.moosejaw_price.data = gear.moosejaw_price
+    form.rei_url.data = gear.rei_url
+    form.rei_price.data = gear.rei_price
+    form.backcountry_url.data = gear.backcountry_url
+    form.backcountry_price.data = gear.backcountry_price
+
+    if form.validate_on_submit():
+        for field, value in form.data.items():
+            if value is not None:
+                gear.field = value
         db.session.commit()
         return redirect(url_for("home_bp.home"))
     return render_template("add_gear.html", form=form)
@@ -59,7 +95,6 @@ def view_gear(gear_id):
 
     form = CommentForm()
     requested_gear = Gear.query.get(gear_id)
-    print("user view_gear logged in?" + str(current_user.is_authenticated))
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
@@ -91,15 +126,13 @@ def view_prices(gear_id):
     """
 
     gear = Gear.query.get(gear_id)
-    amazon_price = amazon_price_query(gear.amazon_url)
-    rei_price = rei_price_query(gear.rei_url)
-    backcountry_price = backcountry_price_query(gear.backcountry_url)
+
     info = {
-        "amazon": {"price": amazon_price,
-                   "link": gear.amazon_url},
-        "rei": {"price": rei_price,
+        "moosejaw": {"price": gear.moosejaw_price,
+                     "link": gear.moosejaw_url},
+        "rei": {"price": gear.rei_price,
                 "link": gear.rei_url},
-        "backcountry": {"price": backcountry_price,
+        "backcountry": {"price": gear.backcountry_price,
                         "link": gear.backcountry_url}
     }
     return render_template("gear_info.html", gear=gear, info=info)

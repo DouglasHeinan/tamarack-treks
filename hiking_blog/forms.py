@@ -53,6 +53,11 @@ class ChangePasswordForm(FlaskForm):
     submit_button = SubmitField("Submit")
 
 
+class AddAdminForm(FlaskForm):
+    username = StringField("Username:", validators=[DataRequired()])
+    submit_button = SubmitField("Submit")
+
+
 class AddTrailForm(FlaskForm):
     """
     A class used for the application's add_trail form, accessible only if the user is admin.
@@ -92,9 +97,12 @@ class GearForm(FlaskForm):
     img_url = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
     review = CKEditorField("Review", validators=[DataRequired()])
-    amazon_url = StringField("Amazon Link", validators=[DataRequired(), URL()])
+    moosejaw_url = StringField("Moosejaw Link", validators=[DataRequired(), URL()])
+    moosejaw_price = StringField("Moosejaw Price", validators=[DataRequired()])
     rei_url = StringField("REI Link", validators=[DataRequired(), URL()])
+    rei_price = StringField("REI Price", validators=[DataRequired()])
     backcountry_url = StringField("Backcountry Link", validators=[DataRequired(), URL()])
+    backcountry_price = StringField("Backcountry Price", validators=[DataRequired()])
     submit_button = SubmitField("Submit")
 
 

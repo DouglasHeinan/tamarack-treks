@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(100), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False)
     trail_page_comments = relationship("TrailComments", back_populates="commenter")
     gear_page_comments = relationship("GearComments", back_populates="commenter")
 
@@ -68,9 +69,12 @@ class Gear(db.Model):
     img_url = db.Column(db.String(250), unique=True, nullable=False)
     rating = db.Column(db.Float, nullable=False)
     review = db.Column(db.Text, nullable=False)
-    amazon_url = db.Column(db.String(250), nullable=False)
+    moosejaw_url = db.Column(db.String(250), nullable=False)
+    moosejaw_price = db.Column(db.String(50), nullable=False)
     rei_url = db.Column(db.String(250), nullable=False)
+    rei_price = db.Column(db.String(50), nullable=False)
     backcountry_url = db.Column(db.String(250), nullable=False)
+    backcountry_price = db.Column(db.String(50), nullable=False)
     comments = relationship("GearComments", back_populates="parent_gear_posts")
 
 

@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, flash, Blueprint
 from flask_login import current_user
 from hiking_blog.forms import CommentForm, AddTrailForm
 from hiking_blog.models import Trails, TrailComments, db
-from hiking_blog.auth import admin_only
+from hiking_blog.auth.auth import admin_only
 
 trail_bp = Blueprint(
     "trail_bp", __name__,

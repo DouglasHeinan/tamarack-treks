@@ -24,7 +24,7 @@ def home():
     saved_trails = db.session.query(Trails).all()
     saved_gear = db.session.query(Gear).all()
     return render_template("dashboard.html", all_trails=saved_trails, all_gear=saved_gear,
-                           logged_in=current_user.is_authenticated)
+                           logged_in=current_user.is_authenticated, user=current_user)
 
 
 @home_bp.route("/about")
