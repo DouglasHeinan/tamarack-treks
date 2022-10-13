@@ -1,3 +1,11 @@
+# from threading import Thread
+#
+#
+# def async_update_gear_info(function):
+#     thread = Thread(target=function)
+#     thread.daemon = True
+#     thread.start()
+
 """Contains the functions that determine the price of a piece of gear from three major retailers."""
 import requests
 from hiking_blog.db import db
@@ -32,6 +40,8 @@ HEADER = {
 
 
 def update_gear_prices():
+    print(db)
+    print(Gear)
     time.sleep(30)
     while True:
         if datetime.now().second == 30:
@@ -76,6 +86,3 @@ def backcountry_price_query(backcountry_url):
     gear_price = soup.find(class_="css-17wknbl").getText()
 
     return gear_price
-
-
-

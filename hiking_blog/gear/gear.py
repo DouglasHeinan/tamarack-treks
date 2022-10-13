@@ -1,10 +1,12 @@
 """Contains the functionality for viewing gear info and creating gear entries in the database."""
-from flask import render_template, redirect, url_for, flash, Blueprint
+from flask import render_template, redirect, url_for, flash, Blueprint, request
 from flask_login import current_user
 from hiking_blog.forms import CommentForm, GearForm
 from hiking_blog.models import Gear, GearComments
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.db import db
+
+ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 
 gear_bp = Blueprint(
     "gear_bp", __name__,
@@ -136,3 +138,44 @@ def view_prices(gear_id):
                         "link": gear.backcountry_url}
     }
     return render_template("gear_info.html", gear=gear, info=info)
+
+
+@gear_bp.route("/edit_comment/<comment_id>", methods=["GET", "POST"])
+def edit_gear_comment(comment_id):
+    gear_id = request.args["gear_id"]
+    comment = GearComments.query.get(comment_id)
+    form = CommentForm(
+        comment_text=comment.text
+    )
+    if form.validate_on_submit():
+        comment.text = form.comment_text.data
+        db.session.commit()
+        form.comment_text.data = ""
+        return redirect(url_for("gear_bp.view_gear", gear_id=gear_id))
+    return render_template("edit_comment.html", form=form)
+
+
+@gear_bp.route("/delete_comment/<comment_id>")
+def delete_gear_comment(comment_id):
+    gear_id = request.args["gear_id"]
+    comment = GearComments.query.get(comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for("gear_bp.view_gear", gear_id=gear_id))
+
+
+@admin_only
+@gear_bp.route("/admin_delete/<comment_id>", methods=["GET", "POST"])
+def admin_delete_gear_comment(comment_id):
+    gear_id = request.args["gear_id"]
+    comment = GearComments.query.get(comment_id)
+    form = CommentForm(
+        comment_text=comment.text
+    )
+    if form.validate_on_submit():
+        comment.text = ADMIN_DELETE_MESSAGE
+        db.session.commit()
+        form.comment_text.data = ""
+        return redirect(url_for("gear_bp.view_gear", gear_id=gear_id))
+    return render_template("edit_comment.html", form=form)
+

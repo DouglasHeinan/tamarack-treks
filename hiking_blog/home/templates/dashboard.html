@@ -26,7 +26,7 @@
     </ul>
     {% if user.is_admin %}
     <a class="btn btn-success" href="{{ url_for('trail_bp.add_trail') }}">
-        Add a new trail!
+        Add a new trail
     </a>
     {% endif %}
 </div>
@@ -38,16 +38,16 @@
         <li><a href="{{ url_for('gear_bp.view_gear', gear_id=gear.id) }}">{{gear.name}}</a></li>
         {% endfor %}
     </ul>
-    {% if user.is_admin == True %}
+    {% if user.is_admin %}
     <a class="btn btn-success" href="{{ url_for('gear_bp.add_gear') }}">
-        Add new gear review!
+        Add new gear review
     </a>
     {% endif %}
 </div>
-<div>
-    {% if user.is_admin == True %}
+<div class="mt-3">
+    {% if user.is_admin %}
     <a class="btn btn-success" href="{{ url_for('auth_bp.add_admin') }}">
-        Add new admin.
+        Add new admin
     </a>
     {% endif %}
 </div>

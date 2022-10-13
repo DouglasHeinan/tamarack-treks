@@ -66,7 +66,8 @@ def sign_up():
     if form.validate_on_submit():
         admin = False
         all_users = User.query.all()
-        if all_users is None:
+        print(all_users)
+        if not all_users:
             admin = True
         if User.query.filter_by(username=form.username.data).first():
             flash("You've already signed up!")
@@ -177,4 +178,4 @@ def add_admin():
         user.is_admin = True
         db.session.commit()
         return redirect(url_for("home_bp.home"))
-    return render_template("add_admin.html")
+    return render_template("add_admin.html", form=form)

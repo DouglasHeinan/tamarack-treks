@@ -2,8 +2,9 @@
 from flask import Flask
 from flask_ckeditor import CKEditor
 from flask_bootstrap import Bootstrap
-from hiking_blog import login_manager, db, mail, data_scraper
+from hiking_blog import login_manager, db, mail
 from datetime import date
+from flask_executor import Executor
 
 
 def init_app():
@@ -19,6 +20,7 @@ def init_app():
     app = Flask(__name__)
     app.config.from_object("config.Config")
 
+    executor = Executor(app)
     mail.create_mail(app)
     login_manager.create_login_manager(app)
     ckeditor.init_app(app)
@@ -33,7 +35,7 @@ def init_app():
         db.init_db(app)
 
         from hiking_blog.home import dashboard
-        from hiking_blog.gear import gear, gear_prices
+        from hiking_blog.gear import gear
         from hiking_blog.trails import trails
         from hiking_blog.auth import auth
         from hiking_blog import contact
@@ -45,8 +47,12 @@ def init_app():
         app.register_blueprint(auth.auth_bp)
 
         db.create_db()
+        #
+        # thread1 = Thread(target=gear_prices.update_gear_prices)
+        # thread1.daemon = True
+        # thread1.start()
         # data_scraper.async_update_gear_info(gear_prices.update_gear_prices)
-
+        # executor.submit(gear_prices.update_gear_prices)
         return app
 
 
