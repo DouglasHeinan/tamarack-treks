@@ -3,8 +3,6 @@ import requests
 from hiking_blog.db import db
 from hiking_blog.models import Gear
 from bs4 import BeautifulSoup
-# from apscheduler.schedulers.background import BackgroundScheduler
-# from flask import current_app as app
 import time
 from datetime import datetime
 
@@ -14,38 +12,6 @@ HEADER = {
                   "KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9,lb;q=0.8,fr;q=0.7"
 }
-
-
-# def delete_this():
-#     while True:
-#         if datetime.now().second == 30:
-#             print("Bottom of the minute")
-#             time.sleep(15)
-
-
-# def update_gear_info(function):
-#     scheduler = BackgroundScheduler(daemon=True)
-#     scheduler.add_job(function, "interval", seconds=5)
-#     scheduler.start()
-#     while True:
-#         sleep(1)
-
-
-def update_gear_prices():
-    time.sleep(30)
-    while True:
-        if datetime.now().second == 30:
-            print("Doing the thing.")
-            all_gear = Gear.query.all()
-            for gear_piece in all_gear:
-                if gear_piece.moosejaw_price is not None:
-                    gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
-                if gear_piece.rei_price is not None:
-                    gear_piece.rei_price = rei_price_query(gear_piece.rei_url)
-                if gear_piece.backcountry_price is not None:
-                    gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
-                db.session.commit()
-                time.sleep(20)
 
 
 def moosejaw_price_query(moosejaw_url):

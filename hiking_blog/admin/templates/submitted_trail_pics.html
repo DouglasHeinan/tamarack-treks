@@ -1,0 +1,13 @@
+{% include "header.html" %}
+
+<h2>Unverified Trail Pics Submitted by Users</h2>
+
+{% for pic in all_pics %}
+<img src="static/submitted_trail_pics/" alt="{{ pic }}" class="mt-5">
+
+<!--<li><a href="{{ url_for('admin_bp.verify_pic', pic=pic) }}">{{ pic }}</a></li>-->
+
+{% endfor %}
+
+
+{% include "footer.html" %}

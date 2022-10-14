@@ -15,37 +15,6 @@ gear_bp = Blueprint(
 )
 
 
-@gear_bp.route("/add_gear", methods=["GET", "POST"])
-@admin_only
-def add_gear():
-    """
-    Allows a user with admin privileges to add a gear entry to the database.
-
-    When the form is submitted, its info is entered into the gear table of the database and the user is redirected to
-    the home page.
-    """
-
-    form = GearForm()
-    if form.validate_on_submit():
-        new_review_gear = Gear(
-            name=form.name.data,
-            category=form.category.data,
-            img_url =form.img_url.data,
-            rating=form.rating.data,
-            review=form.review.data,
-            moosejaw_url=form.moosejaw_url.data,
-            moosejaw_price=form.moosejaw_price.data,
-            rei_url=form.rei_url.data,
-            rei_price=form.rei_price.data,
-            backcountry_url=form.backcountry_url.data,
-            backcountry_price=form.backcountry_price.data
-        )
-        db.session.add(new_review_gear)
-        db.session.commit()
-        return redirect(url_for("home_bp.home"))
-    return render_template("add_gear.html", form=form)
-
-
 @gear_bp.route("/edit_gear/<int:gear_id>", methods=["GET", "POST"])
 @admin_only
 def edit_gear(gear_id):
@@ -75,6 +44,9 @@ def edit_gear(gear_id):
         for field, value in form.data.items():
             if value is not None:
                 gear.field = value
+            else:
+                flash("All fields must have a value.")
+                return redirect(url_for("gear_bp.edit_gear"))
         db.session.commit()
         return redirect(url_for("home_bp.home"))
     return render_template("add_gear.html", form=form)

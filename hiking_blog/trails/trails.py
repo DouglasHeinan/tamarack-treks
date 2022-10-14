@@ -12,33 +12,6 @@ trail_bp = Blueprint(
 )
 
 
-@trail_bp.route("/add_trail", methods=["GET", "POST"])
-@admin_only
-def add_trail():
-    """
-    Allows a user with admin privileges to add a trail entry to the database.
-
-    When the form is submitted, its info is entered into the trails table of the database and the user is redirected to
-    the home page.
-    """
-
-    form = AddTrailForm()
-    if form.validate_on_submit():
-        new_hiking_trail = Trails(
-            name=form.name.data,
-            description=form.description.data,
-            img_url=form.img.data,
-            latitude=form.latitude.data,
-            longitude=form.longitude.data,
-            hiking_dist=form.hiking_distance.data,
-            elev_change=form.elevation_change.data
-        )
-        db.session.add(new_hiking_trail)
-        db.session.commit()
-        return redirect(url_for("home_bp.home"))
-    return render_template("add_trail.html", form=form)
-
-
 @trail_bp.route("/view_trail/<int:trail_id>", methods=["GET", "POST"])
 def view_trail(trail_id):
     """

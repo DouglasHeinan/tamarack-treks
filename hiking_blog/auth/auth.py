@@ -166,16 +166,4 @@ def admin_only(f):
     return decorated_function
 
 
-@admin_only
-@auth_bp.route("/add_admin", methods=["GET", "POST"])
-def add_admin():
-    form = AddAdminForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if not user:
-            flash("That username does not exist. Please try again.")
-            return redirect(url_for("auth_bp.login"))
-        user.is_admin = True
-        db.session.commit()
-        return redirect(url_for("home_bp.home"))
-    return render_template("add_admin.html", form=form)
+

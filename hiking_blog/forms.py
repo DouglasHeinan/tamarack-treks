@@ -69,7 +69,6 @@ class AddTrailForm(FlaskForm):
     description = CKEditorField("Description", validators=[DataRequired()])
     latitude = StringField("Latitude", validators=[DataRequired()])
     longitude = StringField("Longitude", validators=[DataRequired()])
-    img = StringField("Image URL", validators=[DataRequired(), URL()])
     hiking_distance = StringField("Hiking Distance in Miles", validators=[DataRequired()])
     elevation_change = StringField("Elevation Change", validators=[DataRequired()])
     submit_button = SubmitField("Submit")

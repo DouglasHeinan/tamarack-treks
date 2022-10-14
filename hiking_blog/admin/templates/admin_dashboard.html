@@ -1,0 +1,20 @@
+{% include "header.html" %}
+
+<div class="mt-3">
+    {% if user.is_admin %}
+    <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.add_admin') }}">
+        Add new admin
+    </a>
+    <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.add_gear') }}">
+        Add new gear review
+    </a>
+    <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.add_trail') }}">
+        Add a new trail
+    </a>
+    <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.submitted_trail_pics') }}">
+        Approve Trail Pics
+    </a>
+    {% endif %}
+</div>
+
+{% include "footer.html" %}
