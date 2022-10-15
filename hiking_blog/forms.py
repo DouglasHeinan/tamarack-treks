@@ -1,9 +1,10 @@
 """The collection of form classes used in this application."""
 
 from flask_wtf import FlaskForm
+from flask_ckeditor import CKEditorField
+from flask_wtf.file import FileField
 from wtforms.validators import DataRequired, URL, Length, Email
 from wtforms import StringField, SubmitField, SelectField, PasswordField
-from flask_ckeditor import CKEditorField
 
 GEAR_CATEGORIES = ["Tents", "Sleeping Bags", "Hiking Poles"]
 
@@ -71,6 +72,11 @@ class AddTrailForm(FlaskForm):
     longitude = StringField("Longitude", validators=[DataRequired()])
     hiking_distance = StringField("Hiking Distance in Miles", validators=[DataRequired()])
     elevation_change = StringField("Elevation Change", validators=[DataRequired()])
+    submit_button = SubmitField("Submit")
+
+
+class AddTrailPicForm(FlaskForm):
+    filename = FileField("File", validators=[DataRequired()])
     submit_button = SubmitField("Submit")
 
 

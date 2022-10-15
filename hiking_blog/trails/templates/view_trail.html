@@ -33,6 +33,18 @@
         <span class="sr-only">Next</span>
       </a>
     </div>
+    <div>
+        <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="btn btn-dark btn-lg">
+            Add a new picture
+        </a>
+        {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-success"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+    </div>
     <div class="row mt-3">
         <div class="col-sm-4 align-right">
             <h5>Length: {{ trail.hiking_dist }} miles</h5>

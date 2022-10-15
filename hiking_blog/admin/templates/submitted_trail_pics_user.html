@@ -1,0 +1,29 @@
+{% include "header.html" %}
+
+<div class="container text-center">
+    <h2>Unverified Trail Pics Submitted by A User</h2>
+
+    {% if all_pics == [] %}
+        <div class="text-center">
+            <h5 class="mt-3">No submitted photos to approve</h5>
+        </div>
+    {% else %}
+        <ul class="list-unstyled">
+            {% for pic in all_pics %}
+                <li>
+                    <a href="{{ url_for('admin_bp.static_submitted_trail_pic', path=pic) }}">
+                        <img src="{{ url_for('admin_bp.static_submitted_trail_pic', path=pic) }}"
+                             alt="{{ pic }}" class="img-thumbnail">
+                    </a>
+                    <div class="d-flex justify-content-between">
+                        <a class="btn btn-primary btn-lg">Post</a>
+                        <a href="{{ url_for('admin_bp.save_for_appeal', pic=pic) }}" class="btn btn-warning btn-lg">Save</a>
+                        <a class="btn btn-danger btn-lg">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+{% include "footer.html" %}

@@ -5,7 +5,11 @@ from hiking_blog.forms import AddAdminForm, AddTrailForm, GearForm
 from hiking_blog.models import User, Trails, Gear
 from hiking_blog.db import db
 from flask_login import login_required
+import shutil
 import os
+
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+DIR_START = "hiking_blog/admin/static/save_for_appeal_pics/"
 
 
 admin_bp = Blueprint(
@@ -15,13 +19,14 @@ admin_bp = Blueprint(
 )
 
 
-@admin_bp.route("/admin_dashboard")
+@admin_bp.route("/admin/dashboard")
 @admin_only
 def admin_dashboard():
-    return render_template("admin_dashboard.html", user=current_user)
+    pics_by_day = os.listdir("hiking_blog/admin/static/submitted_trail_pics")
+    return render_template("admin_dashboard.html", user=current_user, pics_by_day=pics_by_day)
 
 
-@admin_bp.route("/add_admin", methods=["GET", "POST"])
+@admin_bp.route("/admin/add_admin", methods=["GET", "POST"])
 @admin_only
 def add_admin():
     form = AddAdminForm()
@@ -36,7 +41,7 @@ def add_admin():
     return render_template("add_admin.html", form=form)
 
 
-@admin_bp.route("/add_trail", methods=["GET", "POST"])
+@admin_bp.route("/admin/add_trail", methods=["GET", "POST"])
 @admin_only
 def add_trail():
     """
@@ -62,7 +67,7 @@ def add_trail():
     return render_template("add_trail.html", form=form)
 
 
-@admin_bp.route("/add_gear", methods=["GET", "POST"])
+@admin_bp.route("/admin/add_gear", methods=["GET", "POST"])
 @admin_only
 def add_gear():
     """
@@ -93,15 +98,46 @@ def add_gear():
     return render_template("add_gear.html", form=form)
 
 
-@admin_bp.route("/submitted_trail_pics")
-@admin_only
-def submitted_trail_pics():
-    all_pics = os.listdir("hiking_blog/static/submitted_trail_pics/")
-    return render_template("submitted_trail_pics.html", all_pics=all_pics)
-
-
-@admin_bp.route("/admin/submitted_trail_pics/static/<path>")
+@admin_bp.route("/admin/submitted_trail_pics/<date>")
 @login_required
 @admin_only
-def static_submitted_trail_pic(path):
-    return send_from_directory("admin/static/submitted_trail_pics", path)
+def submitted_trail_pics(date):
+    pics = {}
+    user_trail_directories = os.listdir(f"hiking_blog/admin/static/submitted_trail_pics/{date}")
+    for directory in user_trail_directories:
+        pics[str(directory)] = os.listdir(f"hiking_blog/admin/static/submitted_trail_pics/{date}/{directory}")
+    return render_template(
+        "submitted_trail_pics.html", user_trail_directories=user_trail_directories, pics=pics, date=date
+    )
+
+
+@admin_bp.route("/admin/submitted_trail_pics/<date>/<user_trail>/<pic>")
+@login_required
+@admin_only
+def static_submitted_trail_pic(date, user_trail, pic):
+    path = f"{date}/{user_trail}/{pic}"
+    return send_from_directory("admin/static/submitted_trail_pics/", path)
+
+
+@admin_bp.route("/admin/save_for_appeal/<date>/<user_trail>/<pic>")
+def save_for_appeal(date, user_trail, pic):
+    origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
+    parent_dir = f"{DIR_START}{date}"
+    directory = f"{parent_dir}/{user_trail}"
+    in_existence = os.path.exists(directory)
+    if not in_existence:
+        directory = make_new_directory(parent_dir, user_trail)
+    target = directory
+    shutil.move(origin, target)
+    return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
+
+
+def make_new_directory(parent_dir, user_trail):
+    directory = f"{user_trail}"
+    path = os.path.join(parent_dir, directory)
+    os.makedirs(path)
+    return path
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

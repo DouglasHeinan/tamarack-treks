@@ -11,10 +11,22 @@
     <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.add_trail') }}">
         Add a new trail
     </a>
-    <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.submitted_trail_pics') }}">
-        Approve Trail Pics
-    </a>
     {% endif %}
+</div>
+
+<div class="container text-center mt-5">
+    <h2>Unvetted Pics</h2>
+
+    {% if pics_by_day == [] %}
+        <div class="text-center">
+            <h5 class="mt-3">No submitted photos to approve</h5>
+        </div>
+    {% else %}
+        {% for date in pics_by_day %}
+            <a href="{{ url_for('admin_bp.submitted_trail_pics', date=date) }}" ><h4>{{ date }}</h4></a>
+        {% endfor %}
+    {% endif %}
+
 </div>
 
 {% include "footer.html" %}

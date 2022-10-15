@@ -1,13 +1,22 @@
 {% include "header.html" %}
 
-<h2>Unverified Trail Pics Submitted by Users</h2>
-
-{% for pic in all_pics %}
-<img src="static/submitted_trail_pics/" alt="{{ pic }}" class="mt-5">
-
-<!--<li><a href="{{ url_for('admin_bp.verify_pic', pic=pic) }}">{{ pic }}</a></li>-->
-
+{% for directory in user_trail_directories %}
+    {% if pics[directory] != [] %}
+    <h5>{{ directory }}</h5>
+    {% endif %}
+    <ul class="list-unstyled">
+        {% for pic in pics[directory] %}
+            <li>
+                <img src="{{ url_for('admin_bp.static_submitted_trail_pic', date=date, user_trail=directory, pic=pic) }}"
+                     alt="{{ pic }}" class="img-thumbnail">
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-primary btn-lg">Post</a>
+                    <a href="{{ url_for('admin_bp.save_for_appeal', date=date, user_trail=directory, pic=pic) }}" class="btn btn-warning btn-lg">Save</a>
+                    <a class="btn btn-danger btn-lg">Delete</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 {% endfor %}
-
 
 {% include "footer.html" %}
