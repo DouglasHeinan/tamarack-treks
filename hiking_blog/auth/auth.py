@@ -1,11 +1,9 @@
-"""
-This file handles all user signup/login/logout activities of the application.
-"""
+"""This file handles all user signup/login/logout activities of the application."""
 
 from flask import Blueprint, render_template, redirect, flash, request, url_for, abort
 from flask_login import login_required, logout_user, current_user, login_user
 from functools import wraps
-from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, VerificationForm, AddAdminForm
+from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, VerificationForm
 from hiking_blog.login_manager import login_manager
 from hiking_blog.db import db
 from hiking_blog.models import User
@@ -22,74 +20,60 @@ auth_bp = Blueprint(
 )
 
 
-@auth_bp.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/auth/login", methods=["GET", "POST"])
 def login():
     """
     Allows the user to enter their username and password to login.
 
-    If the user enters their username and password while already logged in, user is redirected to the home page.
-    If username or password do not match entries in the database, screen is cleared and user is prompted to enter their
-    info again. If username and password match an entry in the database, user is logged in and redirected to either the
-    home page or whichever page they were originally destined for before being redirected.
+    Checks if the user is already logged in (if so, user is redirected to homepage). Then, runs a function to check the
+    login info provided on the form is valid (redirecting if it's not). Finally, logs the user in and sends them to
+    whatever page they were on when prompted for their login info.
     """
 
     if current_user.is_authenticated:
         flash("You are already logged in.")
         return redirect(url_for('home_bp.home'))
-
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if not user:
-            flash("That username does not exist. Please try again.")
-            return redirect(url_for("auth_bp.login"))
-        if not user.check_password(password=form.password.data):
-            flash("Password incorrect. Please Try again.")
-            form.username.data = user.username
-            return redirect(url_for("auth_bp.login"))
+        message, reroute = check_login(form, user)
+        if message is not None:
+            flash(message)
+            return reroute
         login_user(user, remember=True, duration=DAYS_BEFORE_LOGOUT)
         next_page = request.args.get("next")
         return redirect(next_page or url_for("home_bp.home"))
     return render_template("login.html", form=form, logged_in=current_user.is_authenticated)
 
 
-@auth_bp.route("/sign_up", methods=["GET", "POST"])
+@auth_bp.route("/auth/sign_up", methods=["GET", "POST"])
 def sign_up():
     """
     Allows a user without membership to the site to become a member.
 
-    If the user enters a username that already exists in the application's database, redirects them to the login page.
-    If the password doesn't match the verify_password data, the fields are cleared and the user is prompted to reenter
-    their info. Otherwise, creates a new user object in the users table.
+    Get request sends user to the form page to sign up. A post request runs a function to confirm the user is not
+    already a member and that their passwords match, then runs a separate function that creates a new user entry
+    in the database before redirecting them to the homepage.
     """
     form = SignUpForm()
     if form.validate_on_submit():
-        admin = False
-        all_users = User.query.all()
-        print(all_users)
-        if not all_users:
-            admin = True
-        if User.query.filter_by(username=form.username.data).first():
-            flash("You've already signed up!")
-            return redirect(url_for("auth_bp.login"))
-        if form.password.data != form.verify_password.data:
-            flash("Passwords Must Match")
-            return redirect(url_for("auth_bp.sign_up"))
-        new_user = User(
-            username=form.username.data,
-            email=form.email.data,
-            is_admin = admin
-        )
-        new_user.set_password(form.password.data)
-        db.session.add(new_user)
-        db.session.commit()
-        login_user(new_user)
+        admin, message, reroute = check_signup(form)
+        if message is not None:
+            flash(message)
+            return reroute
+        create_new_user(form, admin)
         return redirect(url_for("home_bp.home"))
     return render_template("sign_up.html", form=form, logged_in=current_user.is_authenticated)
 
 
-@auth_bp.route("/change_password_verify", methods=["GET", "POST"])
+@auth_bp.route("/auth/change_password_verify", methods=["GET", "POST"])
 def change_password_verify():
+    """
+    Verifies that current user actually requested a password change.
+
+    Takes the username and temporary password from the password_recovery function and compares them to the user's
+    entry in the VerificationForm. If all data matches, redirects user to the change_password function.
+    """
     password_code = request.args["password_code"]
     username = request.args["username"]
     user = User.query.filter_by(username=username).first()
@@ -102,8 +86,9 @@ def change_password_verify():
     return render_template("change_password_verify.html", form=form, user=user)
 
 
-@auth_bp.route("/change_password", methods=["GET", "POST"])
+@auth_bp.route("/auth/change_password", methods=["GET", "POST"])
 def change_password():
+    """Allows user to change their password."""
     username = request.args["username"]
     user = User.query.filter_by(username=username).first()
     form = ChangePasswordForm()
@@ -117,7 +102,7 @@ def change_password():
     return render_template("change_password.html", form=form)
 
 
-@auth_bp.route("/logout")
+@auth_bp.route("/auth/logout")
 @login_required
 def logout():
     """Logs the user out and redirects them to the home page."""
@@ -148,6 +133,57 @@ def unauthorized():
     return redirect(url_for("auth_bp.login"))
 
 
+def create_new_user(form, admin):
+    """Creates a new user entry in the database."""
+    new_user = User(
+        username=form.username.data,
+        email=form.email.data,
+        is_admin=admin
+    )
+    new_user.set_password(form.password.data)
+    db.session.add(new_user)
+    db.session.commit()
+    login_user(new_user)
+
+
+def check_signup(form):
+    """
+    Confirms that the user provided sign up info is valid.
+
+    Assigns the admin value for the would-be new user to False UNLESS it is the first user. Then, checks for validity
+    of user-entered-info, returning a flash message and redirect if invalid.
+    """
+
+    message = None
+    reroute = None
+    admin = False
+    all_users = User.query.all()
+    if not all_users:
+        admin = True
+    if User.query.filter_by(username=form.username.data).first():
+        message = "You've already signed up!"
+        reroute = redirect(url_for("auth_bp.login"))
+    if form.password.data != form.verify_password.data:
+        message = "Passwords Must Match"
+        reroute = redirect(url_for("auth_bp.sign_up"))
+    return admin, message, reroute
+
+
+def check_login(form, user):
+    """Checks user-entered-login info for validity."""
+    message = None
+    reroute = None
+    if not user:
+        message = "That username does not exist. Please try again."
+        reroute = redirect(url_for("auth_bp.login"))
+        return message, reroute
+    if not user.check_password(password=form.password.data):
+        message = "Password incorrect. Please Try again."
+        form.username.data = user.username
+        reroute = redirect(url_for("auth_bp.login"))
+    return message, reroute
+
+
 def admin_only(f):
     """
     A wrapper for functions throughout this application that require a user be logged in before they run.
@@ -164,6 +200,3 @@ def admin_only(f):
             return abort(403)
         return f(*args, **kwargs)
     return decorated_function
-
-
-

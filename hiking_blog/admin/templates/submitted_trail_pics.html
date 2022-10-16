@@ -2,7 +2,7 @@
 
 {% for directory in user_trail_directories %}
     {% if pics[directory] != [] %}
-    <h5>{{ directory }}</h5>
+        <h5>{{ directory }}</h5>
     {% endif %}
     <ul class="list-unstyled">
         {% for pic in pics[directory] %}

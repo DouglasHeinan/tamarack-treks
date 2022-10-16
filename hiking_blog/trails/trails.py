@@ -3,13 +3,12 @@ from flask import render_template, redirect, url_for, flash, Blueprint
 from flask_login import current_user, login_required
 from hiking_blog.forms import CommentForm, AddTrailPicForm
 from hiking_blog.models import Trails, TrailComments, db, User
+from hiking_blog.admin.admin import allowed_file, create_file_name
+from hiking_blog.contact import send_async_email, EMAIL
 from werkzeug.utils import secure_filename
-from hiking_blog.admin.admin import make_new_directory, allowed_file
-from hiking_blog.auth.auth import admin_only
 from datetime import datetime
 import os
 
-DIR_START = "hiking_blog/admin/static/submitted_trail_pics/"
 
 PICTURE_UPLOAD_SUCCESS = "You're photos have been successfully uploaded! They will now need to be vetted by one " \
                          "of our administrators. This process usually only takes a day or two. Once you're photo " \
@@ -68,18 +67,20 @@ def add_trail_pic(trail_id):
             trail = Trails.query.get(trail_id).name
             user_trail = user + "^" + trail
             date = datetime.today().strftime("%m-%d-%Y")
-            parent_dir = f"{DIR_START}{date}"
-            directory = f"{parent_dir}/{user_trail}"
-            in_existence = os.path.exists(directory)
-            if not in_existence:
-                directory = make_new_directory(parent_dir, user_trail)
+            sorting_dir = "submitted_trail_pics/"
+            directory = create_file_name(sorting_dir, date, user_trail)
             filename = secure_filename(file.filename)
             file.save(os.path.join(directory, filename))
             flash(PICTURE_UPLOAD_SUCCESS)
-            # admin should receive email here
+            admin_upload_notification(EMAIL, user, trail)
             return redirect(url_for("trail_bp.view_trail", trail_id=trail_id))
         else:
             flash("Invalid file type.")
             return redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
     return render_template("add_trail_pics.html", form=form)
 
+
+def admin_upload_notification(email, user, trail):
+    subject = "User photo upload notification"
+    message = f"User {user} has just uploaded photos for {trail} that need to be reviewed."
+    send_async_email(email, subject, message)

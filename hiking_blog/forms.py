@@ -35,6 +35,12 @@ class LoginForm(FlaskForm):
     submit_button = SubmitField("Submit")
 
 
+class UsernameRecoveryForm(FlaskForm):
+    """A class used for reminding a user of their username."""
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    submit_button = SubmitField("Submit")
+
+
 class PasswordRecoveryForm(FlaskForm):
     """A class used for creating a password recovery form."""
     username = StringField("Username", validators=[DataRequired()])
@@ -115,4 +121,4 @@ class CommentForm(FlaskForm):
     """A class used for the application's comment form."""
 
     comment_text = CKEditorField("Comment", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    submit_button = SubmitField("Submit")

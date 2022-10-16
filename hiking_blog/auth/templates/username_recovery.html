@@ -1,0 +1,14 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+{% include "header.html" %}
+
+<div class="container">
+    <h2>Forgot Username?</h2>
+    <p>Enter your email and a message will be sent to you reminding you of your username.</p>
+    {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "success"}) }}
+</div>
+
+
+{% include "footer.html" %}
+{% endblock %}

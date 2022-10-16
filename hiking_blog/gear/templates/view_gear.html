@@ -43,7 +43,7 @@
 <div class="container-fluid">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
-    {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+    {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) }}
     <div class="col-lg-8 col-md-10 mx-auto comment">
         <ul>
             {% for comment in gear.comments %}
