@@ -1,12 +1,11 @@
-"""Contains the functionality for viewing gear info and creating gear entries in the database."""
+"""Contains the functionality for viewing gear info and editing gear entries in the database."""
 from flask import render_template, redirect, url_for, flash, Blueprint, request
 from flask_login import current_user
-from hiking_blog.forms import CommentForm, GearForm
+from hiking_blog.admin.admin import delete_comment
+from hiking_blog.forms import CommentForm
 from hiking_blog.models import Gear, GearComments
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.db import db
-
-ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 
 gear_bp = Blueprint(
     "gear_bp", __name__,
@@ -15,92 +14,82 @@ gear_bp = Blueprint(
 )
 
 
-@gear_bp.route("/edit_gear/<int:gear_id>", methods=["GET", "POST"])
-@admin_only
-def edit_gear(gear_id):
+@gear_bp.route("/gear/view_gear/<int:db_id>", methods=["GET", "POST"])
+def view_gear(db_id):
     """
-    Allows a user with admin privileges to edit a gear entry in the database.
+    Allows the user to view the information about a gear specific item.
 
-    When the form is submitted, its info is entered into the gear table of the database and the user is redirected to
-    the home page.
-    """
-
-    gear = Gear.query.get(gear_id)
-    form = GearForm()
-
-    form.name.data = gear.name
-    form.category.data = gear.category
-    form.img_url.data = gear.img_url
-    form.rating.data = gear.rating
-    form.review.data = gear.review
-    form.moosejaw_url.data = gear.moosejaw_url
-    form.moosejaw_price.data = gear.moosejaw_price
-    form.rei_url.data = gear.rei_url
-    form.rei_price.data = gear.rei_price
-    form.backcountry_url.data = gear.backcountry_url
-    form.backcountry_price.data = gear.backcountry_price
-
-    if form.validate_on_submit():
-        for field, value in form.data.items():
-            if value is not None:
-                gear.field = value
-            else:
-                flash("All fields must have a value.")
-                return redirect(url_for("gear_bp.edit_gear"))
-        db.session.commit()
-        return redirect(url_for("home_bp.home"))
-    return render_template("add_gear.html", form=form)
-
-
-@gear_bp.route("/view_gear/<int:gear_id>", methods=["GET", "POST"])
-def view_gear(gear_id):
-    """
-    Allows the user to view the information about a specific gear item stored in the gear table of the database.
-
-    Directs the user to a template containing all stored information regarding a specific gear item in the database.
+    Directs the user to a template containing all stored information regarding a gear item in the database.
     Additionally, loads the comment form, allowing the user to comment on the gear and, when submitted, stores their
     comment in the database as well.
 
     Parameters
     ----------
-    gear_id : int
+    db_id : int
         The primary key for the specified gear item in the gear table of the database
     """
 
     form = CommentForm()
-    requested_gear = Gear.query.get(gear_id)
+    gear = Gear.query.get(db_id)
+    info = create_product_links(gear)
+
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
             return redirect(url_for("auth_bp.login"))
-        new_comment = GearComments(
-            text=form.comment_text.data,
-            commenter=current_user,
-            parent_gear_posts=requested_gear
-        )
-        db.session.add(new_comment)
+        create_new_comment(form, gear)
+        form.comment_text.data = ""
+    return render_template("view_gear.html", gear=gear, form=form, current_user=current_user, info=info)
+
+
+@gear_bp.route("/gear/edit_comment/<comment_id>", methods=["GET", "POST"])
+def edit_gear_comment(comment_id):
+    """Allows a user to edit one of their own comments on a piece of gear from the database."""
+    gear_id = request.args["gear_id"]
+    comment = GearComments.query.get(comment_id)
+    form = CommentForm(
+        comment_text=comment.text
+    )
+
+    if form.validate_on_submit():
+        comment.text = form.comment_text.data
         db.session.commit()
         form.comment_text.data = ""
-    return render_template("view_gear.html", gear=requested_gear, form=form, current_user=current_user)
+        return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
+    return render_template("edit_comment.html", form=form)
 
 
-@gear_bp.route("/view_prices/<gear_id>")
-def view_prices(gear_id):
-    """
-    Renders a page of links to the specified piece of gear's Amazon, REI, and Backcountry pages.
+@gear_bp.route("/gear/delete_comment/<comment_id>")
+def delete_gear_comment(comment_id):
+    """Allows a user to delete one of their own comments on a piece of gear from the database."""
+    gear_id = request.args["gear_id"]
+    comment = GearComments.query.get(comment_id)
+    comment.text = "This comment deleted by original poster."
+    db.session.commit()
+    return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
 
-    Scrapes the gear price from the three major retailers and creates a dictionary of the gear items' prices and
-    retailer links. That dictionary is sent to a template which, when rendered, displays the price from each of the
-    major retailers for the gear item in question and allows the user to visit their pages.
 
-    Parameters
-    ----------
-    gear_id : int
-        The primary key for the specified gear item in the gear table of the database
-    """
+@gear_bp.route("/gear/admin_delete/<comment_id>", methods=["GET", "POST"])
+@admin_only
+def admin_delete_gear_comment(comment_id):
+    """Allows a user with admin privileges to delete a gear comment from the database."""
+    gear_id = request.args["gear_id"]
+    comment = GearComments.query.get(comment_id)
+    next_page = delete_comment(comment, gear_id, "gear")
+    return next_page
 
-    gear = Gear.query.get(gear_id)
 
+def create_new_comment(form, gear):
+    new_comment = GearComments(
+        text=form.comment_text.data,
+        commenter=current_user,
+        parent_gear_posts=gear
+    )
+    db.session.add(new_comment)
+    db.session.commit()
+
+
+def create_product_links(gear):
     info = {
         "moosejaw": {"price": gear.moosejaw_price,
                      "link": gear.moosejaw_url},
@@ -109,45 +98,4 @@ def view_prices(gear_id):
         "backcountry": {"price": gear.backcountry_price,
                         "link": gear.backcountry_url}
     }
-    return render_template("gear_info.html", gear=gear, info=info)
-
-
-@gear_bp.route("/edit_comment/<comment_id>", methods=["GET", "POST"])
-def edit_gear_comment(comment_id):
-    gear_id = request.args["gear_id"]
-    comment = GearComments.query.get(comment_id)
-    form = CommentForm(
-        comment_text=comment.text
-    )
-    if form.validate_on_submit():
-        comment.text = form.comment_text.data
-        db.session.commit()
-        form.comment_text.data = ""
-        return redirect(url_for("gear_bp.view_gear", gear_id=gear_id))
-    return render_template("edit_comment.html", form=form)
-
-
-@gear_bp.route("/delete_comment/<comment_id>")
-def delete_gear_comment(comment_id):
-    gear_id = request.args["gear_id"]
-    comment = GearComments.query.get(comment_id)
-    db.session.delete(comment)
-    db.session.commit()
-    return redirect(url_for("gear_bp.view_gear", gear_id=gear_id))
-
-
-@admin_only
-@gear_bp.route("/admin_delete/<comment_id>", methods=["GET", "POST"])
-def admin_delete_gear_comment(comment_id):
-    gear_id = request.args["gear_id"]
-    comment = GearComments.query.get(comment_id)
-    form = CommentForm(
-        comment_text=comment.text
-    )
-    if form.validate_on_submit():
-        comment.text = ADMIN_DELETE_MESSAGE
-        db.session.commit()
-        form.comment_text.data = ""
-        return redirect(url_for("gear_bp.view_gear", gear_id=gear_id))
-    return render_template("edit_comment.html", form=form)
-
+    return info

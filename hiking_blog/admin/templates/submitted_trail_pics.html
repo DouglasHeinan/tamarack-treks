@@ -7,12 +7,25 @@
     <ul class="list-unstyled">
         {% for pic in pics[directory] %}
             <li>
-                <img src="{{ url_for('admin_bp.static_submitted_trail_pic', date=date, user_trail=directory, pic=pic) }}"
+                <img src="{{ url_for('admin_bp.static_submitted_trail_pic',
+                date=date, user_trail=directory, pic=pic) }}"
                      alt="{{ pic }}" class="img-thumbnail">
                 <div class="d-flex justify-content-between">
-                    <a class="btn btn-primary btn-lg">Post</a>
-                    <a href="{{ url_for('admin_bp.save_for_appeal', date=date, user_trail=directory, pic=pic) }}" class="btn btn-warning btn-lg">Save</a>
-                    <a class="btn btn-danger btn-lg">Delete</a>
+                    <a href="{{ url_for('admin_bp.approve_submitted_trail_pic',
+                    date=date, user_trail=directory, pic=pic) }}"
+                       class="btn btn-primary btn-lg">
+                        Post
+                    </a>
+                    <a href="{{ url_for('admin_bp.save_for_appeal',
+                    date=date, user_trail=directory, pic=pic) }}"
+                       class="btn btn-warning btn-lg">
+                        Save
+                    </a>
+                    <a href="{{ url_for('admin_bp.delete_submitted_photo',
+                    date=date, user_trail=directory, pic=pic) }}"
+                       class="btn btn-danger btn-lg">
+                        Delete
+                    </a>
                 </div>
             </li>
         {% endfor %}

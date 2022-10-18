@@ -21,7 +21,7 @@
     <h3>Trail Reviews</h3>
     <ul>
         {% for trail in all_trails %}
-        <li><a href="{{ url_for('trail_bp.view_trail', trail_id=trail.id) }}">{{trail.name}}</a></li>
+        <li><a href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">{{trail.name}}</a></li>
         {% endfor %}
     </ul>
 </div>
@@ -30,7 +30,7 @@
     <h3>Gear Reviews</h3>
     <ul>
         {% for gear in all_gear %}
-        <li><a href="{{ url_for('gear_bp.view_gear', gear_id=gear.id) }}">{{gear.name}}</a></li>
+        <li><a href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{gear.name}}</a></li>
         {% endfor %}
     </ul>
 

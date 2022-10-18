@@ -68,11 +68,41 @@
     {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) }}
     <div class="col-lg-8 col-md-10 mx-auto comment">
         <ul>
-            {% for comment in trail.comments %}
+            {% for comment in trail.trail_page_comments %}
             <li>
     <!--            need to add avatar here   -->
                 <div>{{ comment.text|safe }}</div>
                 <span>   -{{ comment.commenter.username }}</span>
+                <div>
+                    {% if comment.commenter_id ==  current_user.id %}
+                    <span>
+                        <a
+                            class="btn btn-danger mt-3"
+                            href="{{ url_for('trail_bp.edit_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
+                                Edit Post
+                        </a>
+                    </span>
+                    <span>
+                        <a
+                            class="btn btn-danger mt-3"
+                            href="{{ url_for('trail_bp.delete_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
+                                Delete Post
+                        </a>
+                    </span>
+                    {% endif %}
+                    {% if current_user.is_admin %}
+                    <span>
+                        <a
+                            class="btn btn-danger mt-3"
+                            href="{{ url_for(
+                            'trail_bp.admin_delete_trail_comment',
+                            comment_id=comment.id,
+                            trail_id=trail.id) }}">
+                                Admin Delete
+                        </a>
+                    </span>
+                    {% endif %}
+                </div>
                 <hr>
             </li>
             {% endfor %}

@@ -1,10 +1,6 @@
 """Contains the functions that determine the price of a piece of gear from three major retailers."""
 import requests
-from hiking_blog.db import db
-from hiking_blog.models import Gear
 from bs4 import BeautifulSoup
-import time
-from datetime import datetime
 
 
 HEADER = {
@@ -15,7 +11,7 @@ HEADER = {
 
 
 def moosejaw_price_query(moosejaw_url):
-    """Scrapes the Amazon page of the requested gear piece and returns its price"""
+    """Scrapes the Moosejaw page of the requested gear piece and returns its price"""
 
     response = requests.get(moosejaw_url, headers=HEADER)
     soup = BeautifulSoup(response.text, features="lxml")

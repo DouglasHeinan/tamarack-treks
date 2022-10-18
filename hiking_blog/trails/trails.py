@@ -1,10 +1,11 @@
 """Contains the functionality for viewing trail info and creating trail entries in the database."""
-from flask import render_template, redirect, url_for, flash, Blueprint
+from flask import render_template, redirect, url_for, flash, Blueprint, request
 from flask_login import current_user, login_required
 from hiking_blog.forms import CommentForm, AddTrailPicForm
 from hiking_blog.models import Trails, TrailComments, db, User
-from hiking_blog.admin.admin import allowed_file, create_file_name
+from hiking_blog.admin.admin import allowed_file, create_file_name, delete_comment
 from hiking_blog.contact import send_async_email, EMAIL
+from hiking_blog.auth.auth import admin_only
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
@@ -22,8 +23,8 @@ trail_bp = Blueprint(
 )
 
 
-@trail_bp.route("/<int:trail_id>/view_trail", methods=["GET", "POST"])
-def view_trail(trail_id):
+@trail_bp.route("/<int:db_id>/view_trail", methods=["GET", "POST"])
+def view_trail(db_id):
     """
     Allows the user to view the information  about a specific trail stored in the trails table of the database.
 
@@ -33,11 +34,11 @@ def view_trail(trail_id):
 
     Parameters
     ----------
-    trail_id : int
+    db_id : int
         The primary key for the specified trail in the trails table of the database
     """
     form = CommentForm()
-    requested_trail = Trails.query.get(trail_id)
+    requested_trail = Trails.query.get(db_id)
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
@@ -53,8 +54,45 @@ def view_trail(trail_id):
     return render_template("view_trail.html", trail=requested_trail, form=form, current_user=current_user)
 
 
+@trail_bp.route("/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
+def edit_trail_comment(comment_id):
+    """Allows a user to edit one of their own comments on a piece of gear from the database."""
+    trail_id = request.args["trail_id"]
+    comment = TrailComments.query.get(comment_id)
+    form = CommentForm(
+        comment_text=comment.text
+    )
+    if form.validate_on_submit():
+        comment.text = form.comment_text.data
+        db.session.commit()
+        form.comment_text.data = ""
+        return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
+    return render_template("edit_comment.html", form=form)
+
+
+@trail_bp.route("/trail/delete_comment/<comment_id>")
+def delete_trail_comment(comment_id):
+    """Allows a user to delete one of their own comments on a piece of gear from the database."""
+    trail_id = request.args["trail_id"]
+    comment = TrailComments.query.get(comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
+
+
+@trail_bp.route("/trail/admin_delete/<comment_id>", methods=["GET", "POST"])
+@admin_only
+def admin_delete_trail_comment(comment_id):
+    """Allows a user with admin privileges to delete a gear comment from the database."""
+    trail_id = request.args["trail_id"]
+    comment = TrailComments.query.get(comment_id)
+    next_page = delete_comment(comment, trail_id, "trail")
+    return next_page
+
+
 @trail_bp.route("/<int:trail_id>/add_trail_pic", methods=["GET", "POST"])
 @login_required
+# Break this into smaller chunks
 def add_trail_pic(trail_id):
     form = AddTrailPicForm()
     if form.validate_on_submit():
@@ -73,7 +111,7 @@ def add_trail_pic(trail_id):
             file.save(os.path.join(directory, filename))
             flash(PICTURE_UPLOAD_SUCCESS)
             admin_upload_notification(EMAIL, user, trail)
-            return redirect(url_for("trail_bp.view_trail", trail_id=trail_id))
+            return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
         else:
             flash("Invalid file type.")
             return redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
