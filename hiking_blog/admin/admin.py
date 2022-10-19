@@ -1,6 +1,6 @@
-"""This file is a collection of admin site maintenance operations."""
+"""This file is a collection of site maintenance operations accessible to a site administrator."""
 
-from flask import Blueprint, flash, redirect, render_template, url_for, request, send_from_directory
+from flask import Blueprint, flash, redirect, render_template, url_for, send_from_directory
 from flask_login import current_user
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.forms import AddAdminForm, AddTrailForm, GearForm, CommentForm
@@ -84,7 +84,8 @@ def add_trail():
         )
         db.session.add(new_hiking_trail)
         db.session.commit()
-        return redirect(url_for("home_bp.home"))
+        trail_id = new_hiking_trail.id
+        return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
     return render_template("add_trail.html", form=form)
 
 
@@ -105,7 +106,8 @@ def add_gear():
         update_gear_entry(new_review_gear, form)
         db.session.add(new_review_gear)
         db.session.commit()
-        return redirect(url_for("home_bp.home"))
+        gear_id = new_review_gear.id
+        return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
     return render_template("add_gear.html", form=form)
 
 
@@ -142,7 +144,7 @@ def submitted_trail_pics(date):
     Creates a dictionary of submitted but unapproved photo submissions from users.
 
     This function gathers all the currently unexamined photo submissions from users and puts them in a dictionary to be
-    easily displayed in the template
+    easily displayed in the template.
 
     Parameters
     ----------
@@ -164,6 +166,7 @@ def submitted_trail_pics(date):
 @login_required
 @admin_only
 def static_submitted_trail_pic(date, user_trail, pic):
+    """Displays submitted trail photo."""
     path = f"{date}/{user_trail}/{pic}"
     return send_from_directory("admin/static/submitted_trail_pics/", path)
 
@@ -172,6 +175,24 @@ def static_submitted_trail_pic(date, user_trail, pic):
 @login_required
 @admin_only
 def approve_submitted_trail_pic(date, user_trail, pic):
+    """
+    Saves user-submitted photos to the database and posts them to the app.
+
+    When the admin approves a photo, it is added to the database and then moved to the 'approved' directory. The user
+    is emailed a notification that their photo has been approved.
+
+    Parameters
+    ----------
+    date : str
+        The date, in string form, that the photos were submitted. The date of submission is also the name of the file
+        created to store the file that stores their photos.
+    user_trail : str
+        A string that combines the user's username and the relevant trail's trail name. This is the name of the file
+        that stores the user's photos. It is contained inside the date file.
+    pic : str
+        The file name of the user submitted photo. Must use one of the ALLOWED_EXTENSIONS.
+    """
+
     username = user_trail.split("^")[0]
     trail_name = user_trail.split("^")[1]
     user = User.query.filter_by(username=username).first()
@@ -183,10 +204,8 @@ def approve_submitted_trail_pic(date, user_trail, pic):
     )
     db.session.add(new_pic)
     db.session.commit()
-    to_delete = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
-    os.remove(to_delete)
     save_pic = "keep"
-    create_photo_notification_email(user_trail, save_pic)
+    move_file_and_email_user(user_trail, save_pic, date, pic)
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
@@ -200,6 +219,8 @@ def delete_submitted_photo(date, user_trail, pic):
     If a user-submitted photo is clearly and unequivocally in violation of the site's terms of use and, in the opinion
     of the admin, in extremely poor taste, the admin will delete the photo from the database. The function will
     automatically notify the user of the deletion and the reason for it.
+    # -----------------------Add params
+    # -----------------------Add reason for deletion.
     """
     to_delete = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
     save_pic = False
@@ -234,18 +255,30 @@ def save_for_appeal(date, user_trail, pic):
     pic : str
         The file name of the user submitted photo. Must use one of the ALLOWED_EXTENSIONS.
     """
-
+    # -------------------Add radio buttons for reason why.
     save_pic = "temp"
-    create_photo_notification_email(user_trail, save_pic)
-    origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
-    sorting_dir = "save_for_appeal_pics/"
-    directory = create_file_name(sorting_dir, date, user_trail)
-    target = directory
-    shutil.move(origin, target)
+    move_file_and_email_user(user_trail, save_pic, date, pic)
+    # create_photo_notification_email(user_trail, save_pic)
+    # origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
+    # sorting_dir = "save_for_appeal_pics/"
+    # directory = create_file_name(sorting_dir, date, user_trail)
+    # target = directory
+    # shutil.move(origin, target)
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
+def move_file_and_email_user(user_trail, save_pic, date, pic):
+    """Moves user-submitted photos to the appropriate directory and emails user of the photo's status."""
+    create_photo_notification_email(user_trail, save_pic)
+    origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
+    sorting_directory = "approved"
+    directory = create_file_name(sorting_directory, date, user_trail)
+    target = directory
+    shutil.move(origin, target)
+
+
 def create_photo_notification_email(user_trail, save_pic):
+    """Creates and sends the email that notifies the user of a change in their photo's status."""
     username = user_trail.split("^")[0]
     user = User.query.filter_by(username=username).first()
     user_email = user.email
@@ -262,7 +295,6 @@ def create_photo_notification_email(user_trail, save_pic):
                   "days until it is removed from our servers. If you believe your photo has been flagged in error, " \
                   "please contact us through our contact page with the subject 'photo error' in the next thirty days " \
                   "and we will work with you to resolve the issue."
-    print(f"user = {username}, email = {user_email}.")
     send_async_email(user_email, subject, message)
 
 
