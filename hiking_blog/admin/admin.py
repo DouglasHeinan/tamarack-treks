@@ -8,8 +8,7 @@ from hiking_blog.models import User, Trails, Gear, TrailPictures
 from hiking_blog.contact import send_async_email
 from hiking_blog.db import db
 from flask_login import login_required
-import shutil
-import os
+import shutil, os, errno
 
 ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -23,6 +22,7 @@ admin_bp = Blueprint(
 )
 
 
+# ----------------------------------------MAIN PAGES----------------------------------------
 @admin_bp.route("/admin/dashboard")
 @admin_only
 @login_required
@@ -35,6 +35,8 @@ def admin_dashboard():
     """
 
     pics_by_day = os.listdir("hiking_blog/admin/static/submitted_trail_pics")
+    folder = "hiking_blog/admin/static/submitted_trail_pics"
+    pics_by_day = delete_empty_directories(folder, pics_by_day)
     return render_template("admin_dashboard.html", user=current_user, pics_by_day=pics_by_day)
 
 
@@ -136,6 +138,7 @@ def edit_gear(gear_id):
     return render_template("add_gear.html", form=form)
 
 
+# ----------------------------------------TRAIL PHOTO FUNCTIONS----------------------------------------
 @admin_bp.route("/admin/submitted_trail_pics/<date>")
 @login_required
 @admin_only
@@ -160,15 +163,6 @@ def submitted_trail_pics(date):
     return render_template(
         "submitted_trail_pics.html", user_trail_directories=user_trail_directories, pics=pics, date=date
     )
-
-
-@admin_bp.route("/admin/static/submitted_trail_pic/<date>/<user_trail>/<pic>")
-@login_required
-@admin_only
-def static_submitted_trail_pic(date, user_trail, pic):
-    """Displays submitted trail photo."""
-    path = f"{date}/{user_trail}/{pic}"
-    return send_from_directory("admin/static/submitted_trail_pics/", path)
 
 
 @admin_bp.route("/admin/approve_submitted_photo/<date>/<user_trail>/<pic>")
@@ -255,18 +249,22 @@ def save_for_appeal(date, user_trail, pic):
     pic : str
         The file name of the user submitted photo. Must use one of the ALLOWED_EXTENSIONS.
     """
-    # -------------------Add radio buttons for reason why.
+    # -------------------Add radio buttons for reason why.-------------------------------
     save_pic = "temp"
     move_file_and_email_user(user_trail, save_pic, date, pic)
-    # create_photo_notification_email(user_trail, save_pic)
-    # origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
-    # sorting_dir = "save_for_appeal_pics/"
-    # directory = create_file_name(sorting_dir, date, user_trail)
-    # target = directory
-    # shutil.move(origin, target)
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
+@admin_bp.route("/admin/static/submitted_trail_pic/<date>/<user_trail>/<pic>")
+@login_required
+@admin_only
+def static_submitted_trail_pic(date, user_trail, pic):
+    """Displays submitted trail photo."""
+    path = f"{date}/{user_trail}/{pic}"
+    return send_from_directory("admin/static/submitted_trail_pics/", path)
+
+
+# ----------------------------------------PHOTO-RELATED FUNCTIONS----------------------------------------
 def move_file_and_email_user(user_trail, save_pic, date, pic):
     """Moves user-submitted photos to the appropriate directory and emails user of the photo's status."""
     create_photo_notification_email(user_trail, save_pic)
@@ -283,20 +281,22 @@ def create_photo_notification_email(user_trail, save_pic):
     user = User.query.filter_by(username=username).first()
     user_email = user.email
     if save_pic == "temp":
-        subject = "Your trail photo has been rejected."
-        message = "The administrators have determined that your photo is inappropriate for this site and it has been " \
-                  "deleted from the server."
+        subject = "Your trail photo might have a problem"
+        message = "The administrators have flagged your photo for some reason. Your photo will be  kept for thirty " \
+        "days until it is removed from our servers. If you believe your photo has been flagged in error, " \
+        "please contact us through our contact page with the subject 'photo error' in the next thirty days " \
+        "and we will work with you to resolve the issue."
     elif save_pic == "keep":
         subject = "Your trail photo has been posted!"
         message = "Your photo has been approved by the admin and is now posted on the app."
     else:
-        subject = "Your trail photo might have a problem"
-        message = "The administrators have flagged your photo for some reason. Your photo will be  kept for thirty " \
-                  "days until it is removed from our servers. If you believe your photo has been flagged in error, " \
-                  "please contact us through our contact page with the subject 'photo error' in the next thirty days " \
-                  "and we will work with you to resolve the issue."
+        subject = "Your trail photo has been rejected."
+        message = "The administrators have determined that your photo is inappropriate for this site and it has been " \
+                  "deleted from the server."
     send_async_email(user_email, subject, message)
 
+
+# ----------------------------------------FILE AND DIRECTORY SORTING FUNCTIONS----------------------------------------
 
 def make_new_directory(parent_dir, user_trail):
     """Creates a new directory if one with the appropriate name does not exist."""
@@ -327,7 +327,7 @@ def create_file_name(sorting_dir, date, user_trail):
         that stores the user's photos. It is contained inside the date file.
     """
 
-    parent_dir = f"{DIR_START}{sorting_dir}{date}"
+    parent_dir = f"{DIR_START}{sorting_dir}/{date}"
     directory = f"{parent_dir}/{user_trail}"
     in_existence = os.path.exists(directory)
     if not in_existence:
@@ -335,11 +335,48 @@ def create_file_name(sorting_dir, date, user_trail):
     return directory
 
 
+def delete_empty_directories(folder, directories):
+    """
+    Deletes empty user-submitted photo directories after their contents have been approved or rejected by an admin.
+
+    This function is called upon loading the admin_dashboard function. Before rendering that template, this function
+    iterates through the approved, save_for_appeal, and submitted_trail_pics directories in this blueprint's static
+    folder. During that iteration, it iterates through each sub-directory, removing that sub-directory if it is empty.
+    Then, it checks to see if the parent directory it's iterating through is empty, deleting it if it is. Finally, it
+    returns a list of all directories that still have contents to be displayed in the admin_dashboard template.
+
+    PARAMETERS
+    ----------
+    folder : str
+        The pathway to be joined with each directory to be iterated through.
+    directories : list
+        A list of directories to be iterated through.
+    """
+
+    for directory in directories:
+        working_directory = os.path.join(folder, directory)
+        sub_directories = os.listdir(working_directory)
+        for sub_directory in sub_directories:
+            try:
+                os.rmdir(os.path.join(working_directory, sub_directory))
+            except OSError as e:
+                if e.errno != errno.ENOTEMPTY:
+                    raise
+        try:
+            os.rmdir(os.path.join(folder, directory))
+        except OSError as e:
+            if e.errno != errno.ENOTEMPTY:
+                raise
+    pics_by_day = os.listdir(folder)
+    return pics_by_day
+
+
 def allowed_file(filename):
     """Checks a user-submitted file to confirm it has one of the appropriate extensions."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+# ----------------------------------------UTILITY FUNCTIONS----------------------------------------
 def delete_comment(comment, db_id, page):
     """
     Accessed from the view_gear and view_trail templates, deletes a comment specified by the admin.
