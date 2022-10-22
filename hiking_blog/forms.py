@@ -6,7 +6,7 @@ from flask_wtf.file import FileField
 from wtforms.validators import DataRequired, URL, Length, Email
 from wtforms import StringField, SubmitField, SelectField, PasswordField
 
-GEAR_CATEGORIES = ["Tents", "Sleeping Bags", "Hiking Poles"]
+GEAR_CATEGORIES = ["Tents", "Sleeping Bags", "Trekking Poles", "Furniture", "Kitchen"]
 
 
 class SignUpForm(FlaskForm):

@@ -133,12 +133,18 @@ def unauthorized():
     return redirect(url_for("auth_bp.login"))
 
 
+def email_verification():
+    """Upon signing up, emails the user to confirm the email address they've entered at time of signup is correct."""
+
+
+
 def create_new_user(form, admin):
     """Creates a new user entry in the database."""
     new_user = User(
         username=form.username.data,
         email=form.email.data,
-        is_admin=admin
+        is_admin=admin,
+        email_confirmed=False
     )
     new_user.set_password(form.password.data)
     db.session.add(new_user)

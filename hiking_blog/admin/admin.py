@@ -270,8 +270,7 @@ def move_file_and_email_user(user_trail, save_pic, date, pic):
     create_photo_notification_email(user_trail, save_pic)
     origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
     sorting_directory = "approved"
-    directory = create_file_name(sorting_directory, date, user_trail)
-    target = directory
+    target = create_file_name(sorting_directory, date, user_trail)
     shutil.move(origin, target)
 
 
@@ -283,9 +282,9 @@ def create_photo_notification_email(user_trail, save_pic):
     if save_pic == "temp":
         subject = "Your trail photo might have a problem"
         message = "The administrators have flagged your photo for some reason. Your photo will be  kept for thirty " \
-        "days until it is removed from our servers. If you believe your photo has been flagged in error, " \
-        "please contact us through our contact page with the subject 'photo error' in the next thirty days " \
-        "and we will work with you to resolve the issue."
+                  "days until it is removed from our servers. If you believe your photo has been flagged in error, " \
+                  "please contact us through our contact page with the subject 'photo error' in the next thirty days " \
+                  "and we will work with you to resolve the issue."
     elif save_pic == "keep":
         subject = "Your trail photo has been posted!"
         message = "Your photo has been approved by the admin and is now posted on the app."

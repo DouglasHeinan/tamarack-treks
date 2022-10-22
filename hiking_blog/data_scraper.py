@@ -22,7 +22,6 @@ def app_updates():
         from hiking_blog.gear.gear_prices import moosejaw_price_query, rei_price_query, backcountry_price_query
 
         while True:
-            print("Doing the thing.")
             all_gear = Gear.query.all()
             parent_path = f"hiking_blog/admin/static"
             all_folders = os.listdir(parent_path)
@@ -32,6 +31,25 @@ def app_updates():
 
 
 def check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_price_query):
+    """
+    Updates prices in the gear table.
+
+    Iterates through every entry in the gear table and scrapes the links associated with the three major retailers for
+    the product's current price. It then updates the price in the database.
+
+    PARAMETERS
+    ----------
+    all_gear : list
+        A list of all gear entires in the database.
+    moosejaw_price_query : function
+        A function that scrapes the product page on moosejaw for the current price.
+    rei_price_query : function
+        A function that scrapes the product page on rei for the current price.
+    backcountry_price_query : function
+    A function that scrapes the product page on backcountry for the current price.
+
+    """
+
     for gear_piece in all_gear:
         if gear_piece.moosejaw_price is not None:
             gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
@@ -40,24 +58,31 @@ def check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_pr
         if gear_piece.backcountry_price is not None:
             gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
         db.db.session.commit()
-        print(f"Made changes to {gear_piece.name}.")
 
 
 def delete_old_files(all_folders, parent_path):
+    """
+    Deletes all photo files thirty days after creation time in static folder sub-directories.
+
+    This function iterates through the approved, save_for_appeal_pics, and submitted_trail_pics directories and deletes
+    any sub-directories that were created thirty or more days ago.
+
+    PARAMETERS
+    ----------
+    all_folders : list
+        A list of the three directories: approved, save_for_appeal_pics, and submitted_trail_pics.
+    parent_path : str
+        The file path preceding the names of the three folders.
+    """
+
     current_time = time.time()
     for directory in all_folders:
         directories_queued_for_deletion = os.listdir(f"{parent_path}/{directory}")
         for old_folder in directories_queued_for_deletion:
             full_path = f"{parent_path}/{directory}/{old_folder}"
             creation_time = os.path.getctime(full_path)
-            print(f"Creation time for {old_folder}: {time.ctime(creation_time)}")
-            if (current_time - creation_time) // (24 * 3600) >= 3:
+            if (current_time - creation_time) // (24 * 3600) >= 30:
                 shutil.rmtree(full_path)
-                print(f"Directory {str(old_folder)} removed")
-            else:
-                print(f"Kept {old_folder}")
-        print(f"Finished with {directory}")
-    print(f"Finished with {all_folders}")
 
 
 if __name__ == "__main__":

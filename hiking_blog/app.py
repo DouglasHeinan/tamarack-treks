@@ -48,10 +48,6 @@ def init_app():
 
         db.create_db()
 
-        # thread1 = Thread(target=gear_prices.update_gear_prices)
-        # thread1.daemon = True
-        # thread1.start()
-        # data_scraper.async_update_gear_info(gear_prices.update_gear_prices)
         return app
 
 
