@@ -1,12 +1,14 @@
 """This file handles all user signup/login/logout activities of the application."""
 
-from flask import Blueprint, render_template, redirect, flash, request, url_for, abort
+from flask import Blueprint, render_template, redirect, flash, request, url_for, abort, current_app
 from flask_login import login_required, logout_user, current_user, login_user
 from functools import wraps
-from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, VerificationForm
+from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, VerificationForm, PasswordRecoveryForm
 from hiking_blog.login_manager import login_manager
 from hiking_blog.db import db
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from hiking_blog.models import User
+from hiking_blog.contact import send_password_reset_email
 from datetime import timedelta
 
 
@@ -38,6 +40,7 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         message, reroute = check_login(form, user)
         if message is not None:
+            print(form.password.data)
             flash(message)
             return reroute
         login_user(user, remember=True, duration=DAYS_BEFORE_LOGOUT)
@@ -66,40 +69,117 @@ def sign_up():
     return render_template("sign_up.html", form=form, logged_in=current_user.is_authenticated)
 
 
-@auth_bp.route("/auth/change_password_verify", methods=["GET", "POST"])
-def change_password_verify():
-    """
-    Verifies that current user actually requested a password change.
-
-    Takes the username and temporary password from the password_recovery function and compares them to the user's
-    entry in the VerificationForm. If all data matches, redirects user to the change_password function.
-    """
-    password_code = request.args["password_code"]
-    username = request.args["username"]
-    user = User.query.filter_by(username=username).first()
-    form = VerificationForm()
+@auth_bp.route("/auth/password_recovery", methods=["GET", "POST"])
+def password_recovery():
+    form = PasswordRecoveryForm()
     if form.validate_on_submit():
-        if form.verification_code.data != password_code:
-            flash("That code is incorrect!")
-            return redirect(url_for("auth_bp.change_password_verify", username=username, password_code=password_code))
-        return redirect(url_for("auth_bp.change_password", username=user.username))
-    return render_template("change_password_verify.html", form=form, user=user)
+        user = User.query.filter_by(username=form.username.data).first()
+        send_password_reset_email(user.email)
+        return render_template("check_email.html")
+    return render_template("password_recovery.html", form=form)
 
 
-@auth_bp.route("/auth/change_password", methods=["GET", "POST"])
-def change_password():
-    """Allows user to change their password."""
-    username = request.args["username"]
-    user = User.query.filter_by(username=username).first()
+@auth_bp.route("/auth/reset/<token>", methods=["GET", "POST"])
+def reset_with_token(token):
+    try:
+        password_reset_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        email = password_reset_serializer.loads(token, salt='pw-reset-salt', max_age=3000)
+    except:
+        message = "The password reset link is invalid or expired"
+        flash(message, 'danger')
+        return redirect(url_for('auth_bp.login'))
+    try:
+        user = User.query.filter_by(email=email).first()
+    except:
+        message = "Invalid email address!"
+        flash(message, 'danger')
+        return redirect(url_for('auth_bp.login'))
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if form.new_password.data != form.verify_password.data:
             flash("Passwords do not match!")
-            return redirect(url_for("auth_bp.change_password", username=username))
+            return redirect(url_for("auth_bp.reset_with_token", token=token))
         user.set_password(form.new_password.data)
         db.session.commit()
-        return redirect(url_for("auth_bp.login"))
+        message = "Your password has been updated!"
+        flash(message, 'Success! You may now log in with your new password.')
+        return redirect(url_for('auth_bp.login'))
     return render_template("change_password.html", form=form)
+    # form = ChangePasswordForm()
+    #
+    # if form.validate_on_submit():
+    #     try:
+    #         user = User.query.filter_by(email=email).first()
+    #     except:
+    #         message = "Invalid email address!"
+    #         flash(message, 'danger')
+    #         return redirect(url_for('auth_bp.login'))
+    #
+    #     user.password = form.new_password.data
+    #     # db.session.add(user)
+    #     db.session.commit()
+
+    # ---------------  return render_template('reset_password_with_token.html', form=form, token=token)
+
+
+def change_password(email):
+    """Allows user to change their password."""
+
+
+
+
+# @auth_bp.route("/auth/change_password_verify", methods=["GET", "POST"])
+# def change_password_verify():
+#     """
+#     Verifies that current user actually requested a password change.
+#
+#     Takes the username and temporary password from the password_recovery function and compares them to the user's
+#     entry in the VerificationForm. If all data matches, redirects user to the change_password function.
+#     """
+#     # password_code = request.args["password_code"]
+#     username = request.args["username"]
+#     user = User.query.filter_by(username=username).first()
+#     form = VerificationForm()
+#     if form.validate_on_submit():
+#         token = form.verification_code.data
+#         return redirect(url_for("auth_bp.email_verification", token=token))
+#     return render_template("change_password_verify.html", form=form, user=user)
+    #     if form.verification_code.data != password_code:
+    #         flash("That code is incorrect!")
+    #         return redirect(url_for("auth_bp.change_password_verify", username=username, password_code=password_code))
+    #     return redirect(url_for("auth_bp.change_password", username=user.username))
+    # return render_template("change_password_verify.html", form=form, user=user)
+
+
+# @auth_bp.route("/auth/reset_email_verify/<token>")
+# def email_verification(token):
+#     """Upon signing up, emails the user to confirm the email address they've entered at time of signup is correct."""
+#     email = User.verify_mail_confirmation_token(token)
+#     if email:
+#         user = User.query.filter_by(email=email).first()
+#         user.email = True
+#         db.session.commit()
+#         flash("You're email has been verified.")
+#         return redirect(url_for("auth_bp.login"))
+#     else:
+#         flash("Didn't work, dude")
+#         return redirect("auth_bp.login")
+
+
+# @auth_bp.route("/auth/change_password", methods=["GET", "POST"])
+# def change_password():
+#     """Allows user to change their password."""
+#     username = request.args["username"]
+#     user = User.query.filter_by(username=username).first()
+#     form = ChangePasswordForm()
+#     if form.validate_on_submit():
+#         if form.new_password.data != form.verify_password.data:
+#             flash("Passwords do not match!")
+#             return redirect(url_for("auth_bp.change_password", username=username))
+#         user.set_password(form.new_password.data)
+#         db.session.commit()
+#         return redirect(url_for("auth_bp.login"))
+#     return render_template("change_password.html", form=form)
 
 
 @auth_bp.route("/auth/logout")
@@ -131,11 +211,6 @@ def unauthorized():
     """Flashes a message to a logged-out user attempting to access a page only viewable by logged-in users."""
     flash("You must be logged in to view that page")
     return redirect(url_for("auth_bp.login"))
-
-
-def email_verification():
-    """Upon signing up, emails the user to confirm the email address they've entered at time of signup is correct."""
-
 
 
 def create_new_user(form, admin):

@@ -1,7 +1,9 @@
 """The collection of database tables used in this application."""
 
 from hiking_blog.db import db
+from flask import current_app as app
 from flask_login import UserMixin
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 
@@ -46,6 +48,21 @@ class User(UserMixin, db.Model):
         """
 
         return check_password_hash(self.password, password)
+
+    def get_pw_reset_confirmation_token(self):
+        s = URLSafeTimedSerializer(app.config["SECRET_KEY"], salt="email-reset")
+        return s.dumps(self.email, salt="email-reset")
+
+    @staticmethod
+    def verify_mail_confirmation_token(token):
+        try:
+            s = URLSafeTimedSerializer(
+                app.config["SECRET_KEY"], salt="email-reset"
+            )
+            email = s.loads(token, salt="email-reset", max_age=3600)
+            return email
+        except (SignatureExpired, BadSignature):
+            return None
 
 
 class Trails(db.Model):
