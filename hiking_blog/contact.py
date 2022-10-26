@@ -2,13 +2,12 @@
 from flask import render_template, redirect, url_for, Blueprint, flash, current_app
 from flask_login import current_user
 from bs4 import BeautifulSoup
-from hiking_blog.forms import ContactForm, PasswordRecoveryForm, UsernameRecoveryForm
+from hiking_blog.forms import ContactForm, UsernameRecoveryForm
 from hiking_blog.models import User
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from itsdangerous import URLSafeTimedSerializer
 from threading import Thread
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import random
 import smtplib
 import os
 
@@ -43,31 +42,6 @@ def contact():
         send_async_email(email, subject, message, send_email)
         return redirect(url_for("home_bp.home"))
     return render_template("contact.html", form=form)
-
-
-# @contact_bp.route("/contact/password_recovery", methods=["GET", "POST"])
-# def password_recovery():
-#     """
-#     This function sends the user a temporary password to perform a password reset.
-#
-#     If the user has forgotten their password and used the "forgot username or password" link, this function will create
-#     and email a temporary password to the user. The user enters their username into the form and, when submitted, the
-#     email for that username is sent a randomly generated eight character password, which will be relevant after the user
-#     is redirected. If the username does not exist in the database, the user will be redirected to the signup page. If
-#     the user is already logged in, they will be redirected to the home page.
-#     """
-#
-#     form = PasswordRecoveryForm()
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(username=form.username.data).first()
-#         message, reroute = check_recovery_form(user)
-#         if message:
-#             flash(message)
-#             return reroute
-#         # password_code = password_reset_code_generator()
-#         send_password_reset_code(user)
-#         return redirect(url_for("auth_bp.change_password_verify", username=user.username))
-#     return render_template("password_recovery.html", form=form)
 
 
 @contact_bp.route("/contact/username_recovery", methods=["GET", "POST"])
@@ -113,6 +87,7 @@ def send_email(email, subject, message):
 
 
 def send_html_mail(email, subject, message):
+    """Sends an html page as email."""
     print("sending html mail")
     mime_message = MIMEMultipart("alternative")
     html_body = MIMEText(message, "html")
@@ -124,14 +99,6 @@ def send_html_mail(email, subject, message):
                             to_addrs=email,
                             msg=f"Subject:{subject}\n\n{message}")
     print("html mail sent")
-
-
-# def password_reset_code_generator():
-#     """Generates a random 8 digit security code to verify the user during a password reset."""
-#     password_characters = [random.choice(CHARACTERS) for i in range(8)]
-#     random.shuffle(password_characters)
-#     password_verification = "".join(password_characters)
-#     return password_verification
 
 
 def check_recovery_form(user):

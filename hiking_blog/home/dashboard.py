@@ -4,7 +4,7 @@ from flask_login import current_user
 from hiking_blog.models import Trails, Gear
 from hiking_blog.db import db
 # This import only exists for development purposes
-from hiking_blog.dev_db_autofill import create_gear_reviews, create_trail_entries, create_users
+from hiking_blog.dev_db_autofill import create_gear_reviews, create_trail_entries, create_users, create_trail_pic_entries
 
 home_bp = Blueprint(
     "home_bp",
@@ -30,6 +30,7 @@ def home():
         create_gear_reviews()
         create_trail_entries()
         create_users()
+        create_trail_pic_entries()
         return redirect(url_for("home_bp.home"))
     return render_template("dashboard.html", all_trails=saved_trails, all_gear=saved_gear,
                            logged_in=current_user.is_authenticated, user=current_user)

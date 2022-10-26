@@ -1,3 +1,9 @@
+.carouselImage img {
+  width: auto;
+  height: 600px;
+  max-height: 600px;
+}
+
 .gear-img {
     height: 200px;
     width: 200px;

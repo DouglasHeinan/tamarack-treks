@@ -5,10 +5,12 @@ from flask_login import current_user
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.forms import AddAdminForm, AddTrailForm, GearForm, CommentForm
 from hiking_blog.models import User, Trails, Gear, TrailPictures
-from hiking_blog.contact import send_async_email
+from hiking_blog.contact import send_async_email, send_email
 from hiking_blog.db import db
 from flask_login import login_required
-import shutil, os, errno
+import shutil
+import os
+import errno
 
 ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -292,7 +294,7 @@ def create_photo_notification_email(user_trail, save_pic):
         subject = "Your trail photo has been rejected."
         message = "The administrators have determined that your photo is inappropriate for this site and it has been " \
                   "deleted from the server."
-    send_async_email(user_email, subject, message)
+    send_async_email(user_email, subject, message, send_email)
 
 
 # ----------------------------------------FILE AND DIRECTORY SORTING FUNCTIONS----------------------------------------
@@ -392,7 +394,6 @@ def delete_comment(comment, db_id, page):
         The primary key of the gear or trail entry in the database.
     page : str
         A string of either 'gear' or 'trail' used to direct the admin back to the correct page after the function runs.
-
     """
 
     form = CommentForm(

@@ -47,12 +47,6 @@ class PasswordRecoveryForm(FlaskForm):
     submit_button = SubmitField("Submit")
 
 
-class VerificationForm(FlaskForm):
-    """A class used for creating a password verification form."""
-    verification_code = StringField("Verification Code", validators=[DataRequired(), Length(min=8, max=8)])
-    submit_button = SubmitField("Submit")
-
-
 class ChangePasswordForm(FlaskForm):
     """A class used for creating a password reset form."""
     new_password = PasswordField("New Password", validators=[DataRequired(), Length(min=8, max=50)])
@@ -108,12 +102,12 @@ class GearForm(FlaskForm):
     img_url = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
     review = CKEditorField("Review", validators=[DataRequired()])
-    moosejaw_url = StringField("Moosejaw Link", validators=[DataRequired(), URL()])
-    moosejaw_price = StringField("Moosejaw Price", validators=[DataRequired()])
-    rei_url = StringField("REI Link", validators=[DataRequired(), URL()])
-    rei_price = StringField("REI Price", validators=[DataRequired()])
-    backcountry_url = StringField("Backcountry Link", validators=[DataRequired(), URL()])
-    backcountry_price = StringField("Backcountry Price", validators=[DataRequired()])
+    moosejaw_url = StringField("Moosejaw Link", validators=[])
+    moosejaw_price = StringField("Moosejaw Price", validators=[])
+    rei_url = StringField("REI Link", validators=[])
+    rei_price = StringField("REI Price", validators=[])
+    backcountry_url = StringField("Backcountry Link", validators=[])
+    backcountry_price = StringField("Backcountry Price", validators=[])
     submit_button = SubmitField("Submit")
 
 

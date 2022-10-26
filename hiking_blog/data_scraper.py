@@ -22,11 +22,13 @@ def app_updates():
         from hiking_blog.gear.gear_prices import moosejaw_price_query, rei_price_query, backcountry_price_query
 
         while True:
+            print("starting")
             all_gear = Gear.query.all()
             parent_path = f"hiking_blog/admin/static"
             all_folders = os.listdir(parent_path)
             check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_price_query)
             delete_old_files(all_folders, parent_path)
+            print("waiting...")
             time.sleep(30)
 
 
@@ -51,11 +53,11 @@ def check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_pr
     """
 
     for gear_piece in all_gear:
-        if gear_piece.moosejaw_price is not None:
+        if gear_piece.moosejaw_price != "":
             gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
-        if gear_piece.rei_price is not None:
+        if gear_piece.rei_price != "":
             gear_piece.rei_price = rei_price_query(gear_piece.rei_url)
-        if gear_piece.backcountry_price is not None:
+        if gear_piece.backcountry_price != "":
             gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
         db.db.session.commit()
 

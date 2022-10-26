@@ -82,7 +82,8 @@ class Trails(db.Model):
 class TrailPictures(db.Model):
     __tablename__ = "trail_pics"
     id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.String(250), unique=True, nullable=False)
+    img = db.Column(db.String(250), nullable=False)
+#--------------- Note to add unique constraint to img after finished with dev---------------------------
     poster_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     pic_poster = relationship("User", back_populates="trail_page_pics")
     trail_id = db.Column(db.Integer, db.ForeignKey("trails.id"))
