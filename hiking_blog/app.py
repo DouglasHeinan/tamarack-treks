@@ -1,5 +1,6 @@
 """Sets configurations and runs the app."""
 from flask import Flask
+from flask_gravatar import Gravatar
 from flask_ckeditor import CKEditor
 from flask_bootstrap import Bootstrap
 from hiking_blog import login_manager, db, mail
@@ -23,6 +24,17 @@ def init_app():
     login_manager.create_login_manager(app)
     ckeditor.init_app(app)
     bootstrap.init_app(app)
+
+    gravatar = Gravatar(
+        app,
+        size=100,
+        rating="g",
+        default="retro",
+        force_default=False,
+        force_lower=False,
+        use_ssl=False,
+        base_url=None
+    )
 
     @app.context_processor
     def copyright_year():

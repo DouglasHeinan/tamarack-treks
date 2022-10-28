@@ -62,7 +62,9 @@
         <ul>
             {% for comment in trail.trail_page_comments %}
             <li>
-    <!--            need to add avatar here   -->
+                <div>
+                    <img src="{{ comment.commenter.email | gravatar }}">
+                </div>
                 <div>{{ comment.text|safe }}</div>
                 <span>   -{{ comment.commenter.username }}</span>
                 <div>
@@ -70,14 +72,14 @@
                     <span>
                         <a
                             class="btn btn-danger mt-3"
-                            href="{{ url_for('trail_bp.edit_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
+                            href="{{ url_for('trails_bp.edit_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
                                 Edit Post
                         </a>
                     </span>
                     <span>
                         <a
                             class="btn btn-danger mt-3"
-                            href="{{ url_for('trail_bp.delete_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
+                            href="{{ url_for('trails_bp.delete_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
                                 Delete Post
                         </a>
                     </span>
