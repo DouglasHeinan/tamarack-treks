@@ -66,7 +66,11 @@ def sign_up():
             return reroute
         create_new_user(form, admin)
         return redirect(url_for("home_bp.home"))
-    return render_template("sign_up.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("form_page.html",
+                           form=form,
+                           logged_in=current_user.is_authenticated,
+                           h_two="Sign up today!",
+                           p_tag="Fill out this form to join!")
 
 
 @auth_bp.route("/auth/password_recovery", methods=["GET", "POST"])
@@ -112,7 +116,10 @@ def reset_with_token(token):
         message = "Your password has been updated!"
         flash(message, 'Success! You may now log in with your new password.')
         return redirect(url_for('auth_bp.login'))
-    return render_template("change_password.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Reset your password.",
+                           p_tag="Enter your new password below:")
 
 
 def change_password(email):

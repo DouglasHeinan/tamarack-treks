@@ -16,14 +16,14 @@ PICTURE_UPLOAD_SUCCESS = "You're photos have been successfully uploaded! They wi
                          "has been approved, you will be notified via email. Thank you for supporting the blah-blah " \
                          "community!"
 
-trails_bp = Blueprint(
-    "trails_bp", __name__,
+trail_bp = Blueprint(
+    "trail_bp", __name__,
     template_folder="templates",
     static_folder="static"
 )
 
 
-@trails_bp.route("/<int:db_id>/view_trail", methods=["GET", "POST"])
+@trail_bp.route("/<int:db_id>/view_trail", methods=["GET", "POST"])
 def view_trail(db_id):
     """
     Allows the user to view the information  about a specific trail stored in the trails table of the database.
@@ -54,7 +54,7 @@ def view_trail(db_id):
     return render_template("view_trail.html", trail=requested_trail, form=form, current_user=current_user)
 
 
-@trails_bp.route("/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
+@trail_bp.route("/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
 def edit_trail_comment(comment_id):
     """Allows a user to edit one of their own comments on a piece of gear from the database."""
     trail_id = request.args["trail_id"]
@@ -66,21 +66,25 @@ def edit_trail_comment(comment_id):
         comment.text = form.comment_text.data
         db.session.commit()
         form.comment_text.data = ""
-        return redirect(url_for("trails_bp.view_trail", db_id=trail_id))
-    return render_template("edit_comment.html", form=form)
+        return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Edit Comment",
+                           p_tag="Edit your comment here.",
+                           text_box="comment_text")
 
 
-@trails_bp.route("/trail/delete_comment/<comment_id>")
+@trail_bp.route("/trail/delete_comment/<comment_id>")
 def delete_trail_comment(comment_id):
     """Allows a user to delete one of their own comments on a piece of gear from the database."""
     trail_id = request.args["trail_id"]
     comment = TrailComments.query.get(comment_id)
     db.session.delete(comment)
     db.session.commit()
-    return redirect(url_for("trails_bp.view_trail", db_id=trail_id))
+    return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
 
 
-@trails_bp.route("/trail/admin_delete/<comment_id>", methods=["GET", "POST"])
+@trail_bp.route("/trail/admin_delete/<comment_id>", methods=["GET", "POST"])
 @admin_only
 def admin_delete_trail_comment(comment_id):
     """Allows a user with admin privileges to delete a gear comment from the database."""
@@ -90,7 +94,7 @@ def admin_delete_trail_comment(comment_id):
     return next_page
 
 
-@trails_bp.route("/<int:trail_id>/add_trail_pic", methods=["GET", "POST"])
+@trail_bp.route("/<int:trail_id>/add_trail_pic", methods=["GET", "POST"])
 @login_required
 # Break this into smaller chunks
 def add_trail_pic(trail_id):
@@ -99,7 +103,7 @@ def add_trail_pic(trail_id):
         file = form.filename.data
         if file.filename == "":
             flash("No file selected.")
-            return redirect(url_for("trails_bp.add_trail_pic", trail_id=trail_id))
+            return redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
         if allowed_file(file.filename):
             user = User.query.get(current_user.id).username
             trail = Trails.query.get(trail_id).name
@@ -111,14 +115,17 @@ def add_trail_pic(trail_id):
             file.save(os.path.join(directory, filename))
             flash(PICTURE_UPLOAD_SUCCESS)
             admin_upload_notification(EMAIL, user, trail)
-            return redirect(url_for("trails_bp.view_trail", db_id=trail_id))
+            return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
         else:
             flash("Invalid file type.")
-            return redirect(url_for("trails_bp.add_trail_pic", trail_id=trail_id))
-    return render_template("add_trail_pics.html", form=form)
+            return redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Add New Trail Pictures",
+                           p_tag="Share some photos of this trail!")
 
 
-@trails_bp.route("/trails/static/dev_pics/<file_name>")
+@trail_bp.route("/trails/static/dev_pics/<file_name>")
 def display_trail_pics(file_name):
     print(file_name)
     return send_from_directory("trails/static/dev_pics/", file_name)

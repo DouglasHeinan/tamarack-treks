@@ -56,7 +56,11 @@ def edit_gear_comment(comment_id):
         db.session.commit()
         form.comment_text.data = ""
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
-    return render_template("edit_comment.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Edit Comment",
+                           p_tag="Edit your comment here.",
+                           text_box="comment_text")
 
 
 @gear_bp.route("/gear/delete_comment/<comment_id>")

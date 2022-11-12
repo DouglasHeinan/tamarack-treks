@@ -41,7 +41,11 @@ def contact():
         message = f"from user {form.name.data} at {form.email.data}:\n{message_body}"
         send_async_email(email, subject, message, send_email)
         return redirect(url_for("home_bp.home"))
-    return render_template("contact.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Contact Us",
+                           p_tag="Thanks for reaching out. We'll respond as soon as we can.",
+                           text_box="message")
 
 
 @contact_bp.route("/contact/username_recovery", methods=["GET", "POST"])
@@ -64,7 +68,10 @@ def username_recovery():
         send_user_reminder(user, email)
         flash("An email with your username should be in your inbox shortly.")
         return redirect(url_for("auth_bp.login"))
-    return render_template("username_recovery.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Forgot Username?",
+                           p_tag="Enter your email and a message will be sent to you reminding you of your username.")
 
 
 def send_async_email(email, subject, message, target):

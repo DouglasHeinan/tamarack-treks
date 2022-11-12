@@ -21,7 +21,7 @@
     <h3>Trail Reviews</h3>
     <ul>
         {% for trail in all_trails %}
-        <li><a href="{{ url_for('trails_bp.view_trail', db_id=trail.id) }}">{{trail.name}}</a></li>
+        <li><a href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">{{trail.name}}</a></li>
         {% endfor %}
     </ul>
 </div>

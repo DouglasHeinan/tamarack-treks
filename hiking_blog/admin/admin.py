@@ -62,7 +62,10 @@ def add_admin():
         user.is_admin = True
         db.session.commit()
         return redirect(url_for("admin_bp.admin_dashboard"))
-    return render_template("add_admin.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Add Admin",
+                           p_tag="Enter the username of the user to be given admin status:")
 
 
 @admin_bp.route("/admin/add_trail", methods=["GET", "POST"])
@@ -399,7 +402,11 @@ def delete_comment(comment, db_id, page):
     form = CommentForm(
         comment_text=comment.text
     )
-    next_page = render_template("edit_comment.html", form=form)
+    next_page = render_template("form_page.html",
+                                form=form,
+                                h_two="Admin Edit Comment",
+                                p_tag="Edit this comment, admin:",
+                                text_box="comment_text")
     if form.validate_on_submit():
         comment.text = ADMIN_DELETE_MESSAGE
         db.session.commit()
