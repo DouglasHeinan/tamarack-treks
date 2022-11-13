@@ -64,8 +64,8 @@ def add_admin():
         return redirect(url_for("admin_bp.admin_dashboard"))
     return render_template("form_page.html",
                            form=form,
-                           h_two="Add Admin",
-                           p_tag="Enter the username of the user to be given admin status:")
+                           form_header="Add Admin",
+                           form_sub_header="Enter the username of the user to be given admin status:")
 
 
 @admin_bp.route("/admin/add_trail", methods=["GET", "POST"])
@@ -93,7 +93,10 @@ def add_trail():
         db.session.commit()
         trail_id = new_hiking_trail.id
         return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
-    return render_template("add_trail.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           form_header="Add a new trail review to the database",
+                           form_sub_header="")
 
 
 @admin_bp.route("/admin/add_gear", methods=["GET", "POST"])
@@ -115,7 +118,10 @@ def add_gear():
         db.session.commit()
         gear_id = new_review_gear.id
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
-    return render_template("add_gear.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           form_header="Add a new gear review to the database",
+                           form_sub_header="")
 
 
 @admin_bp.route("/admin/edit_gear/<int:gear_id>", methods=["GET", "POST"])
@@ -140,7 +146,10 @@ def edit_gear(gear_id):
         update_gear_entry(gear, form)
         db.session.commit()
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
-    return render_template("add_gear.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           form_header="Edit this gear review.",
+                           form_sub_header="")
 
 
 # ----------------------------------------TRAIL PHOTO FUNCTIONS----------------------------------------

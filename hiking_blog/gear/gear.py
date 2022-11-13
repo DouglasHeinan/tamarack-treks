@@ -58,8 +58,8 @@ def edit_gear_comment(comment_id):
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
     return render_template("form_page.html",
                            form=form,
-                           h_two="Edit Comment",
-                           p_tag="Edit your comment here.",
+                           form_header="Edit Comment",
+                           form_sub_header="Edit your comment here.",
                            text_box="comment_text")
 
 

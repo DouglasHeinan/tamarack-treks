@@ -40,13 +40,23 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         message, reroute = check_login(form, user)
         if message is not None:
-            print(form.password.data)
             flash(message)
             return reroute
         login_user(user, remember=True, duration=DAYS_BEFORE_LOGOUT)
         next_page = request.args.get("next")
         return redirect(next_page or url_for("home_bp.home"))
-    return render_template("login.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("form_page.html",
+                           form=form,
+                           logged_in=current_user.is_authenticated,
+                           form_header="Sign in.",
+                           form_sub_header="Input your username and password to log in to your profile.",
+                           above_button_text="Not yet a member?",
+                           button_text="Sign Up!",
+                           url_link="auth_bp.sign_up",
+                           above_button_text_two="Forgot your username or password?",
+                           button_text_two="Click here.",
+                           url_link_two="auth_bp.password_recovery"
+                           )
 
 
 @auth_bp.route("/auth/sign_up", methods=["GET", "POST"])
@@ -69,8 +79,18 @@ def sign_up():
     return render_template("form_page.html",
                            form=form,
                            logged_in=current_user.is_authenticated,
-                           h_two="Sign up today!",
-                           p_tag="Fill out this form to join!")
+                           form_header="Sign up today!",
+                           form_sub_header="Fill out this form to join!")
+
+# return render_template("form_page.html",
+#                            form=form,
+#                            logged_in=current_user.is_authenticated,
+#                            form_header="Sign in.",
+#                            form_sub_header="Input your username and password to log in to your profile.",
+#                            above_button_text="Not yet a member?",
+#                            button_text="Sign Up!",
+#                            above_button_text_two="Forgot your username or password?",
+#                            button_text_two="Click here.")
 
 
 @auth_bp.route("/auth/password_recovery", methods=["GET", "POST"])
@@ -81,7 +101,14 @@ def password_recovery():
         user = User.query.filter_by(username=form.username.data).first()
         send_password_reset_email(user.email)
         return render_template("check_email.html")
-    return render_template("password_recovery.html", form=form)
+    return render_template("form_page.html",
+                           form=form,
+                           form_header="Forgot Password?",
+                           form_sub_header="Enter your username to reset your password.",
+                           above_button_text="If you've forgotten your username",
+                           button_text="click here.",
+                           url_link="contact_bp.username_recovery"
+                           )
 
 
 @auth_bp.route("/auth/reset/<token>", methods=["GET", "POST"])

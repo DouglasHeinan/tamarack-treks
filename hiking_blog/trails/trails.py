@@ -121,8 +121,8 @@ def add_trail_pic(trail_id):
             return redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
     return render_template("form_page.html",
                            form=form,
-                           h_two="Add New Trail Pictures",
-                           p_tag="Share some photos of this trail!")
+                           form_header="Add New Trail Pictures",
+                           form_sub_header="Share some photos of this trail!")
 
 
 @trail_bp.route("/trails/static/dev_pics/<file_name>")
