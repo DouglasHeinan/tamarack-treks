@@ -152,6 +152,12 @@ def edit_gear(gear_id):
                            form_sub_header="")
 
 
+@admin_bp.route("/admin/approve_usernames/", methods=["GET", "POST"])
+@admin_only
+def approve_usernames():
+    pass
+
+
 # ----------------------------------------TRAIL PHOTO FUNCTIONS----------------------------------------
 @admin_bp.route("/admin/submitted_trail_pics/<date>")
 @login_required

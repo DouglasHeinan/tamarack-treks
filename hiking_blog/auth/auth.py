@@ -9,6 +9,7 @@ from hiking_blog.db import db
 from itsdangerous import URLSafeTimedSerializer
 from hiking_blog.models import User
 from hiking_blog.contact import send_password_reset_email
+from better_profanity import profanity
 from datetime import timedelta
 
 
@@ -205,7 +206,7 @@ def check_signup(form):
     Confirms that the user provided sign up info is valid.
 
     Assigns the admin value for the would-be new user to False UNLESS it is the first user. Then, checks for validity
-    of user-entered-info, returning a flash message and redirect if invalid.
+    of user-entered-info, returning a flash message and redirect if invalid or if username includes profanity.
     """
 
     message = None
@@ -219,6 +220,10 @@ def check_signup(form):
         reroute = redirect(url_for("auth_bp.login"))
     if form.password.data != form.verify_password.data:
         message = "Passwords Must Match"
+        reroute = redirect(url_for("auth_bp.sign_up"))
+    if profanity.contains_profanity(form.username.data):
+        print(profanity.censor(form.username.data))
+        message = "Username may not contain profanity."
         reroute = redirect(url_for("auth_bp.sign_up"))
     return admin, message, reroute
 
