@@ -138,8 +138,9 @@ def send_password_reset_email(user_email):
         _external=True
     )
     html = render_template(
-        "email_pw_reset.html",
-        pw_reset_url=pw_reset_url
+        "html_email.html",
+        link_url=pw_reset_url,
+        email_body="Please click the link below to reset your password."
     )
     send_async_email(user_email, "Password Reset", html, send_html_mail)
 
@@ -150,3 +151,21 @@ def send_user_reminder(user, email):
     subject = "username reminder"
     message = f"Your username is {username}"
     send_async_email(email, subject, message, send_email)
+
+
+def send_username_rejected_notification(user):
+    subject = "Username rejected."
+    email_body = "Your username does not conform with our terms of use and has been rejected by the admin." \
+                 " Please click the link below to submit an alternative username."
+    username_reset_url = url_for("auth_bp.reset_username", user_id=user.id, _external=True)
+    html = render_template(
+        "html_email.html",
+        link_url=username_reset_url,
+        email_body=email_body
+    )
+    # email = user.email
+    # subject = "username rejected"
+    # message = f"Your chosen username of {user.username} has been rejected by the site administrator. You have been " \
+    #           f"assigned the temporary username of {user.username} until you are able to change your username to " \
+    #           f"something in compliance with our site terms and agreements."
+    send_async_email(user.email, subject, html, send_html_mail)

@@ -130,14 +130,6 @@ def display_trail_pics(file_name):
     print(file_name)
     return send_from_directory("trails/static/dev_pics/", file_name)
 
-# @admin_bp.route("/admin/static/submitted_trail_pic/<date>/<user_trail>/<pic>")
-# @login_required
-# @admin_only
-# def static_submitted_trail_pic(date, user_trail, pic):
-#     """Displays submitted trail photo."""
-#     path = f"{date}/{user_trail}/{pic}"
-#     return send_from_directory("admin/static/submitted_trail_pics/", path)
-
 
 def admin_upload_notification(email, user, trail):
     subject = "User photo upload notification"

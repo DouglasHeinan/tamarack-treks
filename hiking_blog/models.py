@@ -17,6 +17,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False)
     email_confirmed = db.Column(db.Boolean, nullable=False)
+    username_approved = db.Column(db.Boolean, nullable=False)
+    username_needs_verification = db.Column(db.Boolean, nullable=False)
     trail_page_comments = relationship("TrailComments", back_populates="commenter")
     gear_page_comments = relationship("GearComments", back_populates="commenter")
     trail_page_pics = relationship("TrailPictures", back_populates="pic_poster")

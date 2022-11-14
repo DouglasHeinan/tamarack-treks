@@ -3,7 +3,7 @@
 from flask import Blueprint, render_template, redirect, flash, request, url_for, abort, current_app
 from flask_login import login_required, logout_user, current_user, login_user
 from functools import wraps
-from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, PasswordRecoveryForm
+from hiking_blog.forms import SignUpForm, LoginForm, ChangePasswordForm, PasswordRecoveryForm, ChangeUsernameForm
 from hiking_blog.login_manager import login_manager
 from hiking_blog.db import db
 from itsdangerous import URLSafeTimedSerializer
@@ -83,16 +83,6 @@ def sign_up():
                            form_header="Sign up today!",
                            form_sub_header="Fill out this form to join!")
 
-# return render_template("form_page.html",
-#                            form=form,
-#                            logged_in=current_user.is_authenticated,
-#                            form_header="Sign in.",
-#                            form_sub_header="Input your username and password to log in to your profile.",
-#                            above_button_text="Not yet a member?",
-#                            button_text="Sign Up!",
-#                            above_button_text_two="Forgot your username or password?",
-#                            button_text_two="Click here.")
-
 
 @auth_bp.route("/auth/password_recovery", methods=["GET", "POST"])
 def password_recovery():
@@ -156,6 +146,23 @@ def change_password(email):
     pass
 
 
+@auth_bp.route("/auth/reset_username/<user_id>", methods=["GET", "POST"])
+def reset_username(user_id):
+    user = User.query.get(user_id)
+    form = ChangeUsernameForm()
+    if form.validate_on_submit():
+        user.username = form.username.data
+        user.username_needs_verification = True
+        db.session.commit()
+        message = "Your username has been updated!"
+        flash(message, "Success! You may now log in with your new username.")
+        return redirect(url_for('auth_bp.login'))
+    return render_template("form_page.html",
+                           form=form,
+                           h_two="Reset your username.",
+                           p_tag="Enter your new username below:")
+
+
 @auth_bp.route("/auth/logout")
 @login_required
 def logout():
@@ -193,7 +200,9 @@ def create_new_user(form, admin):
         username=form.username.data,
         email=form.email.data,
         is_admin=admin,
-        email_confirmed=False
+        email_confirmed=False,
+        username_approved=False,
+        username_needs_verification=True
     )
     new_user.set_password(form.password.data)
     db.session.add(new_user)

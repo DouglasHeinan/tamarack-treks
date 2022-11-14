@@ -11,9 +11,6 @@
         <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.add_trail') }}">
             Add a new trail
         </a>
-        <a class="btn btn-success mt-3" href="{{ url_for('admin_bp.approve_usernames') }}">
-            Approve new usernames
-        </a>
     {% endif %}
 </div>
 
@@ -30,6 +27,31 @@
             {% endfor %}
         {% endif %}
 
+    <div class="mt-5">
+        <h2>Unapproved New Usernames</h2>
+        {% if new_users == [] %}
+            <div class="text-center">
+                <h5 class="mt-3">No new usernames to approve</h5>
+            </div>
+        {% else %}
+        <ul class="unstyled">
+            {% for user in new_users %}
+                <li class="mt-2">
+                    <span>{{ user.username }}   </span>
+                    <span><a class="btn btn-success" href="{{ url_for('admin_bp.approve_username', user_id=user.id) }}">
+                        Approve
+                    </a></span>
+                    <span><a class="btn btn-danger" href="{{ url_for('admin_bp.reject_username', user_id=user.id) }}">
+                        Reject
+                    </a></span>
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
 </div>
+
+
 
 {% include "footer.html" %}

@@ -41,6 +41,12 @@ class UsernameRecoveryForm(FlaskForm):
     submit_button = SubmitField("Submit")
 
 
+class ChangeUsernameForm(FlaskForm):
+    """A class used for creating a username reset form."""
+    username = StringField("Username", validators=[DataRequired()])
+    submit_button = SubmitField("Submit")
+
+
 class PasswordRecoveryForm(FlaskForm):
     """A class used for creating a password recovery form."""
     username = StringField("Username", validators=[DataRequired()])

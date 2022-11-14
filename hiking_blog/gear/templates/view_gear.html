@@ -61,13 +61,19 @@
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
     {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) }}
-    <div class="col-lg-8 col-md-10 mx-auto comment">
+    <div class="col-lg-8 col-md-10 mx-auto comment mt-4">
         <ul>
             {% for comment in gear.gear_comments %}
             <li>
     <!--            need to add avatar here   -->
-                <div class="mt-3">{{ comment.text|safe }}</div>
+                <div class="mt-3">
+                    {{ comment.text|safe }}
+                </div>
+                {% if current_user.username_approved %}
                 <span>   -{{ comment.commenter.username }}</span>
+                {% else %}
+                <span>   -temp_user_{{ current_user.id }}</span>
+                {% endif %}
                 <div>
                     {% if comment.text != 'This comment deleted by original poster.' %}
                         {% if comment.commenter_id == current_user.id %}

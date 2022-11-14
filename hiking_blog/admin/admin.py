@@ -1,16 +1,19 @@
 """This file is a collection of site maintenance operations accessible to a site administrator."""
+import random
 
 from flask import Blueprint, flash, redirect, render_template, url_for, send_from_directory
 from flask_login import current_user
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.forms import AddAdminForm, AddTrailForm, GearForm, CommentForm
 from hiking_blog.models import User, Trails, Gear, TrailPictures
-from hiking_blog.contact import send_async_email, send_email
+from hiking_blog.contact import send_async_email, send_email, send_username_rejected_notification
 from hiking_blog.db import db
 from flask_login import login_required
+from better_profanity import profanity
 import shutil
 import os
 import errno
+import random
 
 ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -37,9 +40,10 @@ def admin_dashboard():
     """
 
     pics_by_day = os.listdir("hiking_blog/admin/static/submitted_trail_pics")
+    new_users = unapproved_usernames()
     folder = "hiking_blog/admin/static/submitted_trail_pics"
     pics_by_day = delete_empty_directories(folder, pics_by_day)
-    return render_template("admin_dashboard.html", user=current_user, pics_by_day=pics_by_day)
+    return render_template("admin_dashboard.html", user=current_user, pics_by_day=pics_by_day, new_users=new_users)
 
 
 @admin_bp.route("/admin/add_admin", methods=["GET", "POST"])
@@ -150,12 +154,6 @@ def edit_gear(gear_id):
                            form=form,
                            form_header="Edit this gear review.",
                            form_sub_header="")
-
-
-@admin_bp.route("/admin/approve_usernames/", methods=["GET", "POST"])
-@admin_only
-def approve_usernames():
-    pass
 
 
 # ----------------------------------------TRAIL PHOTO FUNCTIONS----------------------------------------
@@ -428,6 +426,37 @@ def delete_comment(comment, db_id, page):
         form.comment_text.data = ""
         next_page = redirect(url_for(f"{page}_bp.view_{page}", db_id=db_id))
     return next_page
+
+
+def unapproved_usernames():
+    all_users = db.session.query(User).all()
+    new_users = []
+    for user in all_users:
+        if user.username_needs_verification:
+            new_users.append(user)
+    return new_users
+
+
+@admin_bp.route("/admin/approve_username/<user_id>")
+@login_required
+@admin_only
+def approve_username(user_id):
+    user = User.query.get(user_id)
+    user.username_approved = True
+    user.username_needs_verification = False
+    db.session.commit()
+    return redirect(url_for("admin_bp.admin_dashboard"))
+
+
+@admin_bp.route("/admin/reject_username/<user_id>")
+@login_required
+@admin_only
+def reject_username(user_id):
+    user = User.query.get(user_id)
+    send_username_rejected_notification(user)
+    user.username_needs_verification = False
+    db.session.commit()
+    return redirect(url_for("admin_bp.admin_dashboard"))
 
 
 def update_gear_entry(gear, form):
