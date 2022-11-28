@@ -45,6 +45,7 @@ def view_trail(db_id):
             return redirect(url_for("auth_bp.login"))
         new_comment = TrailComments(
             text=form.comment_text.data,
+            deleted_by=None,
             commenter=current_user,
             parent_trail_posts=requested_trail
         )
@@ -75,11 +76,11 @@ def edit_trail_comment(comment_id):
 
 
 @trail_bp.route("/trail/delete_comment/<comment_id>")
-def delete_trail_comment(comment_id):
+def user_delete_trail_comment(comment_id):
     """Allows a user to delete one of their own comments on a piece of gear from the database."""
     trail_id = request.args["trail_id"]
     comment = TrailComments.query.get(comment_id)
-    db.session.delete(comment)
+    comment.deleted_by = comment.commenter.username
     db.session.commit()
     return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
 
@@ -88,9 +89,10 @@ def delete_trail_comment(comment_id):
 @admin_only
 def admin_delete_trail_comment(comment_id):
     """Allows a user with admin privileges to delete a gear comment from the database."""
+    admin_id = request.args["admin_id"]
     trail_id = request.args["trail_id"]
     comment = TrailComments.query.get(comment_id)
-    next_page = delete_comment(comment, trail_id, "trail")
+    next_page = delete_comment(comment, trail_id, "trail", admin_id)
     return next_page
 
 

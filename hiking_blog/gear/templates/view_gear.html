@@ -65,49 +65,56 @@
         <ul>
             {% for comment in gear.gear_comments %}
             <li>
-    <!--            need to add avatar here   -->
-                <div class="mt-3">
-                    {{ comment.text|safe }}
-                </div>
-                {% if current_user.username_approved %}
-                <span>   -{{ comment.commenter.username }}</span>
-                {% else %}
-                <span>   -temp_user_{{ current_user.id }}</span>
-                {% endif %}
                 <div>
-                    {% if comment.text != 'This comment deleted by original poster.' %}
-                        {% if comment.commenter_id == current_user.id %}
-                            <span>
-                                <a
-                                    class="btn btn-danger mt-3"
-                                    href="{{ url_for('gear_bp.edit_gear_comment', comment_id=comment.id, gear_id=gear.id) }}">
-                                        Edit Post
-                                </a>
-                            </span>
-                            <span>
-                                <a
-                                    class="btn btn-danger mt-3"
-                                    href="{{ url_for('gear_bp.delete_gear_comment', comment_id=comment.id, gear_id=gear.id) }}">
-                                        Delete Post
-                                </a>
-                            </span>
-                        {% endif %}
-                        {% if current_user.is_admin %}
-                            {% if comment.text != "This comment has been deleted for inappropriate content." %}
-                                <span>
-                                    <a
-                                        class="btn btn-danger mt-3"
-                                        href="{{ url_for('gear_bp.admin_delete_gear_comment', comment_id=comment.id, gear_id=gear.id) }}">
-                                            Admin Delete
-                                    </a>
-                                </span>
-                            {% endif %}
-                        {% endif %}
+                    <img src="{{ comment.commenter.email | gravatar }}">
+                </div>
+                <div>
+                    {% if comment.deleted_by %}
+                        <p>This comment has been deleted by {{ comment.deleted_by }}</p>
+                    {% else %}
+                        {{ comment.text|safe }}
+                    {% endif %}
+                </div>
+                <span>
+                    {% if current_user.username_approved %}
+                    -{{ comment.commenter.username }}
+                    {% else %}
+                    -temp_user_{{ current_user.id }}
+                    {% endif %}
+                </span>
+                <div>
+                    {% if comment.commenter_id == current_user.id and not comment.deleted_by %}
+                    <span>
+                        <a
+                            class="btn btn-danger mt-3"
+                            href="{{ url_for('gear_bp.edit_gear_comment', comment_id=comment.id, gear_id=gear.id) }}">
+                                Edit Post
+                        </a>
+                    </span>
+                    <span>
+                        <a
+                            class="btn btn-danger mt-3"
+                            href="{{ url_for('gear_bp.user_delete_gear_comment', comment_id=comment.id, gear_id=gear.id) }}">
+                                Delete Post
+                        </a>
+                    </span>
+                    {% endif %}
+                    {% if current_user.is_admin and not comment.deleted_by %}
+                    <span>
+                        <a
+                            class="btn btn-danger mt-3"
+                            href="{{ url_for(
+                            'gear_bp.admin_delete_gear_comment',
+                            comment_id=comment.id,
+                            admin_id=current_user.id,
+                            gear_id=gear.id) }}">
+                                Admin Delete
+                        </a>
+                    </span>
                     {% endif %}
                 </div>
                 <hr>
             </li>
-
             {% endfor %}
         </ul>
     </div>

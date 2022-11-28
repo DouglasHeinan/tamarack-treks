@@ -37,7 +37,7 @@ def view_gear(db_id):
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
             return redirect(url_for("auth_bp.login"))
-        create_new_comment(form, gear)
+        create_new_gear_comment(form, gear)
         form.comment_text.data = ""
     return render_template("view_gear.html", gear=gear, form=form, current_user=current_user, info=info)
 
@@ -64,11 +64,17 @@ def edit_gear_comment(comment_id):
 
 
 @gear_bp.route("/gear/delete_comment/<comment_id>")
-def delete_gear_comment(comment_id):
-    """Allows a user to delete one of their own comments on a piece of gear from the database."""
+def user_delete_gear_comment(comment_id):
+    """
+    Allows a user to delete one of their own comments on a piece of gear from the database.
+
+    Any comment deleted by the user is still saved in the database. The text of the comment is replaced in the comments
+    display with a message indicating that the user deleted their own comment.
+    """
+
     gear_id = request.args["gear_id"]
     comment = GearComments.query.get(comment_id)
-    comment.text = "This comment deleted by original poster."
+    comment.deleted_by = comment.commenter.username
     db.session.commit()
     return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
 
@@ -76,16 +82,35 @@ def delete_gear_comment(comment_id):
 @gear_bp.route("/gear/admin_delete/<comment_id>", methods=["GET", "POST"])
 @admin_only
 def admin_delete_gear_comment(comment_id):
-    """Allows a user with admin privileges to delete a gear comment from the database."""
+    """
+    Allows a user with admin privileges to delete a gear comment from the database.
+
+    Any comment deleted by the admin is still saved in the database. The text of the comment is replaced in the
+    comments display with a message indicating that the admin deleted the user's comment.
+    """
+
+    admin_id = request.args["admin_id"]
     gear_id = request.args["gear_id"]
     comment = GearComments.query.get(comment_id)
-    next_page = delete_comment(comment, gear_id, "gear")
+    next_page = delete_comment(comment, gear_id, "gear", admin_id)
     return next_page
 
 
-def create_new_comment(form, gear):
+def create_new_gear_comment(form, gear):
+    """
+    Creates a new comment entry in the GearComments table of the database.
+
+    Parameters
+    ----------
+    form : object
+        A form object with user-input data.
+    gear : object
+        An object from the gear table of the database.
+    """
+
     new_comment = GearComments(
         text=form.comment_text.data,
+        deleted_by=None,
         commenter=current_user,
         parent_gear_posts=gear
     )
@@ -94,6 +119,18 @@ def create_new_comment(form, gear):
 
 
 def create_product_links(gear):
+    """
+    Creates a python dictionary containing the price and url of a gear entry.
+
+    This function is used by the view_gear function. It creates a dictionary that the view_gear.html page can cycle
+    through to access the price and url for each link of each product.
+
+    Parameters
+    ----------
+    gear : object
+        An object from the gear table of the database.
+    """
+
     info = {
         "moosejaw": {"price": gear.moosejaw_price,
                      "link": gear.moosejaw_url},

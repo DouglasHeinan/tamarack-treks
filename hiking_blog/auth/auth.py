@@ -148,6 +148,7 @@ def change_password(email):
 
 @auth_bp.route("/auth/reset_username/<user_id>", methods=["GET", "POST"])
 def reset_username(user_id):
+    """Allows the user to reset their username."""
     user = User.query.get(user_id)
     form = ChangeUsernameForm()
     if form.validate_on_submit():

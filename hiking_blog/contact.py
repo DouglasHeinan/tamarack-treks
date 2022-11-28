@@ -163,9 +163,15 @@ def send_username_rejected_notification(user):
         link_url=username_reset_url,
         email_body=email_body
     )
-    # email = user.email
-    # subject = "username rejected"
-    # message = f"Your chosen username of {user.username} has been rejected by the site administrator. You have been " \
-    #           f"assigned the temporary username of {user.username} until you are able to change your username to " \
-    #           f"something in compliance with our site terms and agreements."
     send_async_email(user.email, subject, html, send_html_mail)
+
+
+def send_dead_links():
+    all_users = User.query.all()
+    for user in all_users:
+        if user.is_admin:
+            subject = "Dead gear links"
+            email = user.email
+            message = "You have dead links in your gear product database. Please perform an sweep of the database to " \
+                      "uncover and correct dead links."
+            send_async_email(email, subject, message, send_email)

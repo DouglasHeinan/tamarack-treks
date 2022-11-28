@@ -9,11 +9,9 @@ from hiking_blog.models import User, Trails, Gear, TrailPictures
 from hiking_blog.contact import send_async_email, send_email, send_username_rejected_notification
 from hiking_blog.db import db
 from flask_login import login_required
-from better_profanity import profanity
 import shutil
 import os
 import errno
-import random
 
 ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -126,6 +124,23 @@ def add_gear():
                            form=form,
                            form_header="Add a new gear review to the database",
                            form_sub_header="")
+
+
+@admin_bp.route("/admin/dead_links/")
+@admin_only
+def dead_links():
+    all_gear = Gear.query.all()
+    current_dead_links = {}
+    for gear in all_gear:
+        if gear.moosejaw_link_dead:
+            current_dead_links[gear.name] = ["Moosejaw Link", gear.moosejaw_url]
+        if gear.rei_link_dead:
+            current_dead_links[gear.name] = ["REI Link", gear.rei_url]
+        if gear.backcountry_link_dead:
+            current_dead_links[gear.name] = ["Backcountry Link", gear.backcountry_url]
+    if current_dead_links == {}:
+        print("No dead links.")
+    return render_template("view_dead_links.html", links=current_dead_links)
 
 
 @admin_bp.route("/admin/edit_gear/<int:gear_id>", methods=["GET", "POST"])
@@ -394,7 +409,7 @@ def allowed_file(filename):
 
 
 # ----------------------------------------UTILITY FUNCTIONS----------------------------------------
-def delete_comment(comment, db_id, page):
+def delete_comment(comment, db_id, page, admin_id):
     """
     Accessed from the view_gear and view_trail templates, deletes a comment specified by the admin.
 
@@ -410,6 +425,8 @@ def delete_comment(comment, db_id, page):
         The primary key of the gear or trail entry in the database.
     page : str
         A string of either 'gear' or 'trail' used to direct the admin back to the correct page after the function runs.
+    admin_id: str
+        The database id number of the admin making the deletion.
     """
 
     form = CommentForm(
@@ -421,7 +438,8 @@ def delete_comment(comment, db_id, page):
                                 p_tag="Edit this comment, admin:",
                                 text_box="comment_text")
     if form.validate_on_submit():
-        comment.text = ADMIN_DELETE_MESSAGE
+        commenter = User.query.get(admin_id)
+        comment.deleted_by = commenter.username
         db.session.commit()
         form.comment_text.data = ""
         next_page = redirect(url_for(f"{page}_bp.view_{page}", db_id=db_id))
@@ -468,10 +486,13 @@ def update_gear_entry(gear, form):
     gear.review = form.review.data
     gear.moosejaw_url = form.moosejaw_url.data
     gear.moosejaw_price = form.moosejaw_price.data
+    gear.moosejaw_link_dead = False
     gear.rei_url = form.rei_url.data
     gear.rei_price = form.rei_price.data
+    gear.rei_link_dead = False
     gear.backcountry_url = form.backcountry_url.data
     gear.backcountry_price = form.backcountry_price.data
+    gear.backcountry_link_dead = False
 
 
 def populate_gear_form(gear):

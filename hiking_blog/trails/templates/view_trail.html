@@ -66,15 +66,21 @@
                     <img src="{{ comment.commenter.email | gravatar }}">
                 </div>
                 <div>
-                    {{ comment.text|safe }}
+                    {% if comment.deleted_by %}
+                        <p>This comment has been deleted by {{ comment.deleted_by }}</p>
+                    {% else %}
+                        {{ comment.text|safe }}
+                    {% endif %}
                 </div>
-                {% if current_user.username_approved %}
-                <span>   -{{ comment.commenter.username }}</span>
-                {% else %}
-                <span>   -temp_user_{{ current_user.id }}</span>
-                {% endif %}
+                <span>
+                    {% if current_user.username_approved %}
+                    -{{ comment.commenter.username }}
+                    {% else %}
+                    -temp_user_{{ current_user.id }}
+                    {% endif %}
+                </span>
                 <div>
-                    {% if comment.commenter_id ==  current_user.id %}
+                    {% if comment.commenter_id == current_user.id and not comment.deleted_by %}
                     <span>
                         <a
                             class="btn btn-danger mt-3"
@@ -85,18 +91,19 @@
                     <span>
                         <a
                             class="btn btn-danger mt-3"
-                            href="{{ url_for('trail_bp.delete_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
+                            href="{{ url_for('trail_bp.user_delete_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
                                 Delete Post
                         </a>
                     </span>
                     {% endif %}
-                    {% if current_user.is_admin %}
+                    {% if current_user.is_admin and not comment.deleted_by %}
                     <span>
                         <a
                             class="btn btn-danger mt-3"
                             href="{{ url_for(
                             'trail_bp.admin_delete_trail_comment',
                             comment_id=comment.id,
+                            admin_id=current_user.id,
                             trail_id=trail.id) }}">
                                 Admin Delete
                         </a>
@@ -115,7 +122,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% endblock %}
 {% include "footer.html" %}
-
-
-
-<!--{# url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) #}-->

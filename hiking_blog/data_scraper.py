@@ -20,13 +20,16 @@ def app_updates():
 
         from hiking_blog.models import Gear
         from hiking_blog.gear.gear_prices import moosejaw_price_query, rei_price_query, backcountry_price_query
+        from hiking_blog.contact import send_dead_links
 
         while True:
             print("starting")
             all_gear = Gear.query.all()
             parent_path = f"hiking_blog/admin/static"
             all_folders = os.listdir(parent_path)
-            check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_price_query)
+            dead_link_change = check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_price_query)
+            if dead_link_change:
+                send_dead_links()
             delete_old_files(all_folders, parent_path)
             print("waiting...")
             time.sleep(30)
@@ -37,7 +40,9 @@ def check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_pr
     Updates prices in the gear table.
 
     Iterates through every entry in the gear table and scrapes the links associated with the three major retailers for
-    the product's current price. It then updates the price in the database.
+    the product's current price. It then updates the price in the database. If the link is dead, adds the link to a
+    list to be emailed to an admin so the link can be updated. In this event, the price in the database will remain
+    unchanged.
 
     PARAMETERS
     ----------
@@ -51,15 +56,27 @@ def check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_pr
     A function that scrapes the product page on backcountry for the current price.
 
     """
-
+    dead_link_change = False
     for gear_piece in all_gear:
-        if gear_piece.moosejaw_price != "":
-            gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
+        if gear_piece.moosejaw_price != "" and gear_piece.moosejaw_link_dead == False:
+            try:
+                gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
+            except AttributeError:
+                gear_piece.moosejaw_link_dead = True
+                dead_link_change = True
         if gear_piece.rei_price != "":
-            gear_piece.rei_price = rei_price_query(gear_piece.rei_url)
+            try:
+                gear_piece.rei_price = rei_price_query(gear_piece.rei_url)
+            except AttributeError:
+                gear_piece.rei_link_dead = True
+                dead_link_change = True
         if gear_piece.backcountry_price != "":
-            gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
+            try:
+                gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
+            except AttributeError:
+                gear_piece.backcountry_link_dead = True
         db.db.session.commit()
+    return dead_link_change
 
 
 def delete_old_files(all_folders, parent_path):

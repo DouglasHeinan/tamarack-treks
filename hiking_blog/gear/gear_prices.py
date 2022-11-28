@@ -15,7 +15,11 @@ def moosejaw_price_query(moosejaw_url):
 
     response = requests.get(moosejaw_url, headers=HEADER)
     soup = BeautifulSoup(response.text, features="lxml")
-    gear_price = soup.find(class_="price-option").getText()
+    try:
+        gear_price = "$" + soup.find(class_="price-set-updated").getText().split("$")[1].split(" ")[0].strip()
+    except:
+        gear_price = "$" + soup.find(class_="price-set").getText().split("$")[1].split(" ")[0].strip().strip("-").strip()
+    print(gear_price)
 
     return gear_price
 
@@ -25,7 +29,7 @@ def rei_price_query(rei_url):
 
     response = requests.get(rei_url, headers=HEADER)
     soup = BeautifulSoup(response.text, features="lxml")
-    gear_price = soup.find(class_="price-value").getText()
+    gear_price = "$" + soup.find(class_="price-value").getText().split("$")[1].split(" ")[0].strip("-")
 
     return gear_price
 
@@ -35,7 +39,7 @@ def backcountry_price_query(backcountry_url):
 
     response = requests.get(backcountry_url, headers=HEADER)
     soup = BeautifulSoup(response.text, features="lxml")
-    gear_price = soup.find(class_="css-17wknbl").getText()
+    gear_price = "$" + soup.find(class_="css-1sxaem").getText().split("$")[1].split(" ")[0].strip("-")
 
     return gear_price
 

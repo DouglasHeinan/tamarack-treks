@@ -97,6 +97,7 @@ class TrailComments(UserMixin, db.Model):
     __tablename__ = "trail_comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
+    deleted_by = db.Column(db.String)
     commenter_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     commenter = relationship("User", back_populates="trail_page_comments")
     trail_id = db.Column(db.Integer, db.ForeignKey("trails.id"))
@@ -114,10 +115,13 @@ class Gear(db.Model):
     review = db.Column(db.Text, nullable=False)
     moosejaw_url = db.Column(db.String(250))
     moosejaw_price = db.Column(db.String(50))
+    moosejaw_link_dead = db.Column(db.Boolean, nullable=False)
     rei_url = db.Column(db.String(250))
     rei_price = db.Column(db.String(50))
+    rei_link_dead = db.Column(db.Boolean, nullable=False)
     backcountry_url = db.Column(db.String(250))
     backcountry_price = db.Column(db.String(50))
+    backcountry_link_dead = db.Column(db.Boolean, nullable=False)
     gear_comments = relationship("GearComments", back_populates="parent_gear_posts")
 
 
@@ -126,6 +130,7 @@ class GearComments(UserMixin, db.Model):
     __tablename__ = "gear_comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
+    deleted_by = db.Column(db.String)
     commenter_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     commenter = relationship("User", back_populates="gear_page_comments")
     gear_id = db.Column(db.Integer, db.ForeignKey("gear_rev.id"))
