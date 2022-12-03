@@ -56,25 +56,40 @@ def check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_pr
     A function that scrapes the product page on backcountry for the current price.
 
     """
+    # -----------Needs to be one function run three times-------------------------
     dead_link_change = False
     for gear_piece in all_gear:
-        if gear_piece.moosejaw_price != "" and gear_piece.moosejaw_link_dead == False:
+        if gear_piece.moosejaw_price != "" and not gear_piece.moosejaw_link_dead:
             try:
                 gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
+                gear_piece.backcountry_out_of_stock = False
+                print(f"{gear_piece.name}")
             except AttributeError:
-                gear_piece.moosejaw_link_dead = True
-                dead_link_change = True
-        if gear_piece.rei_price != "":
+                if not gear_piece.moosejaw_out_of_stock:
+                    gear_piece.moosejaw_link_dead = True
+                    dead_link_change = True
+                else:
+                    continue
+        if gear_piece.rei_price != "" and not gear_piece.rei_link_dead:
             try:
                 gear_piece.rei_price = rei_price_query(gear_piece.rei_url)
+                gear_piece.backcountry_out_of_stock = False
             except AttributeError:
-                gear_piece.rei_link_dead = True
-                dead_link_change = True
-        if gear_piece.backcountry_price != "":
+                if not gear_piece.rei_out_of_stock:
+                    gear_piece.rei_link_dead = True
+                    dead_link_change = True
+                else:
+                    continue
+        if gear_piece.backcountry_price != "" and not gear_piece.backcountry_link_dead:
             try:
                 gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
+                gear_piece.backcountry_out_of_stock = False
             except AttributeError:
-                gear_piece.backcountry_link_dead = True
+                if not gear_piece.backcountry_out_of_stock:
+                    gear_piece.backcountry_link_dead = True
+                    dead_link_change = True
+                else:
+                    continue
         db.db.session.commit()
     return dead_link_change
 

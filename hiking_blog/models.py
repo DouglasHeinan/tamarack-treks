@@ -116,12 +116,15 @@ class Gear(db.Model):
     moosejaw_url = db.Column(db.String(250))
     moosejaw_price = db.Column(db.String(50))
     moosejaw_link_dead = db.Column(db.Boolean, nullable=False)
+    moosejaw_out_of_stock = db.Column(db.Boolean, nullable=False)
     rei_url = db.Column(db.String(250))
     rei_price = db.Column(db.String(50))
     rei_link_dead = db.Column(db.Boolean, nullable=False)
+    rei_out_of_stock = db.Column(db.Boolean, nullable=False)
     backcountry_url = db.Column(db.String(250))
     backcountry_price = db.Column(db.String(50))
     backcountry_link_dead = db.Column(db.Boolean, nullable=False)
+    backcountry_out_of_stock = db.Column(db.Boolean, nullable=False)
     gear_comments = relationship("GearComments", back_populates="parent_gear_posts")
 
 

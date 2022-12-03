@@ -1,7 +1,7 @@
 """This file is a collection of site maintenance operations accessible to a site administrator."""
 import random
 
-from flask import Blueprint, flash, redirect, render_template, url_for, send_from_directory
+from flask import Blueprint, flash, redirect, render_template, url_for, send_from_directory, request
 from flask_login import current_user
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.forms import AddAdminForm, AddTrailForm, GearForm, CommentForm
@@ -141,6 +141,31 @@ def dead_links():
     if current_dead_links == {}:
         print("No dead links.")
     return render_template("view_dead_links.html", links=current_dead_links)
+
+
+@admin_bp.route("/admin/mark_out_of_stock/<gear_name>")
+@admin_only
+def mark_out_of_stock(gear_name):
+    """"""
+    site = request.args["site"]
+    print(site)
+    gear_piece = Gear.query.filter_by(name=gear_name).first()
+    if site == "Moosejaw Link":
+        gear_piece.moosejaw_out_of_stock = True
+        gear_piece.moosejaw_link_dead = False
+        gear_piece.moosejaw_price = "Out of stock"
+    if site == "REI Link":
+        gear_piece.rei_out_of_stock = True
+        gear_piece.rei_link_dead = False
+        gear_piece.rei_price = "Out of stock"
+    if site == "Backcountry Link":
+        gear_piece.backcountry_out_of_stock = True
+        gear_piece.backcountry_link_dead = False
+        gear_piece.backcountry_price = "Out of stock"
+    db.session.commit()
+    print(gear_piece.name)
+    print(gear_piece.backcountry_out_of_stock)
+    return redirect(url_for("admin_bp.dead_links"))
 
 
 @admin_bp.route("/admin/edit_gear/<int:gear_id>", methods=["GET", "POST"])
@@ -487,12 +512,15 @@ def update_gear_entry(gear, form):
     gear.moosejaw_url = form.moosejaw_url.data
     gear.moosejaw_price = form.moosejaw_price.data
     gear.moosejaw_link_dead = False
+    gear.moosejaw_out_of_stock = False
     gear.rei_url = form.rei_url.data
     gear.rei_price = form.rei_price.data
     gear.rei_link_dead = False
+    gear.rei_out_of_stock = False
     gear.backcountry_url = form.backcountry_url.data
     gear.backcountry_price = form.backcountry_price.data
     gear.backcountry_link_dead = False
+    gear.backcountry_out_of_stock = False
 
 
 def populate_gear_form(gear):

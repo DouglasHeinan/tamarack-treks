@@ -33,6 +33,9 @@ def view_gear(db_id):
     gear = Gear.query.get(db_id)
     info = create_product_links(gear)
 
+    print(gear.name)
+    print(gear.backcountry_out_of_stock)
+
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
