@@ -7,6 +7,15 @@ from hiking_blog import db, login_manager
 
 
 def app_updates():
+    """
+
+    After setting up an application object so as to work within the Flask app context, this function automates some
+    aspects of site maintenance. Specifically, it triggers a function that will delete all submitted photo files that
+    are more than a month old, and a separate function to change the price of a piece of gear in the database. Further,
+    if the latter function fails to scrape the price from a database, this function triggers another function that will
+    notify the admins of dead links that have been found.
+    """
+
     app = Flask(__name__)
     app.config.from_object("config.Config")
     login_manager.create_login_manager(app)
@@ -37,61 +46,52 @@ def app_updates():
 
 def check_prices(all_gear, moosejaw_price_query, rei_price_query, backcountry_price_query):
     """
-    Updates prices in the gear table.
+    Checks the current price of every piece of gear in the database and changes the displayed price on the app.
 
-    Iterates through every entry in the gear table and scrapes the links associated with the three major retailers for
-    the product's current price. It then updates the price in the database. If the link is dead, adds the link to a
-    list to be emailed to an admin so the link can be updated. In this event, the price in the database will remain
-    unchanged.
-
-    PARAMETERS
-    ----------
-    all_gear : list
-        A list of all gear entires in the database.
-    moosejaw_price_query : function
-        A function that scrapes the product page on moosejaw for the current price.
-    rei_price_query : function
-        A function that scrapes the product page on rei for the current price.
-    backcountry_price_query : function
-    A function that scrapes the product page on backcountry for the current price.
-
+    This function iterates through every piece of gear in the database and runs the update_gear_links function to keep
+    the entry in the database current.
     """
-    # -----------Needs to be one function run three times-------------------------
+
     dead_link_change = False
     for gear_piece in all_gear:
-        if gear_piece.moosejaw_price != "" and not gear_piece.moosejaw_link_dead:
-            try:
-                gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
-                gear_piece.backcountry_out_of_stock = False
-                print(f"{gear_piece.name}")
-            except AttributeError:
-                if not gear_piece.moosejaw_out_of_stock:
-                    gear_piece.moosejaw_link_dead = True
-                    dead_link_change = True
-                else:
-                    continue
-        if gear_piece.rei_price != "" and not gear_piece.rei_link_dead:
-            try:
-                gear_piece.rei_price = rei_price_query(gear_piece.rei_url)
-                gear_piece.backcountry_out_of_stock = False
-            except AttributeError:
-                if not gear_piece.rei_out_of_stock:
-                    gear_piece.rei_link_dead = True
-                    dead_link_change = True
-                else:
-                    continue
-        if gear_piece.backcountry_price != "" and not gear_piece.backcountry_link_dead:
-            try:
-                gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
-                gear_piece.backcountry_out_of_stock = False
-            except AttributeError:
-                if not gear_piece.backcountry_out_of_stock:
-                    gear_piece.backcountry_link_dead = True
-                    dead_link_change = True
-                else:
-                    continue
+        dead_link_change, gear_piece.moosejaw_price, gear_piece.moosejaw_link_dead, gear_piece.moosejaw_out_of_stock = \
+            update_gear_links(gear_piece.moosejaw_price, gear_piece.moosejaw_link_dead,
+                              gear_piece.moosejaw_out_of_stock, gear_piece.moosejaw_url, moosejaw_price_query,
+                              dead_link_change)
+        dead_link_change, gear_piece.rei_price, gear_piece.rei_link_dead, gear_piece.rei_out_of_stock = \
+            update_gear_links(gear_piece.rei_price, gear_piece.rei_link_dead, gear_piece.rei_out_of_stock,
+                              gear_piece.rei_url, rei_price_query, dead_link_change)
+        dead_link_change, gear_piece.backcountry_price, gear_piece.backcountry_link_dead, \
+            gear_piece.backcountry_out_of_stock = \
+            update_gear_links(gear_piece.backcountry_price, gear_piece.backcountry_link_dead,
+                              gear_piece.backcountry_out_of_stock, gear_piece.backcountry_url, backcountry_price_query,
+                              dead_link_change)
         db.db.session.commit()
     return dead_link_change
+
+
+def update_gear_links(price, dead_link, out_of_stock, url, price_query, dead_link_change):
+    """
+    Updates a gear listing in the database.
+
+    For one entry in the gear table of the database, this function updates the price listed by one of the three
+    retailers (Moosejaw, Backcountry, or REI) in the database. If, for some reason, the price cannot be scraped, the
+    entry is updated to denote that the link is dead, if it hasn't already.
+    """
+    back_in_stock = True
+    if price != "" and not dead_link:
+        try:
+            price = price_query(url)
+        except AttributeError:
+            back_in_stock = False
+            if not out_of_stock:
+                dead_link = True
+                dead_link_change = True
+            else:
+                pass
+    if back_in_stock:
+        out_of_stock = False
+    return dead_link_change, price, dead_link, out_of_stock
 
 
 def delete_old_files(all_folders, parent_path):
@@ -121,3 +121,72 @@ def delete_old_files(all_folders, parent_path):
 
 if __name__ == "__main__":
     app_updates()
+
+    # Below is the original check_prices function; may still be implemented in a different form.
+
+    """
+    Updates prices in the gear table.
+
+    Iterates through every entry in the gear table and scrapes the links associated with the three major retailers for
+    the product's current price. It then updates the price in the database. If the link is dead, adds the link to a
+    list to be emailed to an admin so the link can be updated. In this event, the price in the database will remain
+    unchanged.
+
+    PARAMETERS
+    ----------
+    all_gear : list
+        A list of all gear entires in the database.
+    moosejaw_price_query : function
+        A function that scrapes the product page on moosejaw for the current price.
+    rei_price_query : function
+        A function that scrapes the product page on rei for the current price.
+    backcountry_price_query : function
+    A function that scrapes the product page on backcountry for the current price.
+
+    """
+
+    #     back_in_stock = False
+    #     if gear_piece.moosejaw_price != "" and not gear_piece.moosejaw_link_dead:
+    #         try:
+    #             gear_piece.moosejaw_price = moosejaw_price_query(gear_piece.moosejaw_url)
+    #             back_in_stock = True
+    #         except AttributeError:
+    #             back_in_stock = False
+    #             if not gear_piece.moosejaw_out_of_stock:
+    #                 gear_piece.moosejaw_link_dead = True
+    #                 dead_link_change = True
+    #             else:
+    #                 continue
+    #     if back_in_stock:
+    #         gear_piece.moosejaw_out_of_stock = False
+    #     back_in_stock = False
+    #     if gear_piece.rei_price != "" and not gear_piece.rei_link_dead:
+    #         try:
+    #             gear_piece.rei_price = rei_price_query(gear_piece.rei_url)
+    #             back_in_stock = True
+    #         except AttributeError:
+    #             back_in_stock = False
+    #             if not gear_piece.rei_out_of_stock:
+    #                 gear_piece.rei_link_dead = True
+    #                 dead_link_change = True
+    #             else:
+    #                 continue
+    #     if back_in_stock:
+    #         gear_piece.rei_out_of_stock = False
+    #     back_in_stock = False
+    #     if gear_piece.backcountry_price != "" and not gear_piece.backcountry_link_dead:
+    #         try:
+    #             gear_piece.backcountry_price = backcountry_price_query(gear_piece.backcountry_url)
+    #             back_in_stock = True
+    #         except AttributeError:
+    #             back_in_stock = False
+    #             if not gear_piece.backcountry_out_of_stock:
+    #                 gear_piece.backcountry_link_dead = True
+    #                 dead_link_change = True
+    #             else:
+    #                 continue
+    #     if back_in_stock:
+    #         gear_piece.backcountry_out_of_stock = False
+    #     print(f"{gear_piece.name} link dead: {gear_piece.backcountry_link_dead}")
+    #     db.db.session.commit()
+    # return dead_link_change

@@ -130,15 +130,18 @@ def add_gear():
 @admin_only
 def dead_links():
     all_gear = Gear.query.all()
-    current_dead_links = {}
+    current_dead_links = []
     for gear in all_gear:
         if gear.moosejaw_link_dead:
-            current_dead_links[gear.name] = ["Moosejaw Link", gear.moosejaw_url]
+            current_dead_links.append({gear.name: ["Moosejaw Link", gear.moosejaw_url]})
+            # current_dead_links[gear.name].append(["Moosejaw Link", gear.moosejaw_url])
         if gear.rei_link_dead:
-            current_dead_links[gear.name] = ["REI Link", gear.rei_url]
+            current_dead_links.append({gear.name: ["REI Link", gear.rei_url]})
+            # current_dead_links[gear.name].append(["REI Link", gear.rei_url])
         if gear.backcountry_link_dead:
-            current_dead_links[gear.name] = ["Backcountry Link", gear.backcountry_url]
-    if current_dead_links == {}:
+            current_dead_links.append({gear.name: ["Backcountry Link", gear.backcountry_url]})
+            # current_dead_links[gear.name].append(["Backcountry Link", gear.backcountry_url])
+    if not current_dead_links:
         print("No dead links.")
     return render_template("view_dead_links.html", links=current_dead_links)
 
@@ -148,7 +151,6 @@ def dead_links():
 def mark_out_of_stock(gear_name):
     """"""
     site = request.args["site"]
-    print(site)
     gear_piece = Gear.query.filter_by(name=gear_name).first()
     if site == "Moosejaw Link":
         gear_piece.moosejaw_out_of_stock = True
@@ -163,8 +165,6 @@ def mark_out_of_stock(gear_name):
         gear_piece.backcountry_link_dead = False
         gear_piece.backcountry_price = "Out of stock"
     db.session.commit()
-    print(gear_piece.name)
-    print(gear_piece.backcountry_out_of_stock)
     return redirect(url_for("admin_bp.dead_links"))
 
 

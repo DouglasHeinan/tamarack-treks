@@ -19,7 +19,6 @@ def moosejaw_price_query(moosejaw_url):
         gear_price = "$" + soup.find(class_="price-set-updated").getText().split("$")[1].split(" ")[0].strip()
     except:
         gear_price = "$" + soup.find(class_="price-set").getText().split("$")[1].split(" ")[0].strip().strip("-").strip()
-    print(gear_price)
 
     return gear_price
 
