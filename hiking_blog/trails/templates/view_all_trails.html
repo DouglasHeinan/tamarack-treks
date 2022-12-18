@@ -1,0 +1,11 @@
+{% include "header.html" %}
+
+<h1>View all trails</h1>
+
+<ul>
+    {% for trail in all_trails %}
+    <li><a href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">{{trail.name}}</a></li>
+    {% endfor %}
+</ul>
+
+{% include "footer.html" %}

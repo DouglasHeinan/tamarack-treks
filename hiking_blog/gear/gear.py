@@ -14,6 +14,12 @@ gear_bp = Blueprint(
 )
 
 
+@gear_bp.route("/gear/view_all_gear")
+def view_all_gear():
+    all_gear = db.session.query(Gear).all()
+    return render_template("view_all_gear.html", all_gear=all_gear)
+
+
 @gear_bp.route("/gear/view_gear/<int:db_id>", methods=["GET", "POST"])
 def view_gear(db_id):
     """

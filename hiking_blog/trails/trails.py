@@ -23,6 +23,12 @@ trail_bp = Blueprint(
 )
 
 
+@trail_bp.route("/gear/view_all_trails")
+def view_all_trails():
+    all_trails = db.session.query(Trails).all()
+    return render_template("view_all_trails.html", all_trails=all_trails)
+
+
 @trail_bp.route("/<int:db_id>/view_trail", methods=["GET", "POST"])
 def view_trail(db_id):
     """

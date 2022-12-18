@@ -1,0 +1,12 @@
+{% include "header.html" %}
+
+<h1>View all gear</h1>
+
+<ul>
+    {% for gear in all_gear %}
+    <li><a href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{gear.name}}</a></li>
+    {% endfor %}
+</ul>
+
+
+{% include "footer.html" %}

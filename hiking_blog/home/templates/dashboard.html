@@ -1,7 +1,6 @@
 {% include "header.html" %}
 
 
-<h1>Welcome to Placeholder</h1>
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -11,11 +10,11 @@
     {% endif %}
 {% endwith %}
 
+<p>A Western Montana Hiking Guide</p>
+
 {% if logged_in: %}
   <h3>Hi {{ current_user.username }}!</h3>
 {% endif %}
-
-<p>If you love reading about gear, camp sites, trails, and the outdoors, you've come to the right place!</p>
 
 <div>
     <h3>Trail Reviews</h3>
