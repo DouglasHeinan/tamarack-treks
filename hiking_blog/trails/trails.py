@@ -135,7 +135,6 @@ def add_trail_pic(trail_id):
 
 @trail_bp.route("/trails/static/dev_pics/<file_name>")
 def display_trail_pics(file_name):
-    print(file_name)
     return send_from_directory("trails/static/dev_pics/", file_name)
 
 
