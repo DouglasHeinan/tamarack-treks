@@ -2,8 +2,34 @@
     color: #f6f4d2;
 }
 
+
+.site-color-two {
+    color: #606c38
+}
+
 .navbar-color {
     background-color: #606c38;
+}
+
+.h1-color {
+    color: #606c38;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+.no-underline:hover {
+    color: #606c38;
+}
+
+.carousel-content {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 50%;
+  color: white;
+  font-family: 'Libre Franklin', sans-serif;
 }
 
 .search-button {
@@ -21,6 +47,12 @@
   width: auto;
   height: 600px;
   max-height: 600px;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 25vw;
+    object-fit: cover;
 }
 
 .gear-img {

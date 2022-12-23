@@ -86,6 +86,13 @@ class AddTrailPicForm(FlaskForm):
     submit_button = SubmitField("Submit")
 
 
+class AddNewTrailPicForm(FlaskForm):
+    filename_one = FileField("File", validators=[DataRequired()])
+    filename_two = FileField("File", validators=[DataRequired()])
+    filename_three = FileField("File", validators=[DataRequired()])
+    submit_button = SubmitField("Submit")
+
+
 class ContactForm(FlaskForm):
     """A class used for the application's contact form."""
 

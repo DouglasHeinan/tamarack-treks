@@ -8,15 +8,27 @@
         <div class="carousel-inner">
             <div class="carousel-item active carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_1.jpg') }}" alt="First slide">
+                <div class="carousel-content" >
+                    <h2><a class="no-underline site-color" href="{{  url_for('auth_bp.login')  }}">Join Us in the Outdoors</a></h2>
+                </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_2.jpg') }}" alt="Second slide">
+                <div class="carousel-content" >
+                    <h2><a class="no-underline site-color" href="{{ url_for('gear_bp.view_all_gear') }}">Gearing Up for the Great Outdoors</a></h2>
+                </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_3.jpg') }}" alt="Third slide">
+                <div class="carousel-content" >
+                    <h2><a class="no-underline site-color" href="{{ url_for('trail_bp.view_all_trails') }}">Finding the Right Trail for You</a></h2>
+                </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_4.jpg') }}" alt="Fourth slide">
+                <div class="carousel-content" >
+                    <h2><a class="no-underline site-color" href="{{ url_for('home_bp.about') }}">Learn About Western Montana</a></h2>
+                </div>
             </div>
         </div>
       <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
@@ -38,25 +50,42 @@
     {% endif %}
 {% endwith %}
 
-<p>A Western Montana Hiking Guide</p>
+<h1 class="mt-5 h1-color text-center">A Western Montana Hiking Guide</h1>
 
-<div>
-    <h3>Trail Reviews</h3>
-    <ul>
-        {% for trail in all_trails %}
-        <li><a href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">{{trail.name}}</a></li>
+<div class="mt-5">
+    <h4 class="h1-color">Recent Trail Reviews</h4>
+    <div class="row">
+        {% for trail in recent_trails %}
+        <div class="col-sm-4">
+            <div class="card">
+                <img class="card-img-top img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">{{ trail.name }}</a>
+                    </h5>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 
 <div class="mt-5">
-    <h3>Gear Reviews</h3>
-    <ul>
-        {% for gear in all_gear %}
-        <li><a href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{gear.name}}</a></li>
+    <h4 class="h1-color">Recent Gear Reviews</h4>
+    <div class="row">
+        {% for gear in recent_gear %}
+        <div class="col-sm-4">
+            <div class="card">
+                <img class="card-img-top img-fluid" src="{{ gear.img_url }}">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>
+                    </h5>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
-
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

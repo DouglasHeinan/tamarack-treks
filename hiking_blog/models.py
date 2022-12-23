@@ -77,6 +77,7 @@ class Trails(db.Model):
     longitude = db.Column(db.String(100), nullable=False)
     hiking_dist = db.Column(db.Float, nullable=False)
     elev_change = db.Column(db.Integer, nullable=False)
+    date_time_added = db.Column(db.DateTime, nullable=False)
     trail_page_comments = relationship("TrailComments", back_populates="parent_trail_posts")
     trail_page_pics = relationship("TrailPictures", back_populates="parent_trail_posts")
 
@@ -125,6 +126,7 @@ class Gear(db.Model):
     backcountry_price = db.Column(db.String(50))
     backcountry_link_dead = db.Column(db.Boolean, nullable=False)
     backcountry_out_of_stock = db.Column(db.Boolean, nullable=False)
+    date_time_added = db.Column(db.DateTime, nullable=False)
     gear_comments = relationship("GearComments", back_populates="parent_gear_posts")
 
 

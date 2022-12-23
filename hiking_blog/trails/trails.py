@@ -10,7 +10,6 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
 
-
 PICTURE_UPLOAD_SUCCESS = "You're photos have been successfully uploaded! They will now need to be vetted by one " \
                          "of our administrators. This process usually only takes a day or two. Once you're photo " \
                          "has been approved, you will be notified via email. Thank you for supporting the blah-blah " \

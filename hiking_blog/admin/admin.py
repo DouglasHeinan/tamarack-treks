@@ -2,13 +2,14 @@
 import random
 
 from flask import Blueprint, flash, redirect, render_template, url_for, send_from_directory, request
-from flask_login import current_user
+from flask_login import current_user, login_required
 from hiking_blog.auth.auth import admin_only
-from hiking_blog.forms import AddAdminForm, AddTrailForm, GearForm, CommentForm
+from hiking_blog.forms import AddAdminForm, AddTrailForm, AddNewTrailPicForm, GearForm, CommentForm
 from hiking_blog.models import User, Trails, Gear, TrailPictures
 from hiking_blog.contact import send_async_email, send_email, send_username_rejected_notification
 from hiking_blog.db import db
-from flask_login import login_required
+from werkzeug.utils import secure_filename
+from datetime import datetime
 import shutil
 import os
 import errno
@@ -89,16 +90,55 @@ def add_trail():
             latitude=form.latitude.data,
             longitude=form.longitude.data,
             hiking_dist=form.hiking_distance.data,
-            elev_change=form.elevation_change.data
+            elev_change=form.elevation_change.data,
+            date_time_added=datetime.now()
         )
         db.session.add(new_hiking_trail)
         db.session.commit()
         trail_id = new_hiking_trail.id
-        return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
+        return redirect(url_for("admin_bp.add_initial_trail_pics", trail_id=trail_id))
     return render_template("form_page.html",
                            form=form,
                            form_header="Add a new trail review to the database",
                            form_sub_header="")
+
+
+@admin_bp.route("/<int:trail_id>/add_initial_trail_pics", methods=["GET", "POST"])
+@login_required
+# Break this into smaller chunks
+def add_initial_trail_pics(trail_id):
+    date = datetime.today().strftime("%m-%d-%Y")
+    form = AddNewTrailPicForm()
+    if form.validate_on_submit():
+        file_one = form.filename_one.data
+        file_two = form.filename_two.data
+        file_three = form.filename_three.data
+        if file_one.filename == "" or file_two.filename == "" or file_three.filename == "":
+            flash("No file selected.")
+            return redirect(url_for("admin_bp.add_initial_trail_pics", trail_id=trail_id))
+        if allowed_file(file_one.filename) and allowed_file(file_two.filename) and allowed_file(file_three.filename):
+            user = User.query.get(current_user.id).username
+            trail = Trails.query.get(trail_id).name
+            user_trail = user + "^" + trail
+            date = date
+            sorting_dir = "submitted_trail_pics/"
+            directory = create_file_name(sorting_dir, date, user_trail)
+            filename_one = secure_filename(file_one.filename)
+            file_one.save(os.path.join(directory, filename_one))
+            filename_two = secure_filename(file_two.filename)
+            file_two.save(os.path.join(directory, filename_two))
+            filename_three = secure_filename(file_three.filename)
+            file_three.save(os.path.join(directory, filename_three))
+            return redirect(url_for("admin_bp.admin_dashboard"))
+        else:
+            flash("Invalid file type.")
+            return redirect(url_for("admin_bp.add_initial_trail_pic", trail_id=trail_id))
+    else:
+        return render_template("form_page.html",
+                               form=form,
+                               form_header="Add New Trail Pictures",
+                               form_sub_header="Share some photos of this trail!")
+
 
 
 @admin_bp.route("/admin/add_gear", methods=["GET", "POST"])
@@ -509,6 +549,7 @@ def update_gear_entry(gear, form):
     gear.img_url = form.img_url.data
     gear.rating = form.rating.data
     gear.review = form.review.data
+    gear.date_time_added = datetime.now()
     gear.moosejaw_url = form.moosejaw_url.data
     gear.moosejaw_price = form.moosejaw_price.data
     gear.moosejaw_link_dead = False

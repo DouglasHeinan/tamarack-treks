@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, send_from_direc
 from flask_login import current_user
 from hiking_blog.models import Trails, Gear
 from hiking_blog.db import db
+from datetime import datetime
 # This import only exists for development purposes
 from hiking_blog.dev_db_autofill import create_gear_reviews, create_trail_entries, create_users, create_trail_pic_entries
 
@@ -32,8 +33,10 @@ def home():
         create_users()
         create_trail_pic_entries()
         return redirect(url_for("home_bp.home"))
-    return render_template("dashboard.html", all_trails=saved_trails, all_gear=saved_gear,
-                           logged_in=current_user.is_authenticated, user=current_user)
+    recent_trails = db.session.query(Trails).order_by(Trails.date_time_added)[:-4:-1]
+    recent_gear = db.session.query(Gear).order_by(Gear.date_time_added)[:-4:-1]
+    return render_template("dashboard.html", all_trails=saved_trails, all_gear=saved_gear, recent_trails=recent_trails,
+                           recent_gear=recent_gear, logged_in=current_user.is_authenticated, user=current_user)
 
 
 @home_bp.route("/home/static/dev_pics/<file_name>")
