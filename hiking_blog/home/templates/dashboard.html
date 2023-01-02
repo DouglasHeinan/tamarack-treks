@@ -61,7 +61,7 @@
                 <img class="card-img-top img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">{{ trail.name }}</a>
+                        <a class="no-underline site-color-two" href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">{{ trail.name }}</a>
                     </h5>
                 </div>
             </div>
@@ -76,10 +76,10 @@
         {% for gear in recent_gear %}
         <div class="col-sm-4">
             <div class="card">
-                <img class="card-img-top img-fluid" src="{{ gear.img_url }}">
+                    <img class="card-img" src="{{ gear.img_url }}">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>
+                        <a class="no-underline site-color-two" href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>
                     </h5>
                 </div>
             </div>

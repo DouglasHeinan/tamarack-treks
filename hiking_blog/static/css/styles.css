@@ -6,13 +6,29 @@ button {
     color: #f6f4d2;
 }
 
-
 .site-color-two {
     color: #606c38
 }
 
 .navbar-color {
     background-color: #606c38;
+}
+
+.gear-img {
+    width: 65%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gear-pic-div {
+    margin-left: 3em;
+    width: 70%;
+    height: 24em;
+}
+
+.card-img {
+    object-fit: contain;
+    height: 25vw;
 }
 
 .h1-color {
@@ -57,13 +73,6 @@ button {
     width: 100%;
     height: 25vw;
     object-fit: cover;
-}
-
-.gear-img {
-    height: 200px;
-    width: 200px;
-    overflow: hidden;
-    margin: 0 auto;
 }
 
 .header {
