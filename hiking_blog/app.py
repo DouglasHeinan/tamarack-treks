@@ -27,7 +27,7 @@ def init_app():
 
     gravatar = Gravatar(
         app,
-        size=100,
+        size=20,
         rating="g",
         default="retro",
         force_default=False,
@@ -50,6 +50,7 @@ def init_app():
         from hiking_blog.auth import auth
         from hiking_blog.admin import admin
         from hiking_blog import contact
+        from hiking_blog.search import search
 
         app.register_blueprint(dashboard.home_bp)
         app.register_blueprint(gear.gear_bp)
@@ -57,6 +58,7 @@ def init_app():
         app.register_blueprint(contact.contact_bp)
         app.register_blueprint(auth.auth_bp)
         app.register_blueprint(admin.admin_bp)
+        app.register_blueprint(search.search_bp)
 
         db.create_db()
 

@@ -90,8 +90,10 @@
                             </li>
                             {% endif %}
                         </ul>
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <form method="POST" action="{{ url_for('search_bp.search') }}" class="form-inline my-2 my-lg-0">
+                            {{ form.hidden_tag() }}
+                            <input class="form-control mr-sm-2" type="search"
+                                   placeholder="Search" aria-label="Search" name="searched">
                             <button class="btn my-2 my-sm-0 search-button" type="submit">Search</button>
                         </form>
                     </div>
