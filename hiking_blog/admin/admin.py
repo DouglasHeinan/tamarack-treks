@@ -103,6 +103,24 @@ def add_trail():
                            form_sub_header="")
 
 
+@admin_bp.route("/admin/edit_trail/<int:trail_id>", methods=["GET", "POST"])
+@admin_only
+def edit_trail(trail_id):
+    """"""
+
+    trail = Trails.query.get(trail_id)
+    form = populate_trail_form(trail)
+
+    if form.validate_on_submit():
+        update_trail_entry(trail, form)
+        db.session.commit()
+        return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
+    return render_template("form_page.html",
+                           form=form,
+                           form_header="Edit this trail description.",
+                           form_sub_header="")
+
+
 @admin_bp.route("/<int:trail_id>/add_initial_trail_pics", methods=["GET", "POST"])
 @login_required
 # Break this into smaller chunks
@@ -138,7 +156,6 @@ def add_initial_trail_pics(trail_id):
                                form=form,
                                form_header="Add New Trail Pictures",
                                form_sub_header="Share some photos of this trail!")
-
 
 
 @admin_bp.route("/admin/add_gear", methods=["GET", "POST"])
@@ -564,6 +581,15 @@ def update_gear_entry(gear, form):
     gear.backcountry_out_of_stock = False
 
 
+def update_trail_entry(trail, form):
+    trail.name = form.name.data
+    trail.description = form.description.data
+    trail.latitude = form.latitude.data
+    trail.longitude = form.longitude.data
+    trail.hiking_dist = form.hiking_distance.data
+    trail.elevation_change = form.elevation_change.data
+
+
 def populate_gear_form(gear):
     """Activated during the edit_gear function, populates all fields of the form with data from the database."""
     gear_piece = GearForm(
@@ -580,3 +606,15 @@ def populate_gear_form(gear):
         backcountry_price=gear.backcountry_price
     )
     return gear_piece
+
+
+def populate_trail_form(trail):
+    trail_to_edit = AddTrailForm(
+        name=trail.name,
+        description=trail.description,
+        latitude=trail.latitude,
+        longitude=trail.longitude,
+        hiking_distance=trail.hiking_dist,
+        elevation_change=trail.elev_change
+    )
+    return trail_to_edit

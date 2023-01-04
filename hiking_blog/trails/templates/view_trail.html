@@ -51,6 +51,13 @@
     <div>
             {{ trail.description|safe }}
     </div>
+    {% if current_user.is_admin %}
+    <div class="container mb-3">
+        <a class="btn btn-success" href="{{ url_for('admin_bp.edit_trail', trail_id=trail.id) }}">
+            Edit trail info!
+        </a>
+    </div>
+    {% endif %}
 </div>
 
 <!-------------Comments-------------->
