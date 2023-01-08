@@ -88,6 +88,7 @@ def run_search_functions(search_list):
     return results
 
 
+# ----------------------------------------UTILITY FUNCTIONS----------------------------------------
 def check_gear_and_trail_review_names(searched, results):
     """
     Looks for trail and gear-piece names in the database that match the user-input search terms.
