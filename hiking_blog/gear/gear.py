@@ -39,9 +39,6 @@ def view_gear(db_id):
     gear = Gear.query.get(db_id)
     info = create_product_links(gear)
 
-    print(gear.name)
-    print(gear.backcountry_out_of_stock)
-
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
@@ -121,7 +118,7 @@ def create_new_gear_comment(form, gear):
         text=form.comment_text.data,
         deleted_by=None,
         commenter=current_user,
-        parent_gear_posts=gear
+        parent_posts=gear
     )
     db.session.add(new_comment)
     db.session.commit()

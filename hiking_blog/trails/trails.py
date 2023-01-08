@@ -52,7 +52,7 @@ def view_trail(db_id):
             text=form.comment_text.data,
             deleted_by=None,
             commenter=current_user,
-            parent_trail_posts=requested_trail
+            parent_posts=requested_trail
         )
         db.session.add(new_comment)
         db.session.commit()

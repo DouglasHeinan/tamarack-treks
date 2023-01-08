@@ -114,7 +114,7 @@ class GearForm(FlaskForm):
     category = SelectField("Gear Category", choices=GEAR_CATEGORIES, validators=[DataRequired()])
     img_url = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
-    review = CKEditorField("Review", validators=[DataRequired()])
+    description = CKEditorField("Review", validators=[DataRequired()])
     moosejaw_url = StringField("Moosejaw Link", validators=[])
     moosejaw_price = StringField("Moosejaw Price", validators=[])
     rei_url = StringField("REI Link", validators=[])

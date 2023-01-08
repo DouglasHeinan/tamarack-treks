@@ -1,12 +1,12 @@
 {% include "header.html" %}
 
 <h2>Search Results</h2>
-    {% for result in results %}
+    {% for result in sorted_results %}
 
-        {% if result["gear/trail"] == "gear" %}
-        <h4><a class="no-underline" href="{{ url_for('gear_bp.view_gear', db_id=result['id']) }}">{{ result["gear/trail name"] }}</a></h4>
+        {% if result["gear/trail"] == "Gear" %}
+        <h4><a class="no-underline" href="{{ url_for('gear_bp.view_gear', db_id=result['id']) }}">{{ result["gear/trail_name"] }}</a></h4>
         {% else %}
-        <h4><a class="no-underline" href="{{ url_for('trail_bp.view_trail', db_id=result['id']) }}">{{ result["gear/trail name"] }}</a></h4>
+        <h4><a class="no-underline" href="{{ url_for('trail_bp.view_trail', db_id=result['id']) }}">{{ result["gear/trail_name"] }}</a></h4>
         {% endif %}
 
     {% endfor %}

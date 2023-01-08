@@ -73,12 +73,14 @@ class Trails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=False)
+    gear_trail = db.Column(db.String, nullable=False)
     latitude = db.Column(db.String(100), nullable=False)
     longitude = db.Column(db.String(100), nullable=False)
     hiking_dist = db.Column(db.Float, nullable=False)
     elev_change = db.Column(db.Integer, nullable=False)
+    difficulty = db.Column(db.String, nullable=False)
     date_time_added = db.Column(db.DateTime, nullable=False)
-    trail_page_comments = relationship("TrailComments", back_populates="parent_trail_posts")
+    trail_page_comments = relationship("TrailComments", back_populates="parent_posts")
     trail_page_pics = relationship("TrailPictures", back_populates="parent_trail_posts")
 
 
@@ -102,7 +104,7 @@ class TrailComments(UserMixin, db.Model):
     commenter_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     commenter = relationship("User", back_populates="trail_page_comments")
     trail_id = db.Column(db.Integer, db.ForeignKey("trails.id"))
-    parent_trail_posts = relationship("Trails", back_populates="trail_page_comments")
+    parent_posts = relationship("Trails", back_populates="trail_page_comments")
 
 
 class Gear(db.Model):
@@ -113,7 +115,9 @@ class Gear(db.Model):
     category = db.Column(db.String(100), nullable=False)
     img_url = db.Column(db.String(250), unique=True, nullable=False)
     rating = db.Column(db.Float, nullable=False)
-    review = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    keywords = db.Column(db.String, nullable=False)
+    gear_trail = db.Column(db.String, nullable=False)
     moosejaw_url = db.Column(db.String(250))
     moosejaw_price = db.Column(db.String(50))
     moosejaw_link_dead = db.Column(db.Boolean, nullable=False)
@@ -127,7 +131,7 @@ class Gear(db.Model):
     backcountry_link_dead = db.Column(db.Boolean, nullable=False)
     backcountry_out_of_stock = db.Column(db.Boolean, nullable=False)
     date_time_added = db.Column(db.DateTime, nullable=False)
-    gear_comments = relationship("GearComments", back_populates="parent_gear_posts")
+    gear_comments = relationship("GearComments", back_populates="parent_posts")
 
 
 class GearComments(UserMixin, db.Model):
@@ -139,4 +143,4 @@ class GearComments(UserMixin, db.Model):
     commenter_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     commenter = relationship("User", back_populates="gear_page_comments")
     gear_id = db.Column(db.Integer, db.ForeignKey("gear_rev.id"))
-    parent_gear_posts = relationship("Gear", back_populates="gear_comments")
+    parent_posts = relationship("Gear", back_populates="gear_comments")

@@ -87,6 +87,7 @@ def add_trail():
         new_hiking_trail = Trails(
             name=form.name.data,
             description=form.description.data,
+            gear_trail="Trail",
             latitude=form.latitude.data,
             longitude=form.longitude.data,
             hiking_dist=form.hiking_distance.data,
@@ -99,7 +100,7 @@ def add_trail():
         return redirect(url_for("admin_bp.add_initial_trail_pics", trail_id=trail_id))
     return render_template("form_page.html",
                            form=form,
-                           form_header="Add a new trail review to the database",
+                           form_header="Add a new trail description to the database",
                            form_sub_header="")
 
 
@@ -171,15 +172,15 @@ def add_gear():
 
     form = GearForm()
     if form.validate_on_submit():
-        new_review_gear = Gear()
-        update_gear_entry(new_review_gear, form)
-        db.session.add(new_review_gear)
+        new_gear_description = Gear()
+        update_gear_entry(new_gear_description, form)
+        db.session.add(new_gear_description)
         db.session.commit()
-        gear_id = new_review_gear.id
+        gear_id = new_gear_description.id
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
     return render_template("form_page.html",
                            form=form,
-                           form_header="Add a new gear review to the database",
+                           form_header="Add a new gear description to the database",
                            form_sub_header="")
 
 
@@ -249,7 +250,7 @@ def edit_gear(gear_id):
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
     return render_template("form_page.html",
                            form=form,
-                           form_header="Edit this gear review.",
+                           form_header="Edit this gear description.",
                            form_sub_header="")
 
 
@@ -565,7 +566,8 @@ def update_gear_entry(gear, form):
     gear.category = form.category.data
     gear.img_url = form.img_url.data
     gear.rating = form.rating.data
-    gear.review = form.review.data
+    gear.description = form.description.data
+    gear.gear_trail = "Gear"
     gear.date_time_added = datetime.now()
     gear.moosejaw_url = form.moosejaw_url.data
     gear.moosejaw_price = form.moosejaw_price.data
@@ -597,7 +599,7 @@ def populate_gear_form(gear):
         category=gear.category,
         img_url=gear.img_url,
         rating=gear.rating,
-        review=gear.review,
+        description=gear.description,
         moosejaw_url=gear.moosejaw_url,
         moosejaw_price=gear.moosejaw_price,
         rei_url=gear.rei_url,
