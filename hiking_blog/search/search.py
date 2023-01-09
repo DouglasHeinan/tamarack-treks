@@ -23,6 +23,7 @@ def send_form_to_navbar():
     return dict(form=form)
 
 
+# ----------------------------------------PARENT SEARCH FUNCTIONS----------------------------------------
 @search_bp.route("/search", methods=["POST"])
 def search():
     """
@@ -88,7 +89,7 @@ def run_search_functions(search_list):
     return results
 
 
-# ----------------------------------------UTILITY FUNCTIONS----------------------------------------
+# ----------------------------------------SEARCH FUNCTIONS----------------------------------------
 def check_gear_and_trail_review_names(searched, results):
     """
     Looks for trail and gear-piece names in the database that match the user-input search terms.
@@ -220,6 +221,7 @@ def check_exact_name_in_search(searched, results):
     return results
 
 
+# ----------------------------------------UTILITY FUNCTIONS----------------------------------------
 def add_or_adjust_entries_against_search_term_relevance(hits, results, to_check, search_item, hit_value):
     """
     Adds new entries to the 'results' list, as well as adjusting entries already included in the list.

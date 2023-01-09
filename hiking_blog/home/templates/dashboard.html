@@ -9,25 +9,25 @@
             <div class="carousel-item active carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_1.jpg') }}" alt="First slide">
                 <div class="carousel-content" >
-                    <h2><a class="no-underline site-color" href="{{  url_for('auth_bp.login')  }}">Join Us in the Outdoors</a></h2>
+                    <h2><a class="no-underline site-color-one" href="{{  url_for('auth_bp.login')  }}">Join Us in the Outdoors</a></h2>
                 </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_2.jpg') }}" alt="Second slide">
                 <div class="carousel-content" >
-                    <h2><a class="no-underline site-color" href="{{ url_for('gear_bp.view_all_gear') }}">Gearing Up for the Great Outdoors</a></h2>
+                    <h2><a class="no-underline site-color-one" href="{{ url_for('gear_bp.view_all_gear') }}">Gearing Up for the Great Outdoors</a></h2>
                 </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_3.jpg') }}" alt="Third slide">
                 <div class="carousel-content" >
-                    <h2><a class="no-underline site-color" href="{{ url_for('trail_bp.view_all_trails') }}">Finding the Right Trail for You</a></h2>
+                    <h2><a class="no-underline site-color-one" href="{{ url_for('trail_bp.view_all_trails') }}">Finding the Right Trail for You</a></h2>
                 </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_4.jpg') }}" alt="Fourth slide">
                 <div class="carousel-content" >
-                    <h2><a class="no-underline site-color" href="{{ url_for('home_bp.about') }}">Learn About Western Montana</a></h2>
+                    <h2><a class="no-underline site-color-one" href="{{ url_for('home_bp.about') }}">Learn About Western Montana</a></h2>
                 </div>
             </div>
         </div>
@@ -50,11 +50,11 @@
     {% endif %}
 {% endwith %}
 
-<h1 class="mt-5 h1-color text-center">A Western Montana Hiking Guide</h1>
+<h1 class="mt-5 site-color-two text-center">A Western Montana Hiking Guide</h1>
 
 <div class="mt-5">
-    <h4 class="h1-color">Recent Trail Reviews</h4>
-    <div class="row">
+    <h4 class="site-color-two">Recent Trail Reviews</h4>
+    <div class="row gy-3">
         {% for trail in recent_trails %}
         <div class="col-sm-4">
             <div class="card">
@@ -71,12 +71,12 @@
 </div>
 
 <div class="mt-5">
-    <h4 class="h1-color">Recent Gear Reviews</h4>
-    <div class="row">
+    <h4 class="site-color-two">Recent Gear Reviews</h4>
+    <div class="row gx-3">
         {% for gear in recent_gear %}
         <div class="col-sm-4">
             <div class="card">
-                    <img class="card-img" src="{{ gear.img_url }}">
+                    <img class="card-img mt-2" src="{{ gear.img_url }}">
                 <div class="card-body">
                     <h5 class="card-title">
                         <a class="no-underline site-color-two" href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>

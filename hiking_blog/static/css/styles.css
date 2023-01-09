@@ -1,16 +1,24 @@
+html, body {
+    margin: 0;
+}
+
 button {
     background-color: #f6f4d2;
 }
 
-.site-color {
+.site-color-one {
     color: #f6f4d2;
 }
 
 .site-color-two {
-    color: #606c38
+    color: #606c38;
 }
 
-.navbar-color {
+background-color-one {
+    background-color: #f6f4d2;
+}
+
+.background-color-two {
     background-color: #606c38;
 }
 
@@ -29,10 +37,6 @@ button {
 .card-img {
     object-fit: contain;
     height: 25vw;
-}
-
-.h1-color {
-    color: #606c38;
 }
 
 .no-underline {
@@ -73,10 +77,6 @@ button {
     width: 100%;
     height: 25vw;
     object-fit: cover;
-}
-
-.header {
-    margin: 0 auto
 }
 
 @media all {
