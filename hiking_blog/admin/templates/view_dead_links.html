@@ -1,16 +1,15 @@
-{% include "header.html" %}
+{% extends 'layout.html' %}}
 
+{% block content %}
 <div class="mt-3">
     {% for link in links %}
         {% for info in link %}
         <div class="mt-2">
             <span class="mt-2">{{ info }}:  </span><a href="{{  link[info][1]  }}" target="_blank">{{ link[info][0] }}</a>
-            <a class="btn btn-success" href="#">Edit Link</a>
+            <a class="btn background-color-two site-color-one" href="#">Edit Link</a>
             <a class="btn btn-danger" href="{{ url_for('admin_bp.mark_out_of_stock', gear_name=info, site=link[info][0]) }}">Mark Out of Stock</a>
         </div>
         {% endfor %}
     {% endfor %}
 </div>
-
-
-{% include "footer.html" %}
+{% endblock %}

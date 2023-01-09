@@ -1,5 +1,6 @@
-{% include "header.html" %}
+{% extends 'layout.html' %}
 
+{% block content %}
 {% for directory in user_trail_directories %}
     {% if pics[directory] != [] %}
         <h5>{{ directory }}</h5>
@@ -31,5 +32,4 @@
         {% endfor %}
     </ul>
 {% endfor %}
-
-{% include "footer.html" %}
+{% endblock %}

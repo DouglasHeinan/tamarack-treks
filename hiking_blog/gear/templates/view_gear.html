@@ -1,8 +1,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
+{% extends 'layout.html' %}
 
 {% block content %}
-{% include "header.html" %}
-
 
 {% if current_user.is_authenticated: %}
     <div class="header">
@@ -119,6 +118,4 @@
         </ul>
     </div>
 </div>
-
 {% endblock %}
-{% include "footer.html" %}
