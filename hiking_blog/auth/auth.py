@@ -44,8 +44,8 @@ def login():
             flash(message)
             return reroute
         login_user(user, remember=True, duration=DAYS_BEFORE_LOGOUT)
-        next_page = request.args.get("next")
-        return redirect(next_page or url_for("home_bp.home"))
+        # ------------------NEED TO ADD NEXT PAGE FUNCTIONALITY----------------------------------
+        return redirect(url_for("home_bp.home"))
     return render_template("form_page.html",
                            form=form,
                            logged_in=current_user.is_authenticated,
@@ -107,8 +107,6 @@ def reset_with_token(token):
     """
     # -----------------------------------------Needs Docstring------------------------------------------------
 
-    :param token:
-    :return:
     """
     # ------------------------------------Needs to be broken up-------------------------------------------
     try:
@@ -192,7 +190,7 @@ def load_user(user_id):
 def unauthorized():
     """Flashes a message to a logged-out user attempting to access a page only viewable by logged-in users."""
     flash("You must be logged in to view that page")
-    return redirect(url_for("auth_bp.login"))
+    return redirect(url_for("auth_bp.login", next=request.url))
 
 
 def create_new_user(form, admin):

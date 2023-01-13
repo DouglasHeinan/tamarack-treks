@@ -24,7 +24,7 @@ def send_form_to_navbar():
 
 
 # ----------------------------------------PARENT SEARCH FUNCTIONS----------------------------------------
-@search_bp.route("/search", methods=["POST"])
+@search_bp.route("/search/search", methods=["POST"])
 def search():
     """
     Takes in the user-input to be searched and returns a list of all pages on the site containing relevant information.

@@ -59,7 +59,14 @@
 <div class="container-fluid">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
-    {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) }}
+    {# wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) #}
+    <form method="POST" action="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
+        {{ form.csrf_token }}
+        {{ form.comment_text.label }}
+        {{ form.comment_text }}
+        <input class="btn button-style mt-2" type="submit" value="Submit">
+    </form>
+
     <div class="col-lg-8 col-md-10 mx-auto comment mt-4">
         <ul>
             {% for comment in gear.gear_comments %}

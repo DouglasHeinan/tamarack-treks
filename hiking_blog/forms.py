@@ -126,11 +126,8 @@ class GearForm(FlaskForm):
 
 class CommentForm(FlaskForm):
     """A class used for the application's comment form."""
-
     comment_text = CKEditorField("Comment", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
 
 
 class SearchForm(FlaskForm):
     searched = StringField("Search", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
