@@ -2,11 +2,11 @@ html, body {
     margin: 0;
 }
 
-.site-color-one {
+.site-color-one, .site-color-one:hover  {
     color: #f6f4d2;
 }
 
-.site-color-two {
+.site-color-two, .site-color-two:hover {
     color: #606c38;
 }
 
@@ -35,12 +35,8 @@ background-color-one {
     height: 25vw;
 }
 
-.no-underline {
+.no-underline, no-underline:hover {
     text-decoration: none;
-}
-
-.no-underline:hover {
-    color: #606c38;
 }
 
 .carousel-content {
@@ -74,6 +70,21 @@ background-color-one {
     height: 25vw;
     object-fit: cover;
 }
+
+.footer {
+    margin-bottom: -50px;
+}
+
+.foot-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.foot-btn-font {
+    font-size: 20px;
+}
+
 
 @media all {
     .navbar .nav-item .dropdown-menu{ display: none; }

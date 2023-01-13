@@ -1,6 +1,30 @@
-<div class="text-center">
-    <h3 class="site-color-one">Tamarack Treks</h3>
+<div class="background-color-two pt-4 pb-2">
+    <div class="text-center">
+        <h3 class="site-color-one">Tamarack Treks</h3>
+        <div class="container">
+            <ul class="row mb-3 foot-list list-unstyled">
+                <li class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('gear_bp.view_all_gear') }}">Gear</a></li>
+                <li class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('trail_bp.view_all_trails') }}">Trails</a></li>
+                <li class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('contact_bp.contact') }}">Contact</a></li>
+                <li class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="#">About Western Montana</a></li>
+                <li class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('home_bp.about') }}">About This Blog</a></li>
+                <li class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="#">Community</a></li>
+            </ul>
+        </div>
+<!--        <div class="container">-->
+<!--            <div class="row mb-3">-->
+<!--                <div class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('gear_bp.view_all_gear') }}">Gear</a></div>-->
+<!--                <div class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('trail_bp.view_all_trails') }}">Trails</a></div>-->
+<!--                <div class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('contact_bp.contact') }}">Contact</a></div>-->
+<!--                <div class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="#">About Western Montana</a></div>-->
+<!--                <div class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="{{ url_for('home_bp.about') }}">About This Blog</a></div>-->
+<!--                <div class="foot-btn-font col-sm-6 col-md-4 my-1"><a class="no-underline site-color-one" href="#">Community</a></div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
 </div>
-<div class="container text-center mt-5">
-    <p class="site-color-one">Copyright &copy; Doug Heinan {{ year }}</p>
+
+<div class="container text-center mt-3 background-color-one">
+    <p class="site-color-two">Copyright &copy; Doug Heinan 2022 - {{ year }}.</p>
+    <p class="site-color-two">Site design and build by Doug Heinan</p>
 </div>

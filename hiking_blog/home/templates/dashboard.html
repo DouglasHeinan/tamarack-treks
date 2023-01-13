@@ -31,11 +31,9 @@
         </div>
       <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-<!--        <span class="sr-only">Previous</span>-->
       </a>
       <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-<!--        <span class="sr-only">Next</span>-->
       </a>
     </div>
 </div>
@@ -52,13 +50,13 @@
 
 <div class="mt-5">
     <h4 class="site-color-two">Recent Trail Reviews</h4>
-    <div class="row gy-3">
+    <div class="row gx-3">
         {% for trail in recent_trails %}
         <div class="col-sm-4">
             <div class="card">
                 <img class="card-img-top img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title text-center">
                         <a class="no-underline site-color-two" href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">{{ trail.name }}</a>
                     </h5>
                 </div>
@@ -73,10 +71,10 @@
     <div class="row gx-3">
         {% for gear in recent_gear %}
         <div class="col-sm-4">
-            <div class="card">
+            <div class="card my-2">
                     <img class="card-img mt-2" src="{{ gear.img_url }}">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h5 class="card-title text-center">
                         <a class="no-underline site-color-two" href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>
                     </h5>
                 </div>

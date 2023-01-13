@@ -6,12 +6,12 @@
         {% endblock %}
     </head>
     <body>
-        {% include 'navbar.html' %}
+        {% include 'header_navbar.html' %}
         <div class="container-fluid">
         {% block content %}{% endblock %}
         </div>
     </body>
-    <footer class="background-color-two mt-5">
+    <footer class="mt-5 footer pt-3 pb-1">
         {% block footer %}
         {% include 'footer.html' %}
         {% endblock %}
