@@ -1,6 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="text-center mt-3 mb-2">
+            <h3 class="text-danger"><strong>{{ message }}</strong></h3>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <div class="container-fluid text-center mt-3">
     <div id="carouselControls" class="carousel slide carousel-fade" data-ride="carousel" data-interval="10000">
         <div class="carousel-inner">
@@ -38,15 +49,7 @@
     </div>
 </div>
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-        <p class="text-danger"><strong>{{ message }}</strong></p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-
-<h1 class="mt-5 site-color-two text-center">A Western Montana Hiking Guide</h1>
+<h1 class="mt-4 site-color-two text-center">A Western Montana Hiking Guide</h1>
 
 <div class="mt-5">
     <h4 class="site-color-two">Recent Trail Reviews</h4>
