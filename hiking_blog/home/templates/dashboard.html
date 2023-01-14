@@ -12,31 +12,33 @@
     {% endif %}
 {% endwith %}
 
-<div class="container-fluid text-center mt-3">
+<h1 class="site-color-five text-center title-font mt-4">A Western Montana Hiking Guide</h1>
+
+<div class="text-center mt-3">
     <div id="carouselControls" class="carousel slide carousel-fade" data-ride="carousel" data-interval="10000">
         <div class="carousel-inner">
             <div class="carousel-item active carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_1.jpg') }}" alt="First slide">
-                <div class="carousel-content" >
-                    <h2><a class="no-underline site-color-one" href="{{  url_for('auth_bp.login')  }}">Join Us in the Outdoors</a></h2>
+                <div class="carousel-caption">
+                    <h2><a class="no-underline site-color-three big-font" href="{{ url_for('auth_bp.login') }}">Join Us in the Outdoors</a></h2>
                 </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_2.jpg') }}" alt="Second slide">
-                <div class="carousel-content" >
-                    <h2><a class="no-underline site-color-one" href="{{ url_for('gear_bp.view_all_gear') }}">Gearing Up for the Great Outdoors</a></h2>
+                <div class="carousel-caption">
+                    <h2><a class="no-underline site-color-three big-font" href="{{ url_for('gear_bp.view_all_gear') }}">Gearing Up for the Great Outdoors</a></h2>
                 </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_3.jpg') }}" alt="Third slide">
-                <div class="carousel-content" >
-                    <h2><a class="no-underline site-color-one" href="{{ url_for('trail_bp.view_all_trails') }}">Finding the Right Trail for You</a></h2>
+                <div class="carousel-caption">
+                    <h2><a class="no-underline site-color-three big-font" href="{{ url_for('trail_bp.view_all_trails') }}">Finding the Right Trail for You</a></h2>
                 </div>
             </div>
             <div class="carousel-item carouselImage">
                 <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_4.jpg') }}" alt="Fourth slide">
-                <div class="carousel-content" >
-                    <h2><a class="no-underline site-color-one" href="{{ url_for('home_bp.about') }}">Learn About Western Montana</a></h2>
+                <div class="carousel-caption">
+                    <h2><a class="no-underline site-color-three big-font" href="{{ url_for('home_bp.about') }}">Learn About Western Montana</a></h2>
                 </div>
             </div>
         </div>
@@ -49,41 +51,56 @@
     </div>
 </div>
 
-<h1 class="mt-4 site-color-two text-center">A Western Montana Hiking Guide</h1>
-
-<div class="mt-5">
-    <h4 class="site-color-two">Recent Trail Reviews</h4>
-    <div class="row gx-3">
-        {% for trail in recent_trails %}
-        <div class="col-sm-4">
-            <div class="card">
-                <img class="card-img-top img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}">
-                <div class="card-body">
-                    <h5 class="card-title text-center">
-                        <a class="no-underline site-color-two" href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">{{ trail.name }}</a>
-                    </h5>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+<div class="background-color-three pb-5">
+    <div class="background-color-white pt-5 pb-1">
+        <h3 class="site-color-five text-center section-font">Recent Trail Reviews</h3>
     </div>
-</div>
 
-<div class="mt-5">
-    <h4 class="site-color-two">Recent Gear Reviews</h4>
-    <div class="row gx-3">
-        {% for gear in recent_gear %}
-        <div class="col-sm-4">
-            <div class="card my-2">
-                    <img class="card-img mt-2" src="{{ gear.img_url }}">
-                <div class="card-body">
-                    <h5 class="card-title text-center">
-                        <a class="no-underline site-color-two" href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>
-                    </h5>
+    <div class="background-color-white pt-2 pb-5 px-4">
+        <div>
+            <div class="row gx-3">
+                {% for trail in recent_trails %}
+                <div class="col-sm-4">
+                    <div class="card card-border">
+                        <img class="card-img-top img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">
+                                <a class="no-underline site-color-five card-text" href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">{{ trail.name }}</a>
+                            </h5>
+                        </div>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
-        {% endfor %}
+    </div>
+
+    <div class="big-margin">
+        <h3 class="site-color-two text-center section-font">Place Holder</h3>
+        <p class="site-color-two">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed tempus urna et pharetra pharetra. Adipiscing at in tellus integer. Cras pulvinar mattis nunc sed blandit libero volutpat sed. Tempor orci dapibus ultrices in iaculis nunc sed augue lacus. Dignissim cras tincidunt lobortis feugiat vivamus at augue eget. Eget nunc lobortis mattis aliquam faucibus. Cursus vitae congue mauris rhoncus aenean vel elit scelerisque. Blandit massa enim nec dui nunc mattis enim. Dui ut ornare lectus sit. Non arcu risus quis varius quam. Neque aliquam vestibulum morbi blandit cursus risus at ultrices mi. Placerat duis ultricies lacus sed turpis tincidunt id aliquet. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Gravida arcu ac tortor dignissim convallis aenean. Sed turpis tincidunt id aliquet risus feugiat in ante. Diam volutpat commodo sed egestas egestas. Varius duis at consectetur lorem donec. Tristique risus nec feugiat in fermentum posuere. Velit euismod in pellentesque massa placerat duis ultricies lacus sed.</p>
+    </div>
+
+    <div class="background-color-white pt-5 pb-1">
+        <h4 class="site-color-five text-center section-font">Recent Gear Reviews</h4>
+    </div>
+
+    <div class="background-color-white pt-2 pb-4 px-4">
+        <div>
+            <div class="row gx-3">
+                {% for gear in recent_gear %}
+                <div class="col-sm-4">
+                    <div class="card card-border my-2">
+                            <img class="card-img mt-2" src="{{ gear.img_url }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">
+                                <a class="no-underline site-color-five card-text" href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

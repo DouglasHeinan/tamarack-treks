@@ -10,11 +10,9 @@
         {% include 'header_navbar.html' %}
     </header>
         <div id="wrapper">
-            <div class="container-fluid">
             {% block content %}{% endblock %}
-            </div>
         </div>
-        <footer id="footer" class="mt-5">
+        <footer id="footer">
             {% block footer %}
             {% include 'footer.html' %}
             {% endblock %}
