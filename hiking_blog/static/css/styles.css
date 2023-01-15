@@ -24,6 +24,22 @@ body {
     font-weight: bold;
 }
 
+.logo-font {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #dda15e;
+}
+
+.logo-font:hover {
+    color: #283618;
+}
+
+.align-right {
+    text-align: right;
+    margin-right: 50px;
+    margin-top: 25px;
+}
+
 .section-font {
     font-size: 35px;
     text-transform: uppercase;
@@ -84,6 +100,32 @@ body {
 
 .background-color-white {
     background-color: #ffffff;
+}
+
+.navbar-text {
+    color: #fefae0;
+    text-transform: uppercase;
+}
+
+.navbar-text:hover {
+    color: #283618;
+}
+
+.view-all-links-align {
+    text-align: right;
+    margin-top: 25px;
+    margin-right: 50px;
+}
+
+.view-all-links {
+    color: #283618;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition-duration: 0.5s;
+}
+
+.view-all-links:hover {
+    color: #606c38;
 }
 
 .gear-img {
