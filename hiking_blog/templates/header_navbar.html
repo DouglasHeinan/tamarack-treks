@@ -1,8 +1,8 @@
 <div>
-    <nav class="navbar navbar-expand-lg background-color-one">
+    <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand logo-font" href="/">Tamarack Treks</a>
-            <button class="navbar-toggler site-color-three" type="button" data-bs-toggle="collapse"
+            <button class="navbar-toggler nav-btn" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -23,29 +23,29 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
-                           href="{{ url_for('gear_bp.view_all_gear') }}">Gear Reviews</a>
+                           href="{{ url_for('gear_bp.view_all_gear') }}">Gear</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
-                           href="{{ url_for('trail_bp.view_all_trails') }}">Trail Info</a>
+                           href="{{ url_for('trail_bp.view_all_trails') }}">Trails</a>
                     </li>
                     {% if current_user.is_authenticated: %}
                         {% if current_user.is_admin %}
                             <li class="nav-item dropdown">
-                                <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
+                                <a class="nav-link px-lg-3 py-3 py-lg-4 admin-text"
                                    href="{{ url_for('admin_bp.admin_dashboard') }}">Admin</a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" href="{{ url_for('admin_bp.add_admin') }}">
+                                        <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.add_admin') }}">
                                             Add New Admin
                                         </a>
-                                        <a class="dropdown-item" href="{{ url_for('admin_bp.add_gear') }}">
+                                        <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.add_gear') }}">
                                             Add New Gear Review
                                         </a>
-                                        <a class="dropdown-item" href="{{ url_for('admin_bp.add_trail') }}">
+                                        <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.add_trail') }}">
                                             Add a New Trail
                                         </a>
-                                        <a class="dropdown-item" href="{{ url_for('admin_bp.dead_links') }}">
+                                        <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.dead_links') }}">
                                             Dead Links
                                         </a>
                                     </li>
@@ -54,7 +54,7 @@
                         {% endif %}
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
-                           href="{{ url_for('auth_bp.logout') }}">Logout User: {{ current_user.username }}</a>
+                           href="{{ url_for('auth_bp.logout') }}">Logout</a>
                     </li>
                     {% else: %}
                     <li class="nav-item">
@@ -63,12 +63,14 @@
                     </li>
                     {% endif %}
                 </ul>
-                <form method="POST" action="{{ url_for('search_bp.search') }}" class="d-flex">
-                    {{ form.hidden_tag() }}
-                    <input class="form-control me-2" type="search"
-                           placeholder="Search" aria-label="Search" name="searched">
-                    <button class="btn my-2 my-sm-0 search-button" type="submit">Search</button>
-                </form>
+                <div class="right-search">
+                    <form method="POST" action="{{ url_for('search_bp.search') }}" class="d-flex">
+                        {{ form.hidden_tag() }}
+                        <input class="form-control me-2" type="search"
+                               placeholder="Search" aria-label="Search" name="searched">
+                        <button class="btn my-2 my-sm-0 search-button" type="submit">Search</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
