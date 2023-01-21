@@ -15,39 +15,47 @@
 <h1 class="text-center title-font mt-4">A Western Montana Hiking Guide</h1>
 
 <div class="text-center mt-3">
-    <div id="carouselControls" class="carousel slide carousel-fade" data-ride="carousel" data-interval="7000">
-        <div class="carousel-inner">
-            <div class="carousel-item active carouselImage">
-                <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_1.jpg') }}" alt="First slide">
-                <div class="carousel-caption">
-                    <h2><a class="no-underline carousel-font" href="{{ url_for('auth_bp.login') }}">Join Us in the Outdoors</a></h2>
-                </div>
-            </div>
-            <div class="carousel-item carouselImage">
-                <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_2.jpg') }}" alt="Second slide">
-                <div class="carousel-caption">
-                    <h2><a class="no-underline carousel-font" href="{{ url_for('gear_bp.view_all_gear') }}">Gearing Up for the Great Outdoors</a></h2>
-                </div>
-            </div>
-            <div class="carousel-item carouselImage">
-                <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_3.jpg') }}" alt="Third slide">
-                <div class="carousel-caption">
-                    <h2><a class="no-underline carousel-font" href="{{ url_for('trail_bp.view_all_trails') }}">Finding the Right Trail for You</a></h2>
-                </div>
-            </div>
-            <div class="carousel-item carouselImage">
-                <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_4.jpg') }}" alt="Fourth slide">
-                <div class="carousel-caption">
-                    <h2><a class="no-underline carousel-font" href="{{ url_for('home_bp.about') }}">Learn About Western Montana</a></h2>
-                </div>
-            </div>
+    <div class="carousel-container">
+        <div class="carousel-edges">
+            <img src="https://www.homestratosphere.com/wp-content/uploads/2021/05/what-is-a-western-larch-tree-May32021-1-1.jpg">
         </div>
-      <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      </a>
-      <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      </a>
+        <div id="carouselControls" class="carousel carousel-main slide carousel-fade" data-ride="carousel" data-interval="7000">
+            <div class="carousel-inner">
+                <div class="carousel-item active carouselImage">
+                    <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_1.jpg') }}" alt="First slide">
+                    <div class="carousel-caption">
+                        <h2><a class="no-underline carousel-font" href="{{ url_for('auth_bp.login') }}">Join Us in the Outdoors</a></h2>
+                    </div>
+                </div>
+                <div class="carousel-item carouselImage">
+                    <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_2.jpg') }}" alt="Second slide">
+                    <div class="carousel-caption">
+                        <h2><a class="no-underline carousel-font" href="{{ url_for('gear_bp.view_all_gear') }}">Gearing Up for the Great Outdoors</a></h2>
+                    </div>
+                </div>
+                <div class="carousel-item carouselImage">
+                    <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_3.jpg') }}" alt="Third slide">
+                    <div class="carousel-caption">
+                        <h2><a class="no-underline carousel-font" href="{{ url_for('trail_bp.view_all_trails') }}">Finding the Right Trail for You</a></h2>
+                    </div>
+                </div>
+                <div class="carousel-item carouselImage">
+                    <img class="d-block w-100" src="{{ url_for('home_bp.display_main_carousel_pics', file_name='home_page_pic_4.jpg') }}" alt="Fourth slide">
+                    <div class="carousel-caption">
+                        <h2><a class="no-underline carousel-font" href="{{ url_for('home_bp.about') }}">Learn About Western Montana</a></h2>
+                    </div>
+                </div>
+            </div>
+          <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </a>
+          <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </a>
+        </div>
+        <div class="carousel-edges right-carousel-edge">
+            <img src="https://www.homestratosphere.com/wp-content/uploads/2021/05/what-is-a-western-larch-tree-May32021-1-1.jpg">
+        </div>
     </div>
 </div>
 
@@ -62,12 +70,14 @@
                 {% for trail in recent_trails %}
                 <div class="col-sm-4">
                     <div class="card card-border my-2 card-display">
-                        <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">
-                                <a class="no-underline card-text" href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">{{ trail.name }}</a>
-                            </h5>
-                        </div>
+                        <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=trail.id) }}">
+                            <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}">
+                            <div class="card-body">
+                                <h5 class="card-title text-center card-text">
+                                    {{ trail.name }}
+                                </h5>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 {% endfor %}
@@ -81,9 +91,9 @@
     </div>
 
 
-    <div class="big-margin">
-        <h3 class="text-center section-font-two section-spacing">Place Holder</h3>
-        <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed tempus urna et pharetra pharetra. Adipiscing at in tellus integer. Cras pulvinar mattis nunc sed blandit libero volutpat sed. Tempor orci dapibus ultrices in iaculis nunc sed augue lacus. Dignissim cras tincidunt lobortis feugiat vivamus at augue eget. Eget nunc lobortis mattis aliquam faucibus. Cursus vitae congue mauris rhoncus aenean vel elit scelerisque. Blandit massa enim nec dui nunc mattis enim. Dui ut ornare lectus sit. Non arcu risus quis varius quam. Neque aliquam vestibulum morbi blandit cursus risus at ultrices mi. Placerat duis ultricies lacus sed turpis tincidunt id aliquet. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Gravida arcu ac tortor dignissim convallis aenean. Sed turpis tincidunt id aliquet risus feugiat in ante. Diam volutpat commodo sed egestas egestas. Varius duis at consectetur lorem donec. Tristique risus nec feugiat in fermentum posuere. Velit euismod in pellentesque massa placerat duis ultricies lacus sed.</p>
+    <div class="section-spacing">
+        <h3 class="section-font-two">Place Holder</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed tempus urna et pharetra pharetra. Adipiscing at in tellus integer. Cras pulvinar mattis nunc sed blandit libero volutpat sed. Tempor orci dapibus ultrices in iaculis nunc sed augue lacus. Dignissim cras tincidunt lobortis feugiat vivamus at augue eget. Eget nunc lobortis mattis aliquam faucibus. Cursus vitae congue mauris rhoncus aenean vel elit scelerisque. Blandit massa enim nec dui nunc mattis enim. Dui ut ornare lectus sit. Non arcu risus quis varius quam. Neque aliquam vestibulum morbi blandit cursus risus at ultrices mi. Placerat duis ultricies lacus sed turpis tincidunt id aliquet. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Gravida arcu ac tortor dignissim convallis aenean. Sed turpis tincidunt id aliquet risus feugiat in ante. Diam volutpat commodo sed egestas egestas. Varius duis at consectetur lorem donec. Tristique risus nec feugiat in fermentum posuere. Velit euismod in pellentesque massa placerat duis ultricies lacus sed.</p>
     </div>
 
     <div class="background-color-white pt-5 pb-1">
@@ -96,12 +106,14 @@
                 {% for gear in recent_gear %}
                 <div class="col-sm-4">
                     <div class="card card-border my-2 card-display">
-                        <img class="card-img zoom-img mt-2" src="{{ gear.img_url }}">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">
-                                <a class="no-underline card-text" href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{ gear.name }}</a>
-                            </h5>
-                        </div>
+                        <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">
+                            <img class="card-img zoom-img mt-2" src="{{ gear.img_url }}">
+                            <div class="card-body">
+                                <h5 class="card-title text-center card-text">
+                                    {{ gear.name }}
+                                </h5>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 {% endfor %}

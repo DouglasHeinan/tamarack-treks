@@ -51,6 +51,13 @@ body {
     color: #fefae0;
 }
 
+.logo-font {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #dda15e;
+    transition-duration: 0.5s;
+}
+
 .logo-font:hover {
     color: #283618;
 }
@@ -75,6 +82,7 @@ body {
 }
 
 .carousel-font {
+    display: inline-block;
     font-size: 40px;
     font-weight: bold;
     text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
@@ -83,14 +91,28 @@ body {
 }
 
 .carousel-font:hover {
-    color: #ffffff;
+    color: #dda15e;
 }
 
-.logo-font {
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #dda15e;
-    transition-duration: 0.5s;
+.carousel-main {
+    max-width: 992px;
+    margin: auto;
+}
+
+.carousel-container {
+    display: flex;
+    margin: auto;
+}
+
+.carousel-edges {
+    overflow: hidden;
+    height: 600px;
+    opacity: 40%;
+    flex: 1 1 0px;
+}
+
+.right-carousel-edge {
+    transform: scaleX(-1);
 }
 
 .carouselImage img {
@@ -105,6 +127,12 @@ body {
 }
 
 /*-----------------MAIN PAGE CARDS-------------------*/
+.section-font-one {
+    font-size: 35px;
+    text-transform: uppercase;
+    color: #bc6c25;
+}
+
 .card-text {
     font-size: 22px;
     text-transform: uppercase;
@@ -158,12 +186,6 @@ body {
 }
 
 /*--------------------MAIN PAGE MIDDLE-------------------*/
-.section-font-one {
-    font-size: 35px;
-    text-transform: uppercase;
-    color: #bc6c25;
-}
-
 .section-font-two {
     font-size: 35px;
     text-transform: uppercase;
@@ -175,18 +197,29 @@ body {
 }
 
 .section-spacing {
-
+    width: 75%;
+    margin: auto;
+    text-align: center;
+    padding: 30px 0;
 }
 
-.big-margin {
-    margin: 80px 200px;
+/*------------------TRAILS PAGES---------------------*/
+
+/*-----------------VIEW ALL TRAILS-----------------------*/
+.trail-list-font {
+    font-size: 22px;
+    text-transform: uppercase;
+    color: #bc6c25;
+    transition-duration: 0.5s;
+}
+
+.list-img {
+    display: inline-block;
+    max-width: 33%;
+    max-height: 15vh;
 }
 
 /*----------------------FOOTER--------------------------*/
-#footer {
-
-}
-
 .footer-background {
     background-color: #606c38;
 }
@@ -200,6 +233,17 @@ body {
 .foot-list li {
     width: 100%;
     text-align: center;
+}
+
+.foot-connect {
+    font-weight: bold;
+    color: #fefae0;
+    text-align: center;
+}
+
+.social-icon {
+    color: #bc6c25;
+    margin: auto 3px;
 }
 
 .copyright-background {
@@ -273,6 +317,18 @@ body {
     }
 }
 
+@media (min-width:920px) {
+    .carousel-inner {
+        width: 920px;
+    }
+}
+
+@media (max-width:920px) {
+    .carousel-edges {
+        display: none;
+    }
+}
+
 @media (max-width:768px) {
     .carousel-font {
         font-size: 35px;
@@ -304,6 +360,15 @@ body {
         text-align: center;
         width: 100%;
         margin-top: 10px;
+    }
+}
+
+@media (max-width:450px) {
+    .section-font-one, .section-font-two {
+        font-size: 25px;
+    }
+    .card-text {
+        font-size: 18px;
     }
 }
 
