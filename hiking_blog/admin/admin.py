@@ -13,10 +13,13 @@ from datetime import datetime
 import shutil
 import os
 import errno
+import re
 
 ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 DIR_START = "hiking_blog/admin/static/"
+NO_TAGS = re.compile("<.*?>")
+
 
 
 admin_bp = Blueprint(
@@ -86,12 +89,13 @@ def add_trail():
     if form.validate_on_submit():
         new_hiking_trail = Trails(
             name=form.name.data,
-            description=form.description.data,
+            description=re.sub(NO_TAGS, '', form.description.data),
             gear_trail="Trail",
             latitude=form.latitude.data,
             longitude=form.longitude.data,
             hiking_dist=form.hiking_distance.data,
             elev_change=form.elevation_change.data,
+            difficulty=form.difficulty.data,
             date_time_added=datetime.now()
         )
         db.session.add(new_hiking_trail)
@@ -585,7 +589,7 @@ def update_gear_entry(gear, form):
 
 def update_trail_entry(trail, form):
     trail.name = form.name.data
-    trail.description = form.description.data
+    trail.description = re.sub(NO_TAGS, '', form.description.data)
     trail.latitude = form.latitude.data
     trail.longitude = form.longitude.data
     trail.hiking_dist = form.hiking_distance.data

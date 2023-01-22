@@ -183,6 +183,7 @@ body {
 .card-border {
     border-color: #bc6c25;
     overflow: hidden;
+    border-radius: 8px;
 }
 
 /*--------------------MAIN PAGE MIDDLE-------------------*/
@@ -206,17 +207,54 @@ body {
 /*------------------TRAILS PAGES---------------------*/
 
 /*-----------------VIEW ALL TRAILS-----------------------*/
-.trail-list-font {
+.list-wrapper {
+    margin: 2em 15vw;
+}
+
+.trail-listings {
+    display: flex;
+    max-height: 25vh;
+    overflow: hidden;
+    margin: 0.75em 0
+}
+
+.trail-list-link {
+    margin: 1em 0 0 1em;
+}
+
+.trail-list-name {
     font-size: 22px;
     text-transform: uppercase;
+    font-weight: bold;
     color: #bc6c25;
     transition-duration: 0.5s;
+    display: inline-block;
+}
+
+.trail-list-name:hover {
+    color: #dda15e;
+}
+
+.trail-list-info {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #bc6c25;
+}
+
+.trail-list-description {
+    color: #bc6c25;
 }
 
 .list-img {
     display: inline-block;
-    max-width: 33%;
-    max-height: 15vh;
+    width: 25vw;
+    max-width: 250px;
+    height: 25vh;
+    object-fit: cover;
+    border-radius: 8px;
+    border-style: solid;
+    border-color: #bc6c25;
+    border-width: thin;
 }
 
 /*----------------------FOOTER--------------------------*/
@@ -382,6 +420,22 @@ body {
 @media (max-width:576px) {
     .section-font {
         font-size: 25px;
+    }
+}
+
+/*--------------------MEDIA TRAIL PAGES---------------------*/
+@media (max-width:768px) {
+    .trail-list-name {
+        font-size: 20px;
+    }
+    .trail-list-info {
+        font-size: 18px;
+    }
+}
+
+@media (max-width:576px) {
+    .trail-list-description {
+        display: none;
     }
 }
 

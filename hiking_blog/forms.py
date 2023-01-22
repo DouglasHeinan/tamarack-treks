@@ -78,6 +78,7 @@ class AddTrailForm(FlaskForm):
     longitude = StringField("Longitude", validators=[DataRequired()])
     hiking_distance = StringField("Hiking Distance in Miles", validators=[DataRequired()])
     elevation_change = StringField("Elevation Change", validators=[DataRequired()])
+    difficulty = SelectField("Difficulty", choices=["Easy", "Medium", "Hard"], validators=[DataRequired()])
     submit_button = SubmitField("Submit")
 
 
