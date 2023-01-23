@@ -16,6 +16,13 @@ body {
 }
 
 /*--------------------SITE WIDE UTILITIES----------------*/
+.admin-button {
+    background-color: #283618;
+    color: #ff4444;
+    text-transform: uppercase;
+    trasition-duration: 0.5s;
+}
+
 .admin-text {
     color: #ff4444;
     text-transform: uppercase;
@@ -29,6 +36,11 @@ body {
 
 .background-color-white {
     background-color: #ffffff;
+}
+
+.user-button {
+    background-color: #606c38;
+    color: #fefae0;
 }
 
 /*---------------------NAVBAR--------------------------*/
@@ -205,21 +217,42 @@ body {
 }
 
 /*------------------TRAILS PAGES---------------------*/
+.maps-link {
+    color: #bc6c25;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition-duration: 0.5s;
+}
+
+.maps-link:hover {
+    color: #dda15e;
+}
 
 /*-----------------VIEW ALL TRAILS-----------------------*/
 .list-wrapper {
-    margin: 2em 15vw;
+    margin: 2em 12vw;
 }
 
 .trail-listings {
     display: flex;
-    max-height: 25vh;
+    flex-direction: column;
+    max-height: 45vh;
     overflow: hidden;
     margin: 0.75em 0
 }
 
+.listing-border {
+    border-bottom: 1px ridge #808080;
+    margin-top: 30px;
+}
+
+.trail-pic-and-data {
+    display: flex;
+    padding-bottom: 3em;
+}
+
 .trail-list-link {
-    margin: 1em 0 0 1em;
+    margin: 0 0 0 0;
 }
 
 .trail-list-name {
@@ -241,13 +274,28 @@ body {
     color: #bc6c25;
 }
 
+.trail-data-and-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.trail-data {
+    display: flex;
+    justify-content: space-around;
+}
+
 .trail-list-description {
     color: #bc6c25;
 }
 
+.trail-pic-container {
+    width: 50%;
+}
+
 .list-img {
     display: inline-block;
-    width: 25vw;
+    width: 100%;
     max-width: 250px;
     height: 25vh;
     object-fit: cover;
@@ -424,18 +472,60 @@ body {
 }
 
 /*--------------------MEDIA TRAIL PAGES---------------------*/
-@media (max-width:768px) {
-    .trail-list-name {
-        font-size: 20px;
+@media (min-width:1100px) {
+    .list-img {
+        max-width: 100%;
+        height: 35vh;
     }
-    .trail-list-info {
-        font-size: 18px;
+    .trail-listings {
+        margin-left: 7em;
+        margin-right: 7em;
     }
 }
 
-@media (max-width:576px) {
+@media (max-width:1100px) {
     .trail-list-description {
         display: none;
+    }
+    .trail-data {
+        flex-direction: column;
+    }
+    .trail-pic-and-data {
+        align-items: center;
+    }
+}
+
+@media (max-width:920px) {
+
+}
+
+@media (max-width:768px) {
+    .trail-list-name {
+        font-size: 19px;
+    }
+    .trail-list-info {
+        font-size: 17px;
+    }
+    .trail-data {
+        max-width: 66%;
+    }
+}
+
+@media (max-width:580px) {
+    .trail-pic-and-data {
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 1em;
+    }
+    .trail-pic-container {
+        width: 100%;
+    }
+    .trail-listings {
+        text-align: center;
+        max-height: 60vh;
+    }
+    .trail-data {
+        margin-top: 1em;;
     }
 }
 

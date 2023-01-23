@@ -25,7 +25,7 @@
       </a>
     </div>
     <div class="mt-3">
-        <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="btn btn-dark btn-lg">
+        <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="btn user-button btn-lg">
             Add a new picture
         </a>
         {% with messages = get_flashed_messages() %}
@@ -44,16 +44,19 @@
             <h5>Elevation Gain: {{ trail.elev_change }} feet</h5>
         </div>
         <div class="col-sm-4 align-left">
-            <a href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank"><h5>Directions to the Trail Head</h5></a>
+            <h5>Difficulty: {{ trail.difficulty }}</h5>
+        </div>
+        <div class="my-3">
+            <h5><a class="maps-link" href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank">Get Directions to the Trail Head</a></h5>
         </div>
     </div>
     <div>
             {{ trail.description|safe }}
     </div>
     {% if current_user.is_admin %}
-    <div class="container mb-3">
-        <a class="btn btn-success" href="{{ url_for('admin_bp.edit_trail', trail_id=trail.id) }}">
-            Edit trail info!
+    <div class="container my-4">
+        <a class="btn admin-button" href="{{ url_for('admin_bp.edit_trail', trail_id=trail.id) }}">
+            Admin: Edit trail info!
         </a>
     </div>
     {% endif %}
@@ -63,7 +66,12 @@
 <div class="container-fluid">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
-    {{ wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) }}
+    <form method="POST" action="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">
+        {{ form.csrf_token }}
+        {{ form.comment_text.label }}
+        {{ form.comment_text }}
+        <input class="btn user-button" type="submit" value="Submit">
+    </form>
     <div class="col-lg-8 col-md-10 mx-auto comment mt-4">
         <ul>
             {% for comment in trail.trail_page_comments %}

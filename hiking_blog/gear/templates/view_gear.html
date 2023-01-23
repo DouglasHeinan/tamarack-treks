@@ -38,7 +38,7 @@
     {% for company in info %}
         {% if info[company]["price"] != "" %}
             <span>
-                <a class="btn btn-success" href="{{ info[company]['link'] }}" target="_blank">
+                <a class="btn user-button" href="{{ info[company]['link'] }}" target="_blank">
                     ${{ info[company]["price"] }}
                 </a>
             </span>
@@ -47,9 +47,9 @@
     {% endfor %}
 </div>
     {% if current_user.is_admin %}
-    <div class="container mb-3">
-        <a class="btn btn-success" href="{{ url_for('admin_bp.edit_gear', gear_id=gear.id) }}">
-            Edit gear description!
+    <div class="container mb-3 mt-3 text-center">
+        <a class="btn admin-button" href="{{ url_for('admin_bp.edit_gear', gear_id=gear.id) }}">
+            Admin: Edit gear description!
         </a>
     </div>
     {% endif %}
@@ -64,7 +64,7 @@
         {{ form.csrf_token }}
         {{ form.comment_text.label }}
         {{ form.comment_text }}
-        <input class="btn btn-success" type="submit" value="Submit">
+        <input class="btn user-button" type="submit" value="Submit">
     </form>
 
     <div class="col-lg-8 col-md-10 mx-auto comment mt-4">
