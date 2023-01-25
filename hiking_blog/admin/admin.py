@@ -21,7 +21,6 @@ DIR_START = "hiking_blog/admin/static/"
 NO_TAGS = re.compile("<.*?>")
 
 
-
 admin_bp = Blueprint(
     "admin_bp", __name__,
     template_folder="templates",
@@ -568,6 +567,9 @@ def update_gear_entry(gear, form):
     """Activated during the edit_gear and add_gear functions, assigns all values in the database."""
     gear.name = form.name.data
     gear.category = form.category.data
+    gear.msrp = form.msrp.data
+    gear.weight = form.weight.data
+    gear.dimensions = form.dimensions.data
     gear.img_url = form.img_url.data
     gear.rating = form.rating.data
     gear.description = form.description.data
@@ -601,6 +603,9 @@ def populate_gear_form(gear):
     gear_piece = GearForm(
         name=gear.name,
         category=gear.category,
+        msrp=gear.msrp,
+        wieght=gear.weight,
+        dimensions=gear.dimensions,
         img_url=gear.img_url,
         rating=gear.rating,
         description=gear.description,

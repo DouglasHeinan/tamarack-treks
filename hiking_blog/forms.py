@@ -113,6 +113,9 @@ class GearForm(FlaskForm):
 
     name = StringField("Name of Piece", validators=[DataRequired()])
     category = SelectField("Gear Category", choices=GEAR_CATEGORIES, validators=[DataRequired()])
+    msrp = StringField("MSRP", validators=[DataRequired()])
+    weight = StringField("Item Weight", validators=[DataRequired()])
+    dimensions = StringField("Item Dimensions", validators=[DataRequired()])
     img_url = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
     description = CKEditorField("Review", validators=[DataRequired()])

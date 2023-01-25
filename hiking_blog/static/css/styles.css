@@ -13,12 +13,13 @@ body {
 
 #wrapper {
     flex: 1;
+    padding-top: 1.5em;
 }
 
 /*--------------------SITE WIDE UTILITIES----------------*/
 .admin-button {
-    background-color: #283618;
-    color: #ff4444;
+    background-color: #ff4444;
+    color: #fefae0;
     text-transform: uppercase;
     trasition-duration: 0.5s;
 }
@@ -353,15 +354,84 @@ body {
 
 /*-------------VIEW GEAR PAGE-------------------------*/
 .gear-img {
-    width: 65%;
-    height: 100%;
     object-fit: contain;
+    max-width: 90vw
 }
 
-.gear-pic-div {
-    margin-left: 3em;
-    width: 70%;
-    height: 24em;
+.gear-title {
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #bc6c25;
+}
+
+.gear-pic-and-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 66%;
+    max-height:
+    margin: auto;
+}
+
+.gear-specs {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.gear-pic-and-specs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 96vw;
+}
+
+.spec-title {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #bc6c25;
+}
+
+.main-specs {
+    font-size: 20px;
+    color: #bc6c25;
+}
+
+.rating-number {
+    font-size: 4em;
+    font-weight: bold;
+    color: #606c38;
+}
+
+.gear-description-container {
+    margin: 5em 6em;
+}
+
+.gear-description {
+    color: #bc6c25;
+}
+
+.company-names-and-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.company-name-and-button {
+    display: flex;
+    flex-direction: column;
+    margin: 0 3em;
+}
+
+.company-link-name {
+    font-weight: bold;
+    color: #bc6c25;
+    text-transform: uppercase;
+    display: inline-block;
+    text-align: center;
 }
 
 /*---------------------MEDIA QUERIES-------------------*/
@@ -495,10 +565,6 @@ body {
     }
 }
 
-@media (max-width:920px) {
-
-}
-
 @media (max-width:768px) {
     .trail-list-name {
         font-size: 19px;
@@ -526,6 +592,60 @@ body {
     }
     .trail-data {
         margin-top: 1em;;
+    }
+}
+
+/*-------------------MEDIA VIEW GEAR----------------*/
+@media (max-width:768px) {
+    .gear-pic-and-specs {
+        flex-direction: column;
+        align-items: center;
+    }
+    .gear-specs {
+        flex-direction: row;
+        margin-top: 2em;
+        justify-content: space-evenly;
+    }
+    .rating-number {
+        font-size: 3em;
+    }
+    .gear-description-container {
+        margin: 4em 4em;
+    }
+    .gear-rating-display {
+        width: 100%;
+    }
+    .gear-weight-display {
+        width: 100%;
+    }
+    .gear-weight {
+        display: flex;
+        justify-content: space-evenly;
+    }
+}
+
+@media (max-width:580px) {
+    .rating-number {
+        font-size: 1.5em;
+    }
+    .gear-specs {
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+    .spec-title {
+        font-size: 18px;
+    }
+    .main-specs {
+        font-size: 16px;
+    }
+    .company-names-and-links {
+        flex-direction: column;
+    }
+    .company-name-and-button {
+        margin-top: 1.5em;
+    }
+    .gear-description-container {
+        margin: 3em 3em;
     }
 }
 

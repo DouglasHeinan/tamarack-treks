@@ -3,60 +3,61 @@
 
 {% block content %}
 
-{% if current_user.is_authenticated: %}
-    <div class="header">
-        <h3 class="mb-5 mt-3">Hi {{ current_user.username }}!</h3>
+<div class="gear-pic-and-specs">
+    <div class="gear-pic-and-title">
+        <h3 class="gear-title">{{ gear.name.title() }}</h3>
+        <img class="gear-img" src="{{ gear.img_url }}">
     </div>
-{% endif %}
-
-<div class="gear-pic-div">
-    <img src="{{ gear.img_url }}" class="gear-img rounded mb-2">
+    <div class="gear-specs">
+        <div class="gear-rating-display">
+            <h5 class="spec-title">Rating:</h5>
+            <h5 class="main-specs"><span class="rating-number">{{ gear.rating }}</span>/10</h5>
+        </div>
+        <div class="gear-weight-display">
+            <h5 class="spec-title">Weight:</h5>
+            <div class="gear-weight">
+                <h5 class="main-specs">{{ gear.weight.split("|")[0] }}</h5>
+                <h5 class="main-specs">{{ gear.weight.split("|")[1] }}</h5>
+            </div>
+        </div>
+        <div class="gear-dimensions-display">
+            <h5 class="spec-title">Dimensions:</h5>
+            <div class="gear-dimensions">
+                <h5 class="main-specs">{{ gear.dimensions.split("|")[0] }}</h5>
+                <h5 class="main-specs">{{ gear.dimensions.split("|")[1] }}</h5>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="container-fluid">
-    <h2>{{ gear.name.title() }}</h2>
-    <div class="row mt-3">
-        <div class="col-sm-4 align-right">
-            <h5>Rating: {{ gear.rating }}/10</h5>
-        </div>
-        <div class="col-sm-4">
-            <h5>Category: {{ gear.category }}</h5>
-        </div>
+    <div class="gear-description-container">
+        <p class="gear-description">{{ gear.description|safe }}</p>
     </div>
-    <div class="mt-5">
-            {{ gear.description|safe }}
-    </div>
-    <div class="mt-3 d-flex justify-content-around">
-    {% for company in info %}
-        {% if info[company]["price"] != "" %}
-            <span>
-                {{ company }}:
-            </span>
-        {% endif %}
-    {% endfor %}
-    </div>
-    <div class="d-flex justify-content-around">
-    {% for company in info %}
-        {% if info[company]["price"] != "" %}
-            <span>
-                <a class="btn user-button" href="{{ info[company]['link'] }}" target="_blank">
+    <div class="company-names-and-links">
+        {% for company in info %}
+            {% if info[company]["price"] != "" %}
+            <div class="company-name-and-button">
+                <h6 class="company-link-name">
+                    {{ company }}:
+                </h6>
+                <a class="btn btn-lg user-button" href="{{ info[company]['link'] }}" target="_blank">
                     ${{ info[company]["price"] }}
                 </a>
-            </span>
-        {% endif %}
-
-    {% endfor %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 </div>
     {% if current_user.is_admin %}
-    <div class="container mb-3 mt-3 text-center">
+    <div class="container mb-3 mt-5 text-center">
         <a class="btn admin-button" href="{{ url_for('admin_bp.edit_gear', gear_id=gear.id) }}">
             Admin: Edit gear description!
         </a>
     </div>
     {% endif %}
-</div>
 
 <!-------------Comments-------------->
-<div class="container-fluid">
+<div class="container-fluid mt-3">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
     {# wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) #}
