@@ -10,14 +10,9 @@
     </div>
     <div class="gear-specs">
         <div class="gear-rating-display">
-            <h5 class="spec-title">Rating:</h5>
-            <h5 class="main-specs"><span class="rating-number">{{ gear.rating }}</span>/10</h5>
-        </div>
-        <div class="gear-weight-display">
-            <h5 class="spec-title">Weight:</h5>
-            <div class="gear-weight">
-                <h5 class="main-specs">{{ gear.weight.split("|")[0] }}</h5>
-                <h5 class="main-specs">{{ gear.weight.split("|")[1] }}</h5>
+            <div class="gear-rating">
+                <h5 class="spec-title">Rating:</h5>
+                <h5 class="main-specs"><span class="rating-number">{{ gear.rating }}</span>/10</h5>
             </div>
         </div>
         <div class="gear-dimensions-display">
@@ -25,6 +20,13 @@
             <div class="gear-dimensions">
                 <h5 class="main-specs">{{ gear.dimensions.split("|")[0] }}</h5>
                 <h5 class="main-specs">{{ gear.dimensions.split("|")[1] }}</h5>
+            </div>
+        </div>
+        <div class="gear-weight-display">
+            <h5 class="spec-title">Weight:</h5>
+            <div class="gear-weight">
+                <h5 class="main-specs">{{ gear.weight.split("|")[0] }}</h5>
+                <h5 class="main-specs">{{ gear.weight.split("|")[1] }}</h5>
             </div>
         </div>
     </div>
@@ -65,7 +67,7 @@
         {{ form.csrf_token }}
         {{ form.comment_text.label }}
         {{ form.comment_text }}
-        <input class="btn user-button" type="submit" value="Submit">
+        <input class="btn user-button comment-submit-btn" type="submit" value="Submit">
     </form>
 
     <div class="col-lg-8 col-md-10 mx-auto comment mt-4">

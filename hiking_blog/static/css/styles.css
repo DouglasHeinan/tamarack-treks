@@ -355,7 +355,8 @@ body {
 /*-------------VIEW GEAR PAGE-------------------------*/
 .gear-img {
     object-fit: contain;
-    max-width: 90vw
+    max-width: 65vw;
+    max-height: 65vh;
 }
 
 .gear-title {
@@ -363,15 +364,17 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     color: #bc6c25;
+    margin-bottom: 2em;
 }
 
 .gear-pic-and-title {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 66%;
-    max-height:
     margin: auto;
+    text-align: center;
 }
 
 .gear-specs {
@@ -379,13 +382,16 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    margin-top: 8em;
+    max-height: 80%
 }
 
 .gear-pic-and-specs {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     width: 96vw;
+    max-height: 75vh;
 }
 
 .spec-title {
@@ -434,6 +440,10 @@ body {
     text-align: center;
 }
 
+.comment-submit-btn {
+    margin-top: 1em;
+}
+
 /*---------------------MEDIA QUERIES-------------------*/
 @media all {
     .navbar .nav-item .dropdown-menu{ display: none; }
@@ -453,9 +463,9 @@ body {
 }
 
 /*---------------------MEDIA NAVBAR-------------------*/
-@media (min-width:1200px) {
+@media (min-width:992px) {
     .right-search {
-        margin-left: 10em;
+        text-align: right;
     }
 }
 
@@ -596,6 +606,24 @@ body {
 }
 
 /*-------------------MEDIA VIEW GEAR----------------*/
+@media (min-width:1100px) {
+    .gear-pic-and-specs {
+        max-width: 900px;
+        margin: auto;
+        justify-content: center;
+    }
+    .gear-img {
+        max-height: 70vh;
+        max-width: 40vw;
+    }
+    .gear-specs {
+        margin-top: 6em;
+    }
+    .gear-title {
+        width: 90vw;
+    }
+}
+
 @media (max-width:768px) {
     .gear-pic-and-specs {
         flex-direction: column;
@@ -605,9 +633,10 @@ body {
         flex-direction: row;
         margin-top: 2em;
         justify-content: space-evenly;
+        width: 85vw;
     }
     .rating-number {
-        font-size: 3em;
+        font-size: 2.5em;
     }
     .gear-description-container {
         margin: 4em 4em;
@@ -615,22 +644,66 @@ body {
     .gear-rating-display {
         width: 100%;
     }
-    .gear-weight-display {
-        width: 100%;
+    .gear-rating {
+        text-align: center;
     }
-    .gear-weight {
+    .gear-weight-display, .gear-dimensions-display {
+        width: 100%;
         display: flex;
-        justify-content: space-evenly;
+        flex-direction: column;
+        align-items: center;
+    }
+    .gear-dimensions-display {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+    .gear-weight, .gear-dimensions, .gear-rating-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .gear-dimensions {
+        text-align: center;
+    }
+    .gear-img {
+        max-width: 75vw;
+        max-height: 40vh;
+    }
+    .gear-title {
+        font-size: 30px;
     }
 }
 
-@media (max-width:580px) {
+@media (min-width:301px) and (max-width:768px) {
+    .gear-rating-display, .gear-weight-display {
+        position: relative;
+    }
+    .gear-weight:after {
+        content: "";
+        background: #808080;
+        position: absolute;
+        bottom: 25%;
+        left: 0;
+        height: 50%;
+        width: 1.5px;
+    }
+    .gear-rating:after {
+        content: "";
+        background: #808080;
+        position: absolute;
+        bottom: 25%;
+        right: 0;
+        height: 50%;
+        width: 1.5px;
+    }
+}
+
+@media (max-width:540px) {
     .rating-number {
         font-size: 1.5em;
     }
     .gear-specs {
-        flex-direction: column;
-        justify-content: flex-end;
+        width: 90vw;
     }
     .spec-title {
         font-size: 18px;
@@ -646,6 +719,46 @@ body {
     }
     .gear-description-container {
         margin: 3em 3em;
+    }
+    .gear-img {
+        max-width: 60vw;
+        max-height: 40vh;
+    }
+    .gear-title {
+        font-size: 22px;
+        margin-bottom: 1.5em;
+    }
+}
+
+@media (max-width:300px) {
+    .gear-pic-and-specs {
+        padding-top: 1em;
+        max-height: 95vh;
+    }
+    .gear-specs {
+        max-width: 65vw;
+        flex-direction: column;
+    }
+    .spec-title {
+        font-size: 16px;
+    }
+    .main-specs {
+        font-size: 14px;
+    }
+    .gear-description-container {
+        margin: 2em 2em;
+    }
+    .gear-dimensions-display {
+        padding: 0.5em 0;
+        border-top: .5px solid #808080;
+        border-bottom: .5px solid #808080;
+    }
+    .gear-weight-display {
+        margin-top: 0.5em;
+    }
+    .gear-img {
+        max-width: 60vw;
+        max-height: 30vh;
     }
 }
 
@@ -666,8 +779,8 @@ body {
 
 @media (min-width:768px) {
     .foot-list li {
-    width: 33%;
-    text-align: center;
+        width: 33%;
+        text-align: center;
     }
     .foot-list li:nth-child(3n + 1) {
         text-align: left;
