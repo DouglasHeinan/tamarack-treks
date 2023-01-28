@@ -1,11 +1,40 @@
 {% extends 'layout.html' %}}
 
 {% block content %}
-<h1>View all gear</h1>
+<h2 class="pt-5 pb-1 section-font-one text-center">Gear</h2>
 
-<ul>
-    {% for gear in all_gear %}
-    <li><a href="{{ url_for('gear_bp.view_gear',db_id=gear.id) }}">{{gear.name}}</a></li>
-    {% endfor %}
-</ul>
-{% endblock %}
+<div class="list-wrapper">
+    <ul class="list-unstyled">
+        {% for gear in all_gear %}
+            <li class="trail-listings">
+                <div class="listing-border">
+                    <a href="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
+                        <h4 class="trail-list-name">{{gear.name}}</h4>
+                    </a>
+                    <div class="trail-pic-and-data">
+                        <div class="trail-pic-container">
+                            <a href="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
+                                <img class="gear-list-img" src="{{ gear.img_url  }}">
+                            </a>
+                        </div>
+                        <a class="no-underline trail-list-link" href="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
+                            <div class="trail-data-and-description">
+                                <div class="trail-data">
+                                    <h5 class="trail-list-info">Rating: {{gear.rating}}/10</h5>
+                                    <h5 class="trail-list-info">Weight: {{gear.weight}}</h5>
+                                    <h5 class="trail-list-info">Dimensions: {{gear.dimensions}}</h5>
+                                </div>
+                                {% if gear.description|length > 99 %}
+                                <p class="mt-3 trail-list-description">{{ gear.description[:100] }}...</p>
+                                {% else %}
+                                <p class="mt-3 trail-list-description">{{ gear.description }}</p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}}

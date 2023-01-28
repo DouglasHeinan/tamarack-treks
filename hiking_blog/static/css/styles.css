@@ -217,19 +217,67 @@ body {
     padding: 30px 0;
 }
 
-/*------------------TRAILS PAGES---------------------*/
-.maps-link {
-    color: #bc6c25;
-    text-transform: uppercase;
+/*----------------------FOOTER--------------------------*/
+.footer-background {
+    background-color: #606c38;
+}
+
+.foot-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.foot-list li {
+    width: 100%;
+    text-align: center;
+}
+
+.foot-connect {
     font-weight: bold;
+    color: #fefae0;
+    text-align: center;
+}
+
+.social-icon {
+    color: #bc6c25;
+    margin: auto 3px;
+}
+
+.copyright-background {
+    background-color: #283618;
+}
+
+.copyright-text {
+    color: #fefae0;
+}
+
+.foot-btn-font {
+    font-size: 20px;
+    color: #fefae0;
+    text-transform: uppercase;
     transition-duration: 0.5s;
 }
 
-.maps-link:hover {
-    color: #dda15e;
+.foot-btn-font:hover {
+    color: #283618;
+}
+
+/*-----------------VIEW ALL GEAR-----------------------*/
+.gear-list-img {
+    display: inline-block;
+    width: 100%;
+    max-width: 250px;
+    height: 25vh;
+    object-fit: contain;
+    border-radius: 8px;
+    border-style: solid;
+    border-color: #bc6c25;
+    border-width: thin;
 }
 
 /*-----------------VIEW ALL TRAILS-----------------------*/
+
 .list-wrapper {
     margin: 2em 12vw;
 }
@@ -306,53 +354,7 @@ body {
     border-width: thin;
 }
 
-/*----------------------FOOTER--------------------------*/
-.footer-background {
-    background-color: #606c38;
-}
-
-.foot-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-}
-
-.foot-list li {
-    width: 100%;
-    text-align: center;
-}
-
-.foot-connect {
-    font-weight: bold;
-    color: #fefae0;
-    text-align: center;
-}
-
-.social-icon {
-    color: #bc6c25;
-    margin: auto 3px;
-}
-
-.copyright-background {
-    background-color: #283618;
-}
-
-.copyright-text {
-    color: #fefae0;
-}
-
-.foot-btn-font {
-    font-size: 20px;
-    color: #fefae0;
-    text-transform: uppercase;
-    transition-duration: 0.5s;
-}
-
-.foot-btn-font:hover {
-    color: #283618;
-}
-
-/*-------------VIEW GEAR PAGE-------------------------*/
+/*-----------------VIEW GEAR PAGE-------------------------*/
 .gear-img {
     object-fit: contain;
     max-width: 65vw;
@@ -442,6 +444,26 @@ body {
 
 .comment-submit-btn {
     margin-top: 1em;
+}
+
+/*------------------VIEW TRAIL PAGE---------------------*/
+.trail-title {
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #bc6c25;
+    margin-bottom: 0.5em;
+}
+
+.maps-link {
+    color: #bc6c25;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition-duration: 0.5s;
+}
+
+.maps-link:hover {
+    color: #dda15e;
 }
 
 /*---------------------MEDIA QUERIES-------------------*/

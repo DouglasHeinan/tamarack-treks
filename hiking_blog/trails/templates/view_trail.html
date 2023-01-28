@@ -3,7 +3,8 @@
 
 {% block content %}
 <div class="container-fluid text-center mt-3">
-    <div id="carouselControls" class="carousel slide" data-ride="carousel" data-interval="10000">
+    <h3 class="trail-title">{{ trail.name.title() }}</h3>
+    <div id="carouselControls" class="carousel slide carousel-main" data-ride="carousel" data-interval="10000">
         <div class="carousel-inner">
             <div class="carousel-item active carouselImage">
                 <img class="d-block w-100" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}" alt="First slide">
