@@ -16,7 +16,7 @@ body {
     padding-top: 1.5em;
 }
 
-/*--------------------SITE WIDE UTILITIES----------------*/
+/*---------------SITE WIDE UTILITIES----------------*/
 .admin-button {
     background-color: #ff4444;
     color: #fefae0;
@@ -44,7 +44,7 @@ body {
     color: #fefae0;
 }
 
-/*---------------------NAVBAR--------------------------*/
+/*----------------------NAVBAR----------------------*/
 .navbar {
     background-color: #606c38;
 }
@@ -86,7 +86,7 @@ body {
     border-color: #606c38
 }
 
-/*------------------------MAIN PAGE TOP----------------*/
+/*------------------MAIN PAGE TOP-------------------*/
 .title-font {
     font-size: 50px;
     font-weight: bold;
@@ -139,7 +139,7 @@ body {
     bottom: initial;
 }
 
-/*-----------------MAIN PAGE CARDS-------------------*/
+/*-----------------MAIN PAGE CARDS------------------*/
 .section-font-one {
     font-size: 35px;
     text-transform: uppercase;
@@ -199,7 +199,7 @@ body {
     border-radius: 8px;
 }
 
-/*--------------------MAIN PAGE MIDDLE-------------------*/
+/*-----------------MAIN PAGE MIDDLE-----------------*/
 .section-font-two {
     font-size: 35px;
     text-transform: uppercase;
@@ -217,7 +217,7 @@ body {
     padding: 30px 0;
 }
 
-/*----------------------FOOTER--------------------------*/
+/*----------------------FOOTER----------------------*/
 .footer-background {
     background-color: #606c38;
 }
@@ -263,7 +263,7 @@ body {
     color: #283618;
 }
 
-/*-----------------VIEW ALL GEAR-----------------------*/
+/*------------------VIEW ALL GEAR-------------------*/
 .gear-list-img {
     display: inline-block;
     width: 100%;
@@ -276,7 +276,7 @@ body {
     border-width: thin;
 }
 
-/*-----------------VIEW ALL TRAILS-----------------------*/
+/*-----------------VIEW ALL TRAILS------------------*/
 
 .list-wrapper {
     margin: 2em 12vw;
@@ -354,7 +354,7 @@ body {
     border-width: thin;
 }
 
-/*-----------------VIEW GEAR PAGE-------------------------*/
+/*------------------VIEW GEAR PAGE------------------*/
 .gear-img {
     object-fit: contain;
     max-width: 65vw;
@@ -446,7 +446,7 @@ body {
     margin-top: 1em;
 }
 
-/*------------------VIEW TRAIL PAGE---------------------*/
+/*-----------------VIEW TRAIL PAGE------------------*/
 .trail-title {
     font-size: 35px;
     font-weight: bold;
@@ -466,7 +466,7 @@ body {
     color: #dda15e;
 }
 
-/*---------------------MEDIA QUERIES-------------------*/
+/*------------------MEDIA QUERIES-------------------*/
 @media all {
     .navbar .nav-item .dropdown-menu{ display: none; }
     .navbar .nav-item:hover .dropdown-menu{ display:block }
@@ -484,14 +484,14 @@ body {
     }
 }
 
-/*---------------------MEDIA NAVBAR-------------------*/
+/*-------------------MEDIA NAVBAR-------------------*/
 @media (min-width:992px) {
     .right-search {
         text-align: right;
     }
 }
 
-/*--------------MEDIA MAIN PAGE TOP-----------------------*/
+/*---------------MEDIA MAIN PAGE TOP----------------*/
 @media (max-width:768px) {
     .title-font {
         font-size: 40px;
@@ -529,7 +529,7 @@ body {
     }
 }
 
-/*------------------MEDIA MAIN PAGE CARDS---------------*/
+/*--------------MEDIA MAIN PAGE CARDS---------------*/
 @media (min-width:576px) {
     .card-display {
         height: 100%;
@@ -560,7 +560,7 @@ body {
     }
 }
 
-/*--------------------MEDIA MAIN PAGE MIDDLE-------------------*/
+/*--------------MEDIA MAIN PAGE MIDDLE--------------*/
 @media (max-width:768px) {
     .section-font {
         font-size: 30px;
@@ -573,7 +573,38 @@ body {
     }
 }
 
-/*--------------------MEDIA TRAIL PAGES---------------------*/
+/*-------------------MEDIA FOOTER-------------------*/
+@media (min-width:576px) and (max-width:767.99px) {
+    .foot-list li {
+        width: 50%;
+    }
+    .foot-list li:nth-child(even) {
+        text-align: right;
+        padding-right: 75px;
+    }
+    .foot-list li:nth-child(odd) {
+        text-align: left;
+        padding-left: 75px;
+    }
+}
+
+@media (min-width:768px) {
+    .foot-list li {
+        width: 33%;
+        text-align: center;
+    }
+    .foot-list li:nth-child(3n + 1) {
+        text-align: left;
+        padding-left: 150px;
+    }
+
+    .foot-list li:nth-child(3n + 3) {
+        text-align: right;
+        padding-right: 150px;
+    }
+}
+
+/*----------------MEDIA TRAIL PAGES-----------------*/
 @media (min-width:1100px) {
     .list-img {
         max-width: 100%;
@@ -627,7 +658,7 @@ body {
     }
 }
 
-/*-------------------MEDIA VIEW GEAR----------------*/
+/*-----------------MEDIA VIEW GEAR------------------*/
 @media (min-width:1100px) {
     .gear-pic-and-specs {
         max-width: 900px;
@@ -784,38 +815,7 @@ body {
     }
 }
 
-/*----------------------MEDIA FOOTER---------------------*/
-@media (min-width:576px) and (max-width:767.99px) {
-    .foot-list li {
-        width: 50%;
-    }
-    .foot-list li:nth-child(even) {
-        text-align: right;
-        padding-right: 75px;
-    }
-    .foot-list li:nth-child(odd) {
-        text-align: left;
-        padding-left: 75px;
-    }
-}
-
-@media (min-width:768px) {
-    .foot-list li {
-        width: 33%;
-        text-align: center;
-    }
-    .foot-list li:nth-child(3n + 1) {
-        text-align: left;
-        padding-left: 150px;
-    }
-
-    .foot-list li:nth-child(3n + 3) {
-        text-align: right;
-        padding-right: 150px;
-    }
-}
-
-/*--------------------COLOR REFERENCE-------------------*/
+/*-----------------COLOR REFERENCE-------------------/
 /*
 light green = color: #606c38;
 
