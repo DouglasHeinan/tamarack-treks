@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% if user.trail_page_comments %}
+<p>Here are your trail comments:</p>
+{% for comment in user.trail_page_comments %}
+<p>{{ comment.text }}</p>
+{% if comment.deleted_by %}
+<span class="text-danger">deleted</span>
+{% endif %}
+{% endfor %}
+{% else %}
+<p>You haven't posted any trail comments</p>
+{% endif %}
+{% if user.gear_page_comments %}
+<p>Here are your gear comments:</p>
+{% for comment in user.gear_page_comments %}
+<p>{{ comment.text }}</p>
+{% endfor %}
+{% else %}
+<p>You haven't posted any gear comments</p>
+{% endif %}
+
+{% endblock %}

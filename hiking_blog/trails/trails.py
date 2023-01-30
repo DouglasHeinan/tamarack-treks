@@ -3,12 +3,13 @@ from flask import render_template, redirect, url_for, flash, Blueprint, request,
 from flask_login import current_user, login_required
 from hiking_blog.forms import CommentForm, AddTrailPicForm
 from hiking_blog.models import Trails, TrailComments, db, User
-from hiking_blog.admin.admin import allowed_file, create_file_name, delete_comment
+from hiking_blog.admin.admin import allowed_file, create_file_name, delete_comment, NO_TAGS
 from hiking_blog.contact import send_async_email, send_email, EMAIL
 from hiking_blog.auth.auth import admin_only
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
+import re
 
 PICTURE_UPLOAD_SUCCESS = "You're photos have been successfully uploaded! They will now need to be vetted by one " \
                          "of our administrators. This process usually only takes a day or two. Once you're photo " \
@@ -43,21 +44,14 @@ def view_trail(db_id):
         The primary key for the specified trail in the trails table of the database
     """
     form = CommentForm()
-    requested_trail = Trails.query.get(db_id)
+    trail = Trails.query.get(db_id)
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
             return redirect(url_for("auth_bp.login"))
-        new_comment = TrailComments(
-            text=form.comment_text.data,
-            deleted_by=None,
-            commenter=current_user,
-            parent_posts=requested_trail
-        )
-        db.session.add(new_comment)
-        db.session.commit()
+        create_new_trail_comment(form, trail)
         form.comment_text.data = ""
-    return render_template("view_trail.html", trail=requested_trail, form=form, current_user=current_user)
+    return render_template("view_trail.html", trail=trail, form=form, current_user=current_user)
 
 
 @trail_bp.route("/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
@@ -141,3 +135,14 @@ def admin_upload_notification(email, user, trail):
     subject = "User photo upload notification"
     message = f"User {user} has just uploaded photos for {trail} that need to be reviewed."
     send_async_email(email, subject, message, send_email)
+
+
+def create_new_trail_comment(form, trail):
+    new_comment = TrailComments(
+        text=re.sub(NO_TAGS, '', form.comment_text.data),
+        deleted_by=None,
+        commenter=current_user,
+        parent_posts=trail
+    )
+    db.session.add(new_comment)
+    db.session.commit()

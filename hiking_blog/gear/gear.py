@@ -1,11 +1,12 @@
 """Contains the functionality for viewing gear info and editing gear entries in the database."""
 from flask import render_template, redirect, url_for, flash, Blueprint, request
 from flask_login import current_user
-from hiking_blog.admin.admin import delete_comment
+from hiking_blog.admin.admin import delete_comment, NO_TAGS
 from hiking_blog.forms import CommentForm
 from hiking_blog.models import Gear, GearComments
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.db import db
+import re
 
 gear_bp = Blueprint(
     "gear_bp", __name__,
@@ -115,7 +116,7 @@ def create_new_gear_comment(form, gear):
     """
 
     new_comment = GearComments(
-        text=form.comment_text.data,
+        text=re.sub(NO_TAGS, '', form.comment_text.data),
         deleted_by=None,
         commenter=current_user,
         parent_posts=gear

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% if favorites %}
+{% for favorite in favorites %}
+<div>
+    <img class="img-thumbnail" src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.img) }}">
+    <h4>{{ favorite.name }}</h4>
+</div>
+{% endfor %}
+{% else %}
+<p>No Favorites</p>
+{% endif %}
+
+{% endblock %}

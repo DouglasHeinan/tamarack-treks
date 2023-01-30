@@ -1,5 +1,4 @@
 """This file is a collection of site maintenance operations accessible to a site administrator."""
-import random
 
 from flask import Blueprint, flash, redirect, render_template, url_for, send_from_directory, request
 from flask_login import current_user, login_required
@@ -19,6 +18,7 @@ ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content.
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 DIR_START = "hiking_blog/admin/static/"
 NO_TAGS = re.compile("<.*?>")
+NO_CHARS = re.compile("[^a-zA-Z]")
 
 
 admin_bp = Blueprint(
@@ -195,13 +195,10 @@ def dead_links():
     for gear in all_gear:
         if gear.moosejaw_link_dead:
             current_dead_links.append({gear.name: ["Moosejaw Link", gear.moosejaw_url]})
-            # current_dead_links[gear.name].append(["Moosejaw Link", gear.moosejaw_url])
         if gear.rei_link_dead:
             current_dead_links.append({gear.name: ["REI Link", gear.rei_url]})
-            # current_dead_links[gear.name].append(["REI Link", gear.rei_url])
         if gear.backcountry_link_dead:
             current_dead_links.append({gear.name: ["Backcountry Link", gear.backcountry_url]})
-            # current_dead_links[gear.name].append(["Backcountry Link", gear.backcountry_url])
     if not current_dead_links:
         print("No dead links.")
     return render_template("view_dead_links.html", links=current_dead_links)
@@ -570,7 +567,7 @@ def update_gear_entry(gear, form):
     gear.msrp = form.msrp.data
     gear.weight = form.weight.data
     gear.dimensions = form.dimensions.data
-    gear.img_url = form.img_url.data
+    gear.img = form.img.data
     gear.rating = form.rating.data
     gear.description = form.description.data
     gear.gear_trail = "Gear"
@@ -604,9 +601,9 @@ def populate_gear_form(gear):
         name=gear.name,
         category=gear.category,
         msrp=gear.msrp,
-        wieght=gear.weight,
+        weight=gear.weight,
         dimensions=gear.dimensions,
-        img_url=gear.img_url,
+        img=gear.img,
         rating=gear.rating,
         description=gear.description,
         moosejaw_url=gear.moosejaw_url,

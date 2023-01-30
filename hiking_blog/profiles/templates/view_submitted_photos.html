@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% for pic in user.trail_page_pics %}
+<img class="img-thumbnail" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.img) }}">
+{% endfor %}
+
+
+{% endblock %}

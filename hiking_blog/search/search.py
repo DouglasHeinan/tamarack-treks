@@ -2,12 +2,10 @@
 from flask import Blueprint, render_template, current_app
 from hiking_blog.forms import SearchForm
 from hiking_blog.models import Gear, GearComments, Trails, TrailComments
+from hiking_blog.admin.admin import NO_TAGS, NO_CHARS
 from collections import Counter
 import operator
 import re
-
-NO_TAGS = re.compile("<.*?>")
-NO_CHARS = re.compile("[^a-zA-Z]")
 
 search_bp = Blueprint(
     "search_bp", __name__,

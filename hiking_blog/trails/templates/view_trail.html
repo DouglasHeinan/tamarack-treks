@@ -2,7 +2,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="container-fluid text-center mt-3">
+<div class="mt-3">
     <h3 class="trail-title">{{ trail.name.title() }}</h3>
     <div id="carouselControls" class="carousel slide carousel-main" data-ride="carousel" data-interval="10000">
         <div class="carousel-inner">
@@ -25,10 +25,12 @@
         <span class="sr-only">Next</span>
       </a>
     </div>
-    <div class="mt-3">
+    <div class="mt-3 text-center">
+        {% if current_user.is_authenticated %}
         <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="btn user-button btn-lg">
             Add a new picture
         </a>
+        {% endif %}
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -37,22 +39,29 @@
         {% endif %}
         {% endwith %}
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3 trail-info">
         <div class="col-sm-4 align-right">
-            <h5>Length: {{ trail.hiking_dist }} miles</h5>
+            <h5 class="trail-attribute">Length: {{ trail.hiking_dist }} miles</h5>
         </div>
         <div class="col-sm-4">
-            <h5>Elevation Gain: {{ trail.elev_change }} feet</h5>
+            <h5 class="trail-attribute">Elevation Gain: {{ trail.elev_change }} feet</h5>
         </div>
         <div class="col-sm-4 align-left">
-            <h5>Difficulty: {{ trail.difficulty }}</h5>
+            <h5 class="trail-attribute">Difficulty: {{ trail.difficulty }}</h5>
         </div>
         <div class="my-3">
             <h5><a class="maps-link" href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank">Get Directions to the Trail Head</a></h5>
         </div>
-    </div>
+    {% if current_user.is_authenticated %}
     <div>
-            {{ trail.description|safe }}
+        <a href="{{url_for('user_profile_bp.add_favorite', user_id=current_user.id, gear_trail=trail.gear_trail, favorite_id=trail.id)}}" class="btn btn-sm btn-secondary favorite-button">Add to favorites</a>
+    </div>
+    {% endif %}
+    </div>
+    <div class="section-background-two">
+        <div class="paragraph-spacing">
+            <p class="body-font">{{ trail.description }}</p>
+        </div>
     </div>
     {% if current_user.is_admin %}
     <div class="container my-4">
@@ -64,14 +73,14 @@
 </div>
 
 <!-------------Comments-------------->
-<div class="container-fluid">
+<div class="container-fluid comments-container">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
     <form method="POST" action="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">
         {{ form.csrf_token }}
         {{ form.comment_text.label }}
         {{ form.comment_text }}
-        <input class="btn user-button" type="submit" value="Submit">
+        <input class="btn user-button comment-submit-btn" type="submit" value="Submit">
     </form>
     <div class="col-lg-8 col-md-10 mx-auto comment mt-4">
         <ul>
@@ -84,7 +93,7 @@
                     {% if comment.deleted_by %}
                         <p>This comment has been deleted by {{ comment.deleted_by }}</p>
                     {% else %}
-                        {{ comment.text|safe }}
+                        <p class="body-text">{{ comment.text }}</p>
                     {% endif %}
                 </div>
                 <span>

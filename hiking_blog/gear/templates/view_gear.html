@@ -6,7 +6,7 @@
 <div class="gear-pic-and-specs">
     <div class="gear-pic-and-title">
         <h3 class="gear-title">{{ gear.name.title() }}</h3>
-        <img class="gear-img" src="{{ gear.img_url }}">
+        <img class="gear-img" src="{{ gear.img }}">
     </div>
     <div class="gear-specs">
         <div class="gear-rating-display">
@@ -30,10 +30,17 @@
             </div>
         </div>
     </div>
+    {% if current_user.is_authenticated %}
+    <div>
+        <a href="{{url_for('user_profile_bp.add_favorite', user_id=current_user.id, gear_trail=gear.gear_trail, favorite_id=gear.id)}}" class="btn btn-sm btn-secondary favorite-button">Add to favorites</a>
+    </div>
+    {% endif %}
 </div>
 <div class="container-fluid">
-    <div class="gear-description-container">
-        <p class="gear-description">{{ gear.description|safe }}</p>
+    <div class="section-background-two">
+        <div class="paragraph-spacing">
+            <p class="body-font">{{ gear.description }}</p>
+        </div>
     </div>
     <div class="company-names-and-links">
         {% for company in info %}
@@ -59,7 +66,7 @@
     {% endif %}
 
 <!-------------Comments-------------->
-<div class="container-fluid mt-3">
+<div class="container-fluid comments-container">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
     {# wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) #}

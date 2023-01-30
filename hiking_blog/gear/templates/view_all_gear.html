@@ -3,32 +3,43 @@
 {% block content %}
 <h2 class="pt-5 pb-1 section-font-one text-center">Gear</h2>
 
-<div class="list-wrapper">
+<div class="listing-wrapper">
     <ul class="list-unstyled">
         {% for gear in all_gear %}
-            <li class="trail-listings">
+            <li class="listing">
                 <div class="listing-border">
                     <a href="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
-                        <h4 class="trail-list-name">{{gear.name}}</h4>
+                        <h4 class="listing-name">{{gear.name}}</h4>
                     </a>
-                    <div class="trail-pic-and-data">
-                        <div class="trail-pic-container">
+                    <div class="listing-pic-and-data">
+                        <div class="listing-pic-container">
                             <a href="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
-                                <img class="gear-list-img" src="{{ gear.img_url  }}">
+                                <img class="gear-list-img listing-img" src="{{ gear.img  }}">
                             </a>
                         </div>
-                        <a class="no-underline trail-list-link" href="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
-                            <div class="trail-data-and-description">
-                                <div class="trail-data">
-                                    <h5 class="trail-list-info">Rating: {{gear.rating}}/10</h5>
-                                    <h5 class="trail-list-info">Weight: {{gear.weight}}</h5>
-                                    <h5 class="trail-list-info">Dimensions: {{gear.dimensions}}</h5>
+                        <a class="no-underline listing-link" href="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
+                            <div class="listing-data-and-description">
+                                <div class="listing-data">
+                                    <div class="listing-pair">
+                                        <h5 class="listing-info">Rating:</h5>
+                                        <h5 class="listing-info">{{gear.rating}}/10</h5>
+                                    </div>
+                                    <div class="listing-pair">
+                                        <h5 class="listing-info">Weight:</h5>
+                                        <h5 class="listing-info">{{gear.weight}}</h5>
+                                    </div>
+                                    <div class="listing-pair">
+                                        <h5 class="listing-info">Dimensions:</h5>
+                                        <h5 class="listing-info">{{gear.dimensions}}</h5>
+                                    </div>
                                 </div>
-                                {% if gear.description|length > 99 %}
-                                <p class="mt-3 trail-list-description">{{ gear.description[:100] }}...</p>
-                                {% else %}
-                                <p class="mt-3 trail-list-description">{{ gear.description }}</p>
-                                {% endif %}
+                                <div class="listing-description">
+                                    {% if gear.description|length > 99 %}
+                                    <p class="mt-3 listing-description-text">{{ gear.description[:100] }}...</p>
+                                    {% else %}
+                                    <p class="mt-3 listing-description-text">{{ gear.description }}</p>
+                                    {% endif %}
+                                </div>
                             </div>
                         </a>
                     </div>

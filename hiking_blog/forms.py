@@ -116,7 +116,7 @@ class GearForm(FlaskForm):
     msrp = StringField("MSRP", validators=[DataRequired()])
     weight = StringField("Item Weight", validators=[DataRequired()])
     dimensions = StringField("Item Dimensions", validators=[DataRequired()])
-    img_url = StringField("Image URL", validators=[DataRequired(), URL()])
+    img = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
     description = CKEditorField("Review", validators=[DataRequired()])
     moosejaw_url = StringField("Moosejaw Link", validators=[])

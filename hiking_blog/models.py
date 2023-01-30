@@ -22,6 +22,7 @@ class User(UserMixin, db.Model):
     trail_page_comments = relationship("TrailComments", back_populates="commenter")
     gear_page_comments = relationship("GearComments", back_populates="commenter")
     trail_page_pics = relationship("TrailPictures", back_populates="pic_poster")
+    favorites = relationship("Favorites", back_populates="favorited_by")
 
     def set_password(self, password):
         """
@@ -67,6 +68,18 @@ class User(UserMixin, db.Model):
             return None
 
 
+class Favorites(db.Model):
+    """A class used to represent trail and gear a User has favorited."""
+    __tablename__ = "favorites"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    gear_trail = db.Column(db.String, nullable=False)
+    img = db.Column(db.String(250), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    favorited_by = relationship("User", back_populates="favorites")
+
+
 class Trails(db.Model):
     """A class used to represent a trail information and review page."""
     __tablename__ = "trails"
@@ -109,14 +122,14 @@ class TrailComments(UserMixin, db.Model):
 
 class Gear(db.Model):
     """A class used to represent a gear information and review page."""
-    __tablename__ = "gear_rev"
+    __tablename__ = "gear"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     category = db.Column(db.String(100), nullable=False)
     msrp = db.Column(db.String, nullable=False)
     weight = db.Column(db.String, nullable=False)
     dimensions = db.Column(db.String, nullable=False)
-    img_url = db.Column(db.String(250), unique=True, nullable=False)
+    img = db.Column(db.String(250), unique=True, nullable=False)
     rating = db.Column(db.Float)
     description = db.Column(db.Text, nullable=False)
     keywords = db.Column(db.String, nullable=False)
@@ -145,5 +158,5 @@ class GearComments(UserMixin, db.Model):
     deleted_by = db.Column(db.String)
     commenter_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     commenter = relationship("User", back_populates="gear_page_comments")
-    gear_id = db.Column(db.Integer, db.ForeignKey("gear_rev.id"))
+    gear_id = db.Column(db.Integer, db.ForeignKey("gear.id"))
     parent_posts = relationship("Gear", back_populates="gear_comments")

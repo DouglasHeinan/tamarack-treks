@@ -3,31 +3,40 @@
 {% block content %}
 <h2 class="pt-5 pb-1 section-font-one text-center">Trails</h2>
 
-<div class="list-wrapper">
+<div class="listing-wrapper">
     <ul class="list-unstyled">
         {% for trail in all_trails %}
-            <li class="trail-listings">
+            <li class="listing">
                 <div class="listing-border">
                     <a href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">
-                        <h4 class="trail-list-name">{{trail.name}}</h4>
+                        <h4 class="listing-name">{{trail.name}}</h4>
                     </a>
-                    <div class="trail-pic-and-data">
-                        <div class="trail-pic-container">
+                    <div class="listing-pic-and-data">
+                        <div class="listing-pic-container">
                             <a href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">
-                                <img class="list-img" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img)  }}">
+                                <img class="trail-list-img listing-img" src="{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img)  }}">
                             </a>
                         </div>
-                        <a class="no-underline trail-list-link" href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">
-                            <div class="trail-data-and-description">
-                                <div class="trail-data">
-                                    <h5 class="trail-list-info">Distance: {{trail.hiking_dist}}</h5>
-                                    <h5 class="trail-list-info">Elevation Change: {{trail.elev_change}} ft.</h5>
-                                    <h5 class="trail-list-info">Difficulty: {{trail.difficulty}}</h5>
+                        <a class="no-underline listing-link" href="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">
+                            <div class="listing-data-and-description">
+                                <div class="listing-data">
+                                    <div class="listing-pair">
+                                        <h5 class="listing-info">Difficulty:</h5>
+                                        <h5 class="listing-info">{{trail.difficulty}}</h5>
+                                    </div>
+                                    <div class="listing-pair">
+                                        <h5 class="listing-info">Distance:</h5>
+                                        <h5 class="listing-info">{{trail.hiking_dist}} mi.</h5>
+                                    </div>
+                                    <div class="listing-pair">
+                                        <h5 class="listing-info">Elevation Change:</h5>
+                                        <h5 class="listing-info">{{trail.elev_change}} ft.</h5>
+                                    </div>
                                 </div>
                                 {% if trail.description|length > 99 %}
-                                <p class="mt-3 trail-list-description">{{ trail.description[:100] }}...</p>
+                                <p class="mt-3 listing-description">{{ trail.description[:100] }}...</p>
                                 {% else %}
-                                <p class="mt-3 trail-list-description">{{ trail.description }}</p>
+                                <p class="mt-3 listing-description">{{ trail.description }}</p>
                                 {% endif %}
                             </div>
                         </a>

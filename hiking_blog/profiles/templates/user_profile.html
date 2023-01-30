@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h3>Welcome to your profile {{ user.username }}</h3>
+
+<ul class="list-unstyled">
+    <li><a href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">View past comments</a></li>
+    <li><a href="https://en.gravatar.com/">Customize your avatar</a></li>
+    <li><a href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">View favorite trails and gear</a></li>
+    <li><a href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id) }}">View submitted photos</a></li>
+    <li><a>View rated photos</a></li>
+</ul>
+
+
+{% endblock %}

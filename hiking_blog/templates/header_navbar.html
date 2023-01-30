@@ -10,25 +10,26 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated: %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
-                            href="#">Hi {{ current_user.username }}!
+                    <li class="dropdown">
+                        <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text dropdown-toggle"
+                            id="userNavDropdown" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                            Hi {{ current_user.username }}!
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu nav-dropdown" aria-labelledby="userNavDropdown">
                             <li>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item navbar-text" href="{{ url_for('user_profile_bp.user_profile_dashboard', user_id=current_user.id) }}">
                                     User Profile
                                 </a>
                             </li>
-                                {% if current_user.is_admin %}
+                            {% if current_user.is_admin %}
                             <li>
-                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.admin_dashboard') }}">
+                                <a class="dropdown-item admin-button" href="{{ url_for('admin_bp.admin_dashboard') }}">
                                     Admin Dashboard
                                 </a>
                             </li>
-                                {% endif %}
+                            {% endif %}
                             <li>
-                                <a class="dropdown-item"
+                                <a class="dropdown-item navbar-text"
                                    href="{{ url_for('auth_bp.logout') }}">Logout
                                 </a>
                             </li>
