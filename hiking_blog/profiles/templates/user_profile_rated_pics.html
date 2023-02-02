@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+
+{% for pic in photos %}
+<img class="img-thumbnail" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.rated_pic.img)  }}">
+<h6>{{ pic.rating }}</h6>
+{% endfor %}
+
+{% endblock %}
+
+
+"{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}"

@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False)
+    joined_on = db.Column(db.DateTime, nullable=False)
     email_confirmed = db.Column(db.Boolean, nullable=False)
     username_approved = db.Column(db.Boolean, nullable=False)
     username_needs_verification = db.Column(db.Boolean, nullable=False)
@@ -23,6 +24,7 @@ class User(UserMixin, db.Model):
     gear_page_comments = relationship("GearComments", back_populates="commenter")
     trail_page_pics = relationship("TrailPictures", back_populates="pic_poster")
     favorites = relationship("Favorites", back_populates="favorited_by")
+    rated_pics = relationship("RatedPhoto", back_populates="rated_by_user")
 
     def set_password(self, password):
         """
@@ -74,10 +76,23 @@ class Favorites(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     gear_trail = db.Column(db.String, nullable=False)
+    date_time_added = db.Column(db.DateTime, nullable=False)
     img = db.Column(db.String(250), nullable=False)
     description = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     favorited_by = relationship("User", back_populates="favorites")
+
+
+class RatedPhoto(db.Model):
+    """A class used to represent photos rated by a user."""
+    __tablename__ = "rated_photos"
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer, nullable=False)
+    date_time_added = db.Column(db.DateTime, nullable=False)
+    photo_id = db.Column(db.Integer, db.ForeignKey("trail_pics.id"))
+    rated_pic = relationship("TrailPictures", back_populates="get_user_rating")
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    rated_by_user = relationship("User", back_populates="rated_pics")
 
 
 class Trails(db.Model):
@@ -100,12 +115,15 @@ class Trails(db.Model):
 class TrailPictures(db.Model):
     __tablename__ = "trail_pics"
     id = db.Column(db.Integer, primary_key=True)
+    community_rating = db.Column(db.String, nullable=False)
     img = db.Column(db.String(250), nullable=False)
 #--------------- Note to add unique constraint to img after finished with dev---------------------------
+    date_time_added = db.Column(db.DateTime, nullable=False)
     poster_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     pic_poster = relationship("User", back_populates="trail_page_pics")
     trail_id = db.Column(db.Integer, db.ForeignKey("trails.id"))
     parent_trail_posts = relationship("Trails", back_populates="trail_page_pics")
+    get_user_rating = relationship("RatedPhoto", back_populates="rated_pic")
 
 
 class TrailComments(UserMixin, db.Model):
@@ -114,6 +132,7 @@ class TrailComments(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     deleted_by = db.Column(db.String)
+    date_time_added = db.Column(db.DateTime, nullable=False)
     commenter_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     commenter = relationship("User", back_populates="trail_page_comments")
     trail_id = db.Column(db.Integer, db.ForeignKey("trails.id"))
@@ -156,6 +175,7 @@ class GearComments(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
     deleted_by = db.Column(db.String)
+    date_time_added = db.Column(db.DateTime, nullable=False)
     commenter_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     commenter = relationship("User", back_populates="gear_page_comments")
     gear_id = db.Column(db.Integer, db.ForeignKey("gear.id"))

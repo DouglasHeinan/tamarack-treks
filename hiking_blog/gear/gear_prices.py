@@ -12,7 +12,6 @@ HEADER = {
 
 def moosejaw_price_query(moosejaw_url):
     """Scrapes the Moosejaw page of the requested gear piece and returns its price"""
-
     response = requests.get(moosejaw_url, headers=HEADER)
     soup = BeautifulSoup(response.text, features="lxml")
     try:
@@ -25,7 +24,6 @@ def moosejaw_price_query(moosejaw_url):
 
 def rei_price_query(rei_url):
     """Scrapes the REI page of the requested gear piece and returns its price"""
-
     response = requests.get(rei_url, headers=HEADER)
     soup = BeautifulSoup(response.text, features="lxml")
     gear_price = "$" + soup.find(class_="price-value").getText().split("$")[1].split(" ")[0].strip("-")
@@ -35,7 +33,6 @@ def rei_price_query(rei_url):
 
 def backcountry_price_query(backcountry_url):
     """Scrapes the Backcountry page of the requested gear piece and returns its price"""
-
     response = requests.get(backcountry_url, headers=HEADER)
     soup = BeautifulSoup(response.text, features="lxml")
     gear_price = "$" + soup.find(class_="css-1sxaem").getText().split("$")[1].split(" ")[0].strip("-")

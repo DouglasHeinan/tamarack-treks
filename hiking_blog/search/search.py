@@ -124,6 +124,7 @@ def check_gear_review_keywords(searched, results):
     are any matches.
 
     PARAMETERS
+    ----------
     searched : list
         A list of all individual words, in string form, input by the user into the search form.
     results : list
@@ -150,6 +151,7 @@ def check_gear_and_trail_review_content(searched, results):
     there are any matches.
 
     PARAMETERS
+    ----------
     searched : list
         A list of all individual words, in string form, input by the user into the search form.
     results : list
@@ -177,6 +179,7 @@ def check_gear_and_trail_review_comments(searched, results):
     are any matches.
 
     PARAMETERS
+    ----------
     searched : list
         A list of all individual words, in string form, input by the user into the search form.
     results : list
@@ -203,6 +206,7 @@ def check_exact_name_in_search(searched, results):
     words that are included in the list of strings input by the user in the search form.
 
     PARAMETERS
+    ----------
     searched : list
         A list of all individual words, in string form, input by the user into the search form.
     results : list

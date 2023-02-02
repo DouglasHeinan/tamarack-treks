@@ -110,25 +110,6 @@ def send_html_mail(email, subject, message):
     print("html mail sent")
 
 
-def check_recovery_form(user):
-    """
-    Checks the user-provided info from the password- and user-recovery forms.
-
-    This function is called by both recovery functions. If this function returns any value, those functions reroute the
-    user from the recovery function.
-    """
-
-    message = None
-    reroute = None
-    if not user:
-        message = "That username has not yet been created."
-        reroute = redirect(url_for("auth_bp.sign_up"))
-    if current_user.is_authenticated:
-        message = "You are already logged in."
-        reroute = redirect(url_for("home_bp.home"))
-    return message, reroute
-
-
 def send_password_reset_email(user_email):
     """Activated in the 'password_recovery' function, crafts and sends the password recovery email to the user."""
     pw_reset_serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
@@ -175,3 +156,22 @@ def send_dead_links():
             message = "You have dead links in your gear product database. Please perform an sweep of the database to " \
                       "uncover and correct dead links."
             send_async_email(email, subject, message, send_email)
+
+
+def check_recovery_form(user):
+    """
+    Checks the user-provided info from the password- and user-recovery forms.
+
+    This function is called by both recovery functions. If this function returns any value, those functions reroute the
+    user from the recovery function.
+    """
+
+    message = None
+    reroute = None
+    if not user:
+        message = "That username has not yet been created."
+        reroute = redirect(url_for("auth_bp.sign_up"))
+    if current_user.is_authenticated:
+        message = "You are already logged in."
+        reroute = redirect(url_for("home_bp.home"))
+    return message, reroute

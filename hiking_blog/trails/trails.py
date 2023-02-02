@@ -2,9 +2,8 @@
 from flask import render_template, redirect, url_for, flash, Blueprint, request, send_from_directory
 from flask_login import current_user, login_required
 from hiking_blog.forms import CommentForm, AddTrailPicForm
-from hiking_blog.models import Trails, TrailComments, db, User
-from hiking_blog.admin.admin import allowed_file, create_file_name, delete_comment, NO_TAGS
-from hiking_blog.contact import send_async_email, send_email, EMAIL
+from hiking_blog.models import Trails, TrailComments, db
+from hiking_blog.admin.admin import allowed_file, create_initial_trail_directory, delete_comment, NO_TAGS
 from hiking_blog.auth.auth import admin_only
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -25,6 +24,7 @@ trail_bp = Blueprint(
 
 @trail_bp.route("/gear/view_all_trails")
 def view_all_trails():
+    """Collects all trail items from the database to display to the user."""
     all_trails = db.session.query(Trails).all()
     return render_template("view_all_trails.html", all_trails=all_trails)
 
@@ -38,7 +38,7 @@ def view_trail(db_id):
     Additionally, loads the comment form, allowing the user to comment on the trail and, when submitted, stores their
     comment in the database as well.
 
-    Parameters
+    PARAMETERS
     ----------
     db_id : int
         The primary key for the specified trail in the trails table of the database
@@ -97,29 +97,13 @@ def admin_delete_trail_comment(comment_id):
 
 @trail_bp.route("/<int:trail_id>/add_trail_pic", methods=["GET", "POST"])
 @login_required
-# Break this into smaller chunks
 def add_trail_pic(trail_id):
+    """Adds a new trail picture to the database."""
     form = AddTrailPicForm()
     if form.validate_on_submit():
-        file = form.filename.data
-        if file.filename == "":
-            flash("No file selected.")
-            return redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
-        if allowed_file(file.filename):
-            user = User.query.get(current_user.id).username
-            trail = Trails.query.get(trail_id).name
-            user_trail = user + "^" + trail
-            date = datetime.today().strftime("%m-%d-%Y")
-            sorting_dir = "submitted_trail_pics/"
-            directory = create_file_name(sorting_dir, date, user_trail)
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(directory, filename))
-            flash(PICTURE_UPLOAD_SUCCESS)
-            admin_upload_notification(EMAIL, user, trail)
-            return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
-        else:
-            flash("Invalid file type.")
-            return redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
+        message, result = check_file(form, trail_id)
+        flash(message)
+        return result
     return render_template("form_page.html",
                            form=form,
                            form_header="Add New Trail Pictures",
@@ -128,21 +112,38 @@ def add_trail_pic(trail_id):
 
 @trail_bp.route("/trails/static/dev_pics/<file_name>")
 def display_trail_pics(file_name):
+    """Displays trail pics to the user."""
     return send_from_directory("trails/static/dev_pics/", file_name)
 
 
-def admin_upload_notification(email, user, trail):
-    subject = "User photo upload notification"
-    message = f"User {user} has just uploaded photos for {trail} that need to be reviewed."
-    send_async_email(email, subject, message, send_email)
-
-
 def create_new_trail_comment(form, trail):
+    """Creates a new entry in the trail_comments table of the database."""
     new_comment = TrailComments(
         text=re.sub(NO_TAGS, '', form.comment_text.data),
         deleted_by=None,
+        date_time_added=datetime.now(),
         commenter=current_user,
         parent_posts=trail
     )
     db.session.add(new_comment)
     db.session.commit()
+
+
+# --------------------------------SHOULD BE COMBINED WITH ADMIN CHECK FILES FUNCTION---------------------------------
+def check_file(form, trail_id):
+    """Checks that the user has submitted a valid file before creating a new directory to store that file."""
+
+    file = form.filename.data
+    if file.filename == "":
+        message = "No file selected."
+        result = redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
+    elif allowed_file(file.filename):
+        directory = create_initial_trail_directory(trail_id)
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(directory, filename))
+        message = PICTURE_UPLOAD_SUCCESS
+        result = redirect(url_for("trail_bp.view_trail", db_id=trail_id))
+    else:
+        message = "Invalid file type."
+        result = redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))
+    return message, result

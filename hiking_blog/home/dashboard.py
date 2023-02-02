@@ -4,7 +4,7 @@ from flask_login import current_user
 from hiking_blog.models import Trails, Gear
 from hiking_blog.db import db
 # This import only exists for development purposes
-from hiking_blog.dev_db_autofill import create_gear_reviews, create_trail_entries, create_users, create_trail_pic_entries
+from hiking_blog.dev_db_autofill import create_database
 
 home_bp = Blueprint(
     "home_bp",
@@ -26,7 +26,9 @@ def home():
     saved_trails = db.session.query(Trails).all()
     saved_gear = db.session.query(Gear).all()
     # The create_database function only exists for development purposes.
-    create_database(saved_gear)
+    if not saved_gear:
+        create_database()
+        return redirect(url_for("home_bp.home"))
     # End of development only code.
     recent_trails = db.session.query(Trails).order_by(Trails.date_time_added)[:-4:-1]
     recent_gear = db.session.query(Gear).order_by(Gear.date_time_added)[:-4:-1]
@@ -44,13 +46,3 @@ def display_main_carousel_pics(file_name):
 def about():
     """Renders the about page."""
     return render_template("about.html")
-
-
-def create_database(saved_gear):
-    """This function creates a database if one does not already exist. It is for development purposes only."""
-    if not saved_gear:
-        create_gear_reviews()
-        create_trail_entries()
-        create_users()
-        create_trail_pic_entries()
-        return redirect(url_for("home_bp.home"))

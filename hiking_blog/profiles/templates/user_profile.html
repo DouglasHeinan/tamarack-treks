@@ -9,7 +9,7 @@
     <li><a href="https://en.gravatar.com/">Customize your avatar</a></li>
     <li><a href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">View favorite trails and gear</a></li>
     <li><a href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id) }}">View submitted photos</a></li>
-    <li><a>View rated photos</a></li>
+    <li><a href="{{ url_for('user_profile_bp.view_rated_photos', user_id=user.id) }}">View rated photos</a></li>
 </ul>
 
 

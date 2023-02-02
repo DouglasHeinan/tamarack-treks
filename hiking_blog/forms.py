@@ -61,6 +61,7 @@ class ChangePasswordForm(FlaskForm):
 
 
 class AddAdminForm(FlaskForm):
+    """A class used for creating a form to add an admin."""
     username = StringField("Username:", validators=[DataRequired()])
     submit_button = SubmitField("Submit")
 
@@ -83,11 +84,13 @@ class AddTrailForm(FlaskForm):
 
 
 class AddTrailPicForm(FlaskForm):
+    """A class for a form that submits a new image file."""
     filename = FileField("File", validators=[DataRequired()])
     submit_button = SubmitField("Submit")
 
 
 class AddNewTrailPicForm(FlaskForm):
+    """A class for a form that submits a three new image files."""
     filename_one = FileField("File", validators=[DataRequired()])
     filename_two = FileField("File", validators=[DataRequired()])
     filename_three = FileField("File", validators=[DataRequired()])
@@ -96,7 +99,6 @@ class AddNewTrailPicForm(FlaskForm):
 
 class ContactForm(FlaskForm):
     """A class used for the application's contact form."""
-
     name = StringField("Name", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     subject = StringField("Subject", validators=[DataRequired()])
@@ -134,4 +136,5 @@ class CommentForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
+    """A class used for the applications search form."""
     searched = StringField("Search", validators=[DataRequired()])

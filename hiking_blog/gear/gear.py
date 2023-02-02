@@ -7,6 +7,7 @@ from hiking_blog.models import Gear, GearComments
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.db import db
 import re
+from datetime import datetime
 
 gear_bp = Blueprint(
     "gear_bp", __name__,
@@ -17,6 +18,7 @@ gear_bp = Blueprint(
 
 @gear_bp.route("/gear/view_all_gear")
 def view_all_gear():
+    """Collects all gear items from the database to display to the user."""
     all_gear = db.session.query(Gear).all()
     return render_template("view_all_gear.html", all_gear=all_gear)
 
@@ -24,7 +26,7 @@ def view_all_gear():
 @gear_bp.route("/gear/view_gear/<int:db_id>", methods=["GET", "POST"])
 def view_gear(db_id):
     """
-    Allows the user to view the information about a gear specific item.
+    Allows the user to view the information about a specific gear item.
 
     Directs the user to a template containing all stored information regarding a gear item in the database.
     Additionally, loads the comment form, allowing the user to comment on the gear and, when submitted, stores their
@@ -57,7 +59,6 @@ def edit_gear_comment(comment_id):
     form = CommentForm(
         comment_text=comment.text
     )
-
     if form.validate_on_submit():
         comment.text = form.comment_text.data
         db.session.commit()
@@ -77,6 +78,11 @@ def user_delete_gear_comment(comment_id):
 
     Any comment deleted by the user is still saved in the database. The text of the comment is replaced in the comments
     display with a message indicating that the user deleted their own comment.
+
+    PARAMETERS
+    ----------
+    comment_id : int
+        The id number of an entry in the comments table of the database.
     """
 
     gear_id = request.args["gear_id"]
@@ -94,6 +100,11 @@ def admin_delete_gear_comment(comment_id):
 
     Any comment deleted by the admin is still saved in the database. The text of the comment is replaced in the
     comments display with a message indicating that the admin deleted the user's comment.
+
+    PARAMETERS
+    ----------
+    comment_id : int
+        The id number of an entry in the comments table of the database.
     """
 
     admin_id = request.args["admin_id"]
@@ -118,6 +129,7 @@ def create_new_gear_comment(form, gear):
     new_comment = GearComments(
         text=re.sub(NO_TAGS, '', form.comment_text.data),
         deleted_by=None,
+        date_time_added=datetime.now(),
         commenter=current_user,
         parent_posts=gear
     )

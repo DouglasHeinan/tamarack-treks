@@ -10,7 +10,7 @@ from itsdangerous import URLSafeTimedSerializer
 from hiking_blog.models import User
 from hiking_blog.contact import send_password_reset_email
 from better_profanity import profanity
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 DAYS_BEFORE_LOGOUT = timedelta(days=30)
@@ -104,11 +104,7 @@ def password_recovery():
 
 @auth_bp.route("/auth/reset/<token>", methods=["GET", "POST"])
 def reset_with_token(token):
-    """
-    # -----------------------------------------Needs Docstring------------------------------------------------
-
-    """
-    # ------------------------------------Needs to be broken up-------------------------------------------
+    """Confirms the user is validly attempting to reset their password."""
     try:
         password_reset_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         email = password_reset_serializer.loads(token, salt='pw-reset-salt', max_age=3000)
@@ -122,26 +118,44 @@ def reset_with_token(token):
         message = "Invalid email address!"
         flash(message, 'danger')
         return redirect(url_for('auth_bp.login'))
+    message, result = change_password(user, token)
+    flash(message)
+    return result
+
+
+def change_password(user, token):
+    """
+    Allows a user to change their password.
+
+    Called by the reset_with_token function, this function allows a user who is already a member to change their
+    password if forgotten or if the user simply desires a change. After taking a user-input new password, the user
+    is redirected to the login page.
+
+    PARAMETERS
+    ----------
+    #-----------------------------ADD USER/TOKEN DATA TYPES---------------------------------------
+    user :
+        An entry in the users table of the database with all user information.
+    token : str
+        A token.
+    """
+
+    message = None
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if form.new_password.data != form.verify_password.data:
-            flash("Passwords do not match!")
-            return redirect(url_for("auth_bp.reset_with_token", token=token))
+            message = "Passwords do not match!"
+            result = redirect(url_for("auth_bp.reset_with_token", token=token))
+            return message, result
         user.set_password(form.new_password.data)
         db.session.commit()
-        message = "Your password has been updated!"
-        flash(message, 'Success! You may now log in with your new password.')
-        return redirect(url_for('auth_bp.login'))
-    return render_template("form_page.html",
-                           form=form,
-                           h_two="Reset your password.",
-                           p_tag="Enter your new password below:")
-
-
-def change_password(email):
-    """Allows user to change their password."""
-#     ----------------------------------------------Reserved for above breakdown------------------------------------
-    pass
+        message = "Success! You may now log in with your new password."
+        result = redirect(url_for('auth_bp.login'))
+        return message, result
+    result = render_template(
+        "form_page.html", form=form, h_two="Reset your password.", p_tag="Enter your new password below:"
+    )
+    return message, result
 
 
 @auth_bp.route("/auth/reset_username/<user_id>", methods=["GET", "POST"])
@@ -172,15 +186,7 @@ def logout():
 
 @login_manager.user_loader
 def load_user(user_id):
-    """
-    Tells flask-login how to load users given an id.
-
-    Parameters
-    ----------
-    user_id : int
-        The primary key from the users table in the database that corresponds to the current user.
-    """
-
+    """Tells flask-login how to load users given an id."""
     if user_id is not None:
         return User.query.get(user_id)
     return None
@@ -199,6 +205,7 @@ def create_new_user(form, admin):
         username=form.username.data,
         email=form.email.data,
         is_admin=admin,
+        joined_on=datetime.now(),
         email_confirmed=False,
         username_approved=False,
         username_needs_verification=True
@@ -223,6 +230,7 @@ def check_signup(form):
     all_users = User.query.all()
     if not all_users:
         admin = True
+    #-------------------------SHOULD CONFIRM WOULD_BE SIGN_IN IS SAME PERSON BEFORE REDIRECT------------------------
     if User.query.filter_by(username=form.username.data).first():
         message = "You've already signed up!"
         reroute = redirect(url_for("auth_bp.login"))
@@ -252,15 +260,7 @@ def check_login(form, user):
 
 
 def admin_only(f):
-    """
-    A wrapper for functions throughout this application that require a user be logged in before they run.
-
-    Parameters
-    ----------
-    f : function()
-        The function being wrapped by admin_only.
-    """
-
+    """A wrapper for functions throughout this application that require a user be logged in before they run."""
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_admin:
