@@ -38,6 +38,14 @@ body {
 .user-button {
     background-color: #606c38;
     color: #fefae0;
+    text-transform: uppercase;
+    border-color: #606c38;
+    border-width: 2px;
+}
+
+.user-button:hover {
+    background-color: #606c38;
+    color: #fefae0;
 }
 
 .section-font-one {
@@ -441,6 +449,20 @@ h5.listing-info:nth-child(odd) {
     color: #606c38;
 }
 
+.lg-favorite-button {
+    margin-top: 1em;
+    display: inline-block;
+}
+
+.sm-favorite-button {
+    margin-top: 1em;
+    display: none;
+}
+
+.price-button {
+    width: 100%;
+}
+
 .company-names-and-links {
     display: flex;
     flex-direction: row;
@@ -453,6 +475,8 @@ h5.listing-info:nth-child(odd) {
     display: flex;
     flex-direction: column;
     margin: 0 3em;
+    flex: 1 1 0px;
+    min-width: 20vw;
 }
 
 .company-link-name {
@@ -471,6 +495,23 @@ h5.listing-info:nth-child(odd) {
     color: #bc6c25;
     margin-bottom: 0.5em;
     text-align: center;
+}
+
+.trail-carousel {
+    object-fit: cover;
+}
+
+.carousel-font {
+    color: #fefae0;
+    font-size: 1em;
+}
+
+.carousel-caption {
+    display: flex;
+    align-items: end;
+    justify-content: space-around;
+    bottom: 0;
+    top: auto;
 }
 
 .trail-info {
@@ -728,7 +769,7 @@ h5.listing-info:nth-child(odd) {
 @media (min-width:1100px) {
     .gear-pic-and-specs {
         max-width: 900px;
-        margin: auto;
+        margin: 0 auto 3em;
         justify-content: center;
     }
     .gear-img {
@@ -747,6 +788,7 @@ h5.listing-info:nth-child(odd) {
     .gear-pic-and-specs {
         flex-direction: column;
         align-items: center;
+        margin-bottom: 3em;
     }
     .gear-specs {
         flex-direction: row;
@@ -790,6 +832,12 @@ h5.listing-info:nth-child(odd) {
     }
     .gear-title {
         font-size: 30px;
+    }
+    .lg-favorite-button {
+        display: none;
+    }
+    .sm-favorite-button {
+        display: inline-block;
     }
 }
 

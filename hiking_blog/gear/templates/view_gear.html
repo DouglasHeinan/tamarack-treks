@@ -29,10 +29,25 @@
                 <h5 class="main-specs">{{ gear.weight.split("|")[1] }}</h5>
             </div>
         </div>
+        {% if current_user.is_authenticated %}
+        <div>
+            <a href="{{url_for('user_profile_bp.add_favorite',
+            user_id=current_user.id, gear_trail=gear.gear_trail,
+            favorite_id=gear.id)}}"
+               class="btn btn-sm user-button lg-favorite-button">
+                Add to favorites
+            </a>
+        </div>
+        {% endif %}
     </div>
     {% if current_user.is_authenticated %}
     <div>
-        <a href="{{url_for('user_profile_bp.add_favorite', user_id=current_user.id, gear_trail=gear.gear_trail, favorite_id=gear.id)}}" class="btn btn-sm btn-secondary favorite-button">Add to favorites</a>
+        <a href="{{url_for('user_profile_bp.add_favorite',
+        user_id=current_user.id, gear_trail=gear.gear_trail,
+        favorite_id=gear.id)}}"
+           class="btn btn-sm user-button sm-favorite-button">
+            Add to favorites
+        </a>
     </div>
     {% endif %}
 </div>
@@ -49,7 +64,7 @@
                 <h6 class="company-link-name">
                     {{ company }}:
                 </h6>
-                <a class="btn btn-lg user-button" href="{{ info[company]['link'] }}" target="_blank">
+                <a class="btn user-button price-button" href="{{ info[company]['link'] }}" target="_blank">
                     ${{ info[company]["price"] }}
                 </a>
             </div>

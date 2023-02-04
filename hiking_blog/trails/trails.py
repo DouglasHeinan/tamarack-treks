@@ -2,7 +2,7 @@
 from flask import render_template, redirect, url_for, flash, Blueprint, request, send_from_directory
 from flask_login import current_user, login_required
 from hiking_blog.forms import CommentForm, AddTrailPicForm
-from hiking_blog.models import Trails, TrailComments, db
+from hiking_blog.models import Trails, TrailComments, TrailPictures, RatedPhoto, db
 from hiking_blog.admin.admin import allowed_file, create_initial_trail_directory, delete_comment, NO_TAGS
 from hiking_blog.auth.auth import admin_only
 from werkzeug.utils import secure_filename
@@ -45,13 +45,17 @@ def view_trail(db_id):
     """
     form = CommentForm()
     trail = Trails.query.get(db_id)
+    # trail_pics = TrailPictures.query.filter_by(trail_id=db_id).all()
+    # pic_ids = [pic.id for pic in trail_pics]
+    user_rated_pics = RatedPhoto.query.filter_by(user_id=current_user.id).all()
+    user_rated_pic_ids = [pic.id for pic in user_rated_pics]
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
             return redirect(url_for("auth_bp.login"))
         create_new_trail_comment(form, trail)
         form.comment_text.data = ""
-    return render_template("view_trail.html", trail=trail, form=form, current_user=current_user)
+    return render_template("view_trail.html", trail=trail, form=form, current_user=current_user, user_rated_pic_ids=user_rated_pic_ids)
 
 
 @trail_bp.route("/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
