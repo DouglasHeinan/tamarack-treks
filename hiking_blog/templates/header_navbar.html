@@ -15,7 +15,7 @@
                             id="userNavDropdown" data-bs-toggle="dropdown" aria-expanded="false" href="#">
                             Hi {{ current_user.username }}!
                         </a>
-                        <ul class="dropdown-menu nav-dropdown" aria-labelledby="userNavDropdown">
+                        <ul class="dropdown-menu dropdown-bg" aria-labelledby="userNavDropdown">
                             <li>
                                 <a class="dropdown-item navbar-text" href="{{ url_for('user_profile_bp.user_profile_dashboard', user_id=current_user.id) }}">
                                     User Profile

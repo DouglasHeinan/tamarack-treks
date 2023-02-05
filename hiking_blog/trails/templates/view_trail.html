@@ -4,100 +4,170 @@
 {% block content %}
 <div class="mt-3">
     <h3 class="trail-title">{{ trail.name.title() }}</h3>
-    <div id="carouselControls" class="carousel slide carousel-main" data-ride="carousel" data-interval="7000">
-        <div class="carousel-inner">
-            {% for pic in trail.trail_page_pics[:3] %}
-            {% if pic == trail.trail_page_pics[0] %}
-            <div class="carousel-item active carouselImage">
-            {% else %}
-            <div class="carousel-item carouselImage">
-            {% endif %}
-                <img class="trail-carousel d-block w-100" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.img) }}" alt="First slide">
-                <div class="carousel-caption">
-                    <p class="carousel-font">Community rating: {{ pic.community_rating }}</p>
-                    {% if current_user.is_authenticated %}
-                    <div class="dropdown">
-                        <a class="btn btn-sm btn-success dropdown-toggle"
-                           role="button"
-                           id="photoRatingDropdown"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false"
-                           href="#">
-                            Rate this photo
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="photoRatingDropdown">
-                            <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='5') }}" class="dropdown-item">
-                                5
+    <div class="trail-carousel-container">
+        <div id="carouselControls" class="carousel slide carousel-main carousel-fade" data-ride="carousel" data-interval="7000">
+            <div class="carousel-inner trail-carousel-inner">
+                {% for pic in trail.trail_page_pics[:3] %}
+                {% if pic == trail.trail_page_pics[0] %}
+                <div class="carousel-item active carouselImage trail-img-container">
+                {% else %}
+                <div class="carousel-item carouselImage trail-img-container">
+                {% endif %}
+                    <img class="d-block w-100 trail-page-carousel-img" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.img) }}" alt="First slide">
+                    <div class="carousel-caption trail-carousel-caption-sm dropdown">
+                        <a class="btn btn-sm user-button dropdown-toggle"
+                               role="button"
+                               id="smScreenDropdown"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false"
+                               href="#">
+                                Ratings
                             </a>
-                            <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='4') }}" class="dropdown-item">
-                                4
-                            </a>
-                            <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='3') }}" class="dropdown-item">
-                                3
-                            </a>
-                            <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='2') }}" class="dropdown-item">
-                                2
-                            </a>
-                            <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='1') }}" class="dropdown-item">
-                                1
-                            </a>
+                        <div class="dropdown-menu dropdown-bg" aria-labelledby="smScreenDropdown">
+                            <div class="dropdown-item">
+                                {% if pic.community_rating != "Be the first to rate this photo!" %}
+                                <p class="trail-carousel-font">Community rating: {{ pic.community_rating }}</p>
+                                {% else %}
+                                <p class="trail-carousel-font">Community rating: -</p>
+                                {% endif %}
+                            </div>
+                            <div class="dropdown-item">
+                                {% if pic.id not in user_rated_pic_ids %}
+                                <p class="trail-carousel-font">You haven't rated this photo.</p>
+                                {% else %}
+                                {% for rated_pic in current_user.rated_pics %}
+                                {% if rated_pic.photo_id == pic.id %}
+                                <p class="trail-carousel-font">You rated this: {{ rated_pic.rating }}/5</p>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="dropdown-item">
+                                <p class="trail-carousel-font">Rate this photo:</p>
+                                <div class="trail-ratings-dropdown">
+                                    <span>
+                                        <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='5') }}" class="dropdown-item trail-carousel-font">
+                                            5
+                                        </a>
+                                    </span>
+                                    <span class="trail-carousel-font">|</span>
+                                    <span>
+                                        <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='4') }}" class="dropdown-item trail-carousel-font">
+                                            4
+                                        </a>
+                                    </span>
+                                    <span class="trail-carousel-font">|</span>
+                                    <span>
+                                        <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='3') }}" class="dropdown-item trail-carousel-font">
+                                            3
+                                        </a>
+                                    </span>
+                                    <span class="trail-carousel-font">|</span>
+                                    <span>
+                                        <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='2') }}" class="dropdown-item trail-carousel-font">
+                                            2
+                                        </a>
+                                    </span>
+                                    <span class="trail-carousel-font">|</span>
+                                    <span>
+                                        <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='1') }}" class="dropdown-item trail-carousel-font">
+                                            1
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    {% if pic.id not in user_rated_pic_ids %}
-                    <p class="carousel-font">You haven't rated this photo.</p>
-                    {% else %}
-                    {% for rated_pic in current_user.rated_pics %}
-                    {% if rated_pic.photo_id == pic.id %}
-                    <p class="carousel-font">You rated this: {{ rated_pic.rating }}/5</p>
-                    {% endif %}
-                    {% endfor %}
-                    {% endif %}
-                    {% endif %}
+                    <div class="carousel-caption trail-carousel-caption">
+                        {% if pic.community_rating != "Be the first to rate this photo!" %}
+                        <p class="trail-carousel-font">Community rating: {{ pic.community_rating }}</p>
+                        {% else %}
+                        <p class="trail-carousel-font">{{ pic.community_rating }}</p>
+                        {% endif %}
+                        {% if current_user.is_authenticated %}
+                        <div class="dropdown">
+                            <a class="btn btn-sm user-button dropdown-toggle"
+                               role="button"
+                               id="photoRatingDropdown"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false"
+                               href="#">
+                                Rate this photo
+                            </a>
+                            <div class="dropdown-menu dropdown-bg" aria-labelledby="photoRatingDropdown">
+                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='5') }}" class="dropdown-item trail-carousel-font">
+                                    5
+                                </a>
+                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='4') }}" class="dropdown-item trail-carousel-font">
+                                    4
+                                </a>
+                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='3') }}" class="dropdown-item trail-carousel-font">
+                                    3
+                                </a>
+                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='2') }}" class="dropdown-item trail-carousel-font">
+                                    2
+                                </a>
+                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='1') }}" class="dropdown-item trail-carousel-font">
+                                    1
+                                </a>
+                            </div>
+                        </div>
+                        {% if pic.id not in user_rated_pic_ids %}
+                        <p class="trail-carousel-font">You haven't rated this photo.</p>
+                        {% else %}
+                        {% for rated_pic in current_user.rated_pics %}
+                        {% if rated_pic.photo_id == pic.id %}
+                        <p class="trail-carousel-font">You rated this: {{ rated_pic.rating }}/5</p>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+          <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
         </div>
-      <a class="carousel-control-prev" href="#carouselControls" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#carouselControls" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
     </div>
-    <div class="mt-3 text-center">
-        {% if current_user.is_authenticated %}
-        <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="btn user-button btn-lg">
-            Add a new picture
-        </a>
-        {% endif %}
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <p class="text-success"><strong>{{ message }}</strong></p>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
-    </div>
-    <div class="row mt-3 trail-info">
-        <div class="col-sm-4 align-right">
-            <h5 class="trail-attribute">Length: {{ trail.hiking_dist }} miles</h5>
+    <div class="text-center">
+        <div class="mt-3 trail-user-add-buttons">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="btn user-button btn-sm">
+                Add a new picture to this trail gallery
+            </a>
+            <a href="{{url_for('user_profile_bp.add_favorite', user_id=current_user.id, gear_trail=trail.gear_trail, favorite_id=trail.id)}}" class="btn btn-sm user-button">
+                Add this trail to your favorites page
+            </a>
+            {% endif %}
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <p class="text-success"><strong>{{ message }}</strong></p>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
         </div>
-        <div class="col-sm-4">
-            <h5 class="trail-attribute">Elevation Gain: {{ trail.elev_change }} feet</h5>
+        <div class="row mt-3 trail-info">
+            <div class="col-sm-4 align-right">
+                <h5 class="trail-attribute">Length: {{ trail.hiking_dist }} miles</h5>
+            </div>
+            <div class="col-sm-4">
+                <h5 class="trail-attribute">Elevation Gain: {{ trail.elev_change }} feet</h5>
+            </div>
+            <div class="col-sm-4 align-left">
+                <h5 class="trail-attribute">Difficulty: {{ trail.difficulty }}</h5>
+            </div>
+            <div class="my-3">
+                <h5><a class="maps-link" href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank">Get Directions to the Trail Head</a></h5>
+            </div>
         </div>
-        <div class="col-sm-4 align-left">
-            <h5 class="trail-attribute">Difficulty: {{ trail.difficulty }}</h5>
-        </div>
-        <div class="my-3">
-            <h5><a class="maps-link" href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank">Get Directions to the Trail Head</a></h5>
-        </div>
-    {% if current_user.is_authenticated %}
-    <div>
-        <a href="{{url_for('user_profile_bp.add_favorite', user_id=current_user.id, gear_trail=trail.gear_trail, favorite_id=trail.id)}}" class="btn btn-sm btn-secondary favorite-button">Add to favorites</a>
-    </div>
-    {% endif %}
     </div>
     <div class="section-background-two">
         <div class="paragraph-spacing">

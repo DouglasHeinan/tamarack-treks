@@ -79,6 +79,15 @@ body {
     padding: 30px 0;
 }
 
+.dropdown-bg {
+    background-color: #606c38;
+}
+
+.dropdown-menu {
+    --bs-dropdown-link-hover-bg: none;
+}
+
+
 /*----------------------NAVBAR----------------------*/
 .navbar {
     background-color: #606c38;
@@ -97,10 +106,6 @@ body {
 
 .nav-btn {
     color: #fefae0;
-}
-
-.nav-dropdown {
-    background-color: #606c38;
 }
 
 .logo-font {
@@ -167,12 +172,12 @@ body {
     transform: scaleX(-1);
 }
 
-.carouselImage img {
+.main-page-carousel-img {
   width: auto;
   max-height: 600px;
 }
 
-.carousel-caption {
+.main-carousel-caption {
     top: 50%;
     transform: translateY(-50%);
     bottom: initial;
@@ -497,25 +502,73 @@ h5.listing-info:nth-child(odd) {
     text-align: center;
 }
 
-.trail-carousel {
-    object-fit: cover;
+.trail-carousel-inner {
+    width: 95vw;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.carousel-font {
-    color: #fefae0;
-    font-size: 1em;
-}
-
-.carousel-caption {
+.trail-carousel-container {
     display: flex;
-    align-items: end;
-    justify-content: space-around;
+}
+
+.trail-img-container {
+    max-height: 600px;
+    height: 500px;
+    position: relative;
+}
+
+.trail-page-carousel-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    object-fit: cover;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+}
+
+.trail-carousel-font {
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #fefae0;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
+
+a.trail-carousel-font:hover {
+    color: #dda15e;
+}
+
+.trail-carousel-caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     bottom: 0;
     top: auto;
 }
 
+.trail-carousel-caption-sm {
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    top: auto;
+    display: none;
+}
+
+.trail-ratings-dropdown {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.trail-user-add-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
 .trail-info {
     text-align: center;
+    max-width: 95%;
+    margin: 1em auto;
 }
 
 .trail-attribute {
@@ -930,9 +983,28 @@ h5.listing-info:nth-child(odd) {
 }
 
 /*-------------------VIEW TRAILS--------------------*/
+@media (max-width:920px) {
+    .trail-img-container {
+        max-height: 58vh;
+    }
+}
 
+@media (max-width:768px) {
+    .trail-carousel-caption {
+        display: none;
+    }
+    .trail-carousel-caption-sm {
+        display: inline-block;
+    }
+}
 
-/*-----------------COLOR REFERENCE-------------------/
+@media (max-width:540px) {
+    .trail-img-container {
+        max-height: 35vh;
+    }
+}
+
+/*-----------------COLOR REFERENCE-------------------*/
 /*
 light green = color: #606c38;
 
