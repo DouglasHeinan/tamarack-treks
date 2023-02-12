@@ -87,6 +87,15 @@ body {
     --bs-dropdown-link-hover-bg: none;
 }
 
+.more-link {
+    color: #606c38;
+    text-transform: uppercase;
+    transition-duration: 0.5s;
+}
+
+.more-link:hover {
+    color: #283618;
+}
 
 /*----------------------NAVBAR----------------------*/
 .navbar {
@@ -493,6 +502,11 @@ h5.listing-info:nth-child(odd) {
 }
 
 /*-----------------VIEW TRAIL PAGE------------------*/
+.view-gear-body {
+    margin-top: 2em;
+    text-align: center;
+}
+
 .trail-title {
     font-size: 35px;
     font-weight: bold;
@@ -538,21 +552,18 @@ a.trail-carousel-font:hover {
     color: #dda15e;
 }
 
-.trail-carousel-caption {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    bottom: 0;
-    top: auto;
-    flex: 1 1 0;
-}
-
-.trail-carousel-caption-sm {
+.submit-photo {
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+.trail-carousel-caption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     bottom: 0;
     top: auto;
-    display: none;
 }
 
 .trail-ratings-dropdown {
@@ -565,6 +576,11 @@ a.trail-carousel-font:hover {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    bottom: 0.5em;
+}
+
+.trail-dropdown-bg {
+    background-color: transparent;
 }
 
 .trail-dropdown-btn {
@@ -581,7 +597,6 @@ a.trail-carousel-font:hover {
 }
 
 .trail-info-and-links {
-    text-align: center;
     max-width: 95%;
     margin: 1em auto;
 }
@@ -596,11 +611,26 @@ a.trail-carousel-font:hover {
     margin: 0.5em;
 }
 
-.trail-attribute {
+.trail-attribute-top {
     font-size: 22px;
     font-weight: bold;
     text-transform: uppercase;
     color: #bc6c25;
+}
+
+.trail-attribute-btm {
+    font-size: 22px;
+    text-transform: uppercase;
+    color: #bc6c25;
+}
+
+.trail-length-display, .trail-elevation-display, .trail-difficulty-display {
+    width: 30%;
+    margin: auto;
+}
+
+.admin-edit-button {
+    margin: 2em auto 1em;
 }
 
 
@@ -630,6 +660,14 @@ a.trail-carousel-font:hover {
     color: #fefae0;
     text-transform: uppercase;
     trasition-duration: 0.5s;
+}
+
+.description-lg {
+    display: block;
+}
+
+.description-sm {
+    display: none;
 }
 
 /*------------------MEDIA QUERIES-------------------*/
@@ -1015,16 +1053,7 @@ a.trail-carousel-font:hover {
     }
 }
 
-@media (max-width:768px) {
-    .trail-carousel-caption {
-        display: none;
-    }
-    .trail-carousel-caption-sm {
-        display: inline-block;
-    }
-}
-
-@media (min-width:541px) and (max-width:768px) {
+@media (min-width:541px) {
     .trail-difficulty-display, .trail-length-display {
         position: relative;
     }
@@ -1042,7 +1071,7 @@ a.trail-carousel-font:hover {
         background: #808080;
         position: absolute;
         bottom: 25%;
-        right: 0;
+        left: 100%;
         height: 50%;
         width: 1.5px;
     }
@@ -1061,12 +1090,21 @@ a.trail-carousel-font:hover {
         border-top: .5px solid #808080;
         border-bottom: .5px solid #808080;
     }
+    .trail-length-display, .trail-elevation-display, .trail-difficulty-display {
+        width: 80%;
+    }
 }
 
 /*--------------MEDIA VIEW GEAR/TRAILS--------------*/
 @media (max-width:768px) {
     .paragraph-spacing {
         width: 85%;
+    }
+    .description-lg {
+        display: none;
+    }
+    .description-sm {
+        display: block;
     }
 }
 
