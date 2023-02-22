@@ -1,0 +1,24 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container form-page-wrapper">
+    <h2 class="mb-4 mt-5 section-font-one">Reset your username.</h2>
+    <h6 class="body-font mb-3">Enter your new username below:</h6>
+    <form method="POST" action="{{ url_for('auth_bp.reset_username', user_id=user_id) }}">
+        {{ form.csrf_token }}
+        <div class="form-container">
+            <span class="form-font form-label">{{ form.username.label }}:</span>
+            {{ form.username }}
+        </div>
+        <input class="btn btn-sm user-button username-button" type="submit" value="Submit">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

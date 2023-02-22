@@ -79,7 +79,7 @@
                             <div>
                                 {% if current_user.is_authenticated %}
                                 <div class="dropdown-item">
-                                    <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="no-underline trail-carousel-font">
+                                    <a href="{{ url_for('trail_bp.add_trail_photo', trail_id=trail.id) }}" class="no-underline trail-carousel-font">
                                     Submit a photo
                                     </a>
                                 </div>
@@ -87,54 +87,6 @@
                             </div>
                         </div>
                     </div>
-<!--                    <div class="carousel-caption trail-carousel-caption">-->
-<!--                        {% if pic.community_rating != "Be the first to rate this photo!" %}-->
-<!--                        <p class="trail-carousel-font">Community rating: {{ pic.community_rating }}</p>-->
-<!--                        {% else %}-->
-<!--                        <p class="trail-carousel-font">{{ pic.community_rating }}</p>-->
-<!--                        {% endif %}-->
-<!--                        {% if current_user.is_authenticated %}-->
-<!--                        <div class="dropdown rating-btn">-->
-<!--                            <a class="btn btn-sm trail-dropdown-btn dropdown-toggle"-->
-<!--                               role="button"-->
-<!--                               id="photoRatingDropdown"-->
-<!--                               data-bs-toggle="dropdown"-->
-<!--                               aria-expanded="false"-->
-<!--                               href="#">-->
-<!--                                Rate this photo-->
-<!--                            </a>-->
-<!--                            <div class="dropdown-menu dropdown-bg" aria-labelledby="photoRatingDropdown">-->
-<!--                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='5') }}" class="dropdown-item trail-carousel-font">-->
-<!--                                    5-->
-<!--                                </a>-->
-<!--                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='4') }}" class="dropdown-item trail-carousel-font">-->
-<!--                                    4-->
-<!--                                </a>-->
-<!--                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='3') }}" class="dropdown-item trail-carousel-font">-->
-<!--                                    3-->
-<!--                                </a>-->
-<!--                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='2') }}" class="dropdown-item trail-carousel-font">-->
-<!--                                    2-->
-<!--                                </a>-->
-<!--                                <a href="{{ url_for('user_profile_bp.rate_photo', user_id=current_user.id, photo_id=pic.id, trail_id=trail.id, rating='1') }}" class="dropdown-item trail-carousel-font">-->
-<!--                                    1-->
-<!--                                </a>-->
-<!--                                <a href="{{ url_for('trail_bp.add_trail_pic', trail_id=trail.id) }}" class="dropdown-item trail-carousel-font">-->
-<!--                                Submit a photo-->
-<!--                                </a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        {% if pic.id not in user_rated_pic_ids %}-->
-<!--                        <p class="trail-carousel-font">You haven't rated this photo.</p>-->
-<!--                        {% else %}-->
-<!--                        {% for rated_pic in current_user.rated_pics %}-->
-<!--                        {% if rated_pic.photo_id == pic.id %}-->
-<!--                        <p class="trail-carousel-font">You rated this: {{ rated_pic.rating }}/5</p>-->
-<!--                        {% endif %}-->
-<!--                        {% endfor %}-->
-<!--                        {% endif %}-->
-<!--                        {% endif %}-->
-<!--                    </div>-->
                 </div>
                 {% endfor %}
             </div>
@@ -149,9 +101,16 @@
         </div>
     </div>
     <div class="text-center">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <p class="text-success mt-4"><strong>{{ message }}</strong></p>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="row trail-info-and-links">
             <div class="">
-                <a class="btn user-button trail-page-link" href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank">
+                <a class="btn user-button trail-page-link mt-3" href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank">
                     Directions to trailhead
                 </a>
             </div>
@@ -185,20 +144,12 @@
                 {% endif %}
             </div>
         </div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <p class="text-success"><strong>{{ message }}</strong></p>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
     </div>
     <div class="section-background-two">
         <div class="paragraph-spacing">
             <p class="body-font description-lg">{{ trail.description }}</p>
-            <p class="body-font description-sm">{{ trail.description[:400] }}<span><button type="button" class="btn btn-sm user-button" data-bs-toggle="modal" data-bs-target="#trailDescriptionModal"> ...more</button></span></p>
+            <p class="body-font description-sm">{{ trail.description[:400] }}<span><a class="more-link" data-bs-toggle="modal" data-bs-target="#trailDescriptionModal"> ...more</a></span></p>
         </div>
-
         <div class="modal fade" id="trailDescriptionModal" tabindex="-1" aria-labelledby="trailDescriptionLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -226,7 +177,7 @@
 </div>
 
 <!-------------Comments-------------->
-<div class="container-fluid comments-container">
+<div class="container-fluid ck-container">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
     <form method="POST" action="{{ url_for('trail_bp.view_trail', db_id=trail.id) }}">

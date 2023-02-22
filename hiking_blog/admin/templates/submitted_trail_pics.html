@@ -1,35 +1,43 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-{% for directory in user_trail_directories %}
-    {% if pics[directory] != [] %}
-        <h5>{{ directory }}</h5>
-    {% endif %}
-    <ul class="list-unstyled">
-        {% for pic in pics[directory] %}
-            <li>
-                <img src="{{ url_for('admin_bp.static_submitted_trail_pic',
-                date=date, user_trail=directory, pic=pic) }}"
-                     alt="{{ pic }}" class="img-thumbnail">
-                <div class="d-flex justify-content-between">
-                    <a href="{{ url_for('admin_bp.approve_submitted_trail_pic',
-                    date=date, user_trail=directory, pic=pic) }}"
-                       class="btn btn-primary btn-lg">
-                        Post
-                    </a>
-                    <a href="{{ url_for('admin_bp.save_for_appeal',
-                    date=date, user_trail=directory, pic=pic) }}"
-                       class="btn btn-warning btn-lg">
-                        Save
-                    </a>
-                    <a href="{{ url_for('admin_bp.delete_submitted_photo',
-                    date=date, user_trail=directory, pic=pic) }}"
-                       class="btn btn-danger btn-lg">
-                        Delete
-                    </a>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-{% endfor %}
+<div class="admin-body">
+    {% for directory in user_trail_directories %}
+        {% if pics[directory] != [] %}
+        <h5 class="admin-title">{{ directory }}</h5>
+        {% else %}
+        <h5 class="admin-section-title">No submitted photos remaining in this directory</h5>
+        <a class="btn admin-button mt-5" href="{{ url_for('admin_bp.admin_dashboard') }}">Return to admin dashboard</a>
+        {% endif %}
+        <ul class="list-unstyled">
+            {% for pic in pics[directory] %}
+                <li class="submitted-pic-list-entry">
+                    <h5 class="admin-section-title">Submission {{ pics[directory].index(pic) + 1 }}</h5>
+                    <div class="submitted-pic-container">
+                        <img src="{{ url_for('admin_bp.static_submitted_trail_pic',
+                        date=date, user_trail=directory, pic=pic) }}"
+                             alt="{{ pic }}" class="submitted-pic">
+                    </div>
+                    <div class="submit-buttons">
+                        <a href="{{ url_for('admin_bp.approve_submitted_trail_pic',
+                        date=date, user_trail=directory, pic=pic) }}"
+                           class="btn user-button btn-lg">
+                            Post
+                        </a>
+                        <a href="{{ url_for('admin_bp.save_for_appeal',
+                        date=date, user_trail=directory, pic=pic) }}"
+                           class="btn user-button btn-lg">
+                            Save
+                        </a>
+                        <a href="{{ url_for('admin_bp.delete_submitted_photo',
+                        date=date, user_trail=directory, pic=pic) }}"
+                           class="btn admin-button btn-lg">
+                            Delete
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</div>
 {% endblock %}

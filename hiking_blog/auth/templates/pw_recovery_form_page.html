@@ -1,0 +1,30 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container form-page-wrapper">
+    <h2 class="mb-4 mt-5 section-font-one">Forgot your password?</h2>
+    <h6 class="body-font mb-3">Submit your username and we'll send a verification email to walk you</h6>
+    <form method="POST" action="{{ url_for(form_action) }}">
+        {{ form.csrf_token }}
+        <div class="form-container">
+            <span class="form-font form-label">{{ form.username.label }}:</span>
+            {{ form.username }}
+        </div>
+        <input class="btn btn-sm user-button username-button" type="submit" value="Submit">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div>
+        <p class="body-font">
+            If you've forgotten your username
+            <a class="more-link" href="{{ url_for('contact_bp.username_recovery') }}">click here.</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

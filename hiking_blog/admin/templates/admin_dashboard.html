@@ -1,58 +1,60 @@
 {% extends 'layout.html' %}}
 
 {% block content %}
-<div class="mt-5">
-    {% if user.is_admin %}
-        <a class="btn background-color-two site-color-one" href="{{ url_for('admin_bp.add_admin') }}">
+{% if user.is_admin %}
+<div class="admin-body container">
+    <h3 class="admin-title">Welcome {{ user.username }}</h3>
+    <div class="admin-btn-group">
+        <a class="btn user-button" href="{{ url_for('admin_bp.add_admin') }}">
             Add new admin
         </a>
-        <a class="btn background-color-two site-color-one" href="{{ url_for('admin_bp.add_gear') }}">
-            Add new gear review
+        <a class="btn user-button" href="{{ url_for('admin_bp.add_gear') }}">
+            Add new gear
         </a>
-        <a class="btn background-color-two site-color-one" href="{{ url_for('admin_bp.add_trail') }}">
+        <a class="btn user-button" href="{{ url_for('admin_bp.add_trail') }}">
             Add a new trail
         </a>
-        <a class="btn background-color-two site-color-one" href="{{ url_for('admin_bp.dead_links') }}">
-            Dead links
+        <a class="btn admin-button" href="{{ url_for('admin_bp.dead_links') }}">
+            View dead links
         </a>
-    {% endif %}
-</div>
-
-<div class="container text-center mt-5">
-    <h2>Unvetted Pics</h2>
-
+    </div>
+    <div class="admin-unapproved-photo-group">
+        <h4 class="admin-section-title">Unapproved Photos</h4>
         {% if pics_by_day == [] %}
-            <div class="text-center">
-                <h5 class="mt-3">No submitted photos to approve</h5>
-            </div>
+        <p class="admin-section-content">No submitted photos to approve</p>
         {% else %}
             {% for date in pics_by_day %}
-                <a href="{{ url_for('admin_bp.submitted_trail_pics', date=date) }}" ><h4>{{ date }}</h4></a>
+            <a class="admin-link-text" href="{{ url_for('admin_bp.submitted_trail_pics', date=date) }}" ><h4>{{ date }}</h4></a>
             {% endfor %}
         {% endif %}
-
-    <div class="mt-5">
-        <h2>Unapproved New Usernames</h2>
+    </div>
+    <div class="admin-unapproved-usernames-group">
+        <h4 class="admin-section-title">Unapproved New Usernames</h4>
         {% if new_users == [] %}
-            <div class="text-center">
-                <h5 class="mt-3">No new usernames to approve</h5>
-            </div>
+        <p class="admin-section-content">No new usernames to approve</p>
         {% else %}
-        <ul class="unstyled">
-            {% for user in new_users %}
-                <li class="mt-2">
-                    <span>{{ user.username }}   </span>
-                    <span><a class="btn btn-success" href="{{ url_for('admin_bp.approve_username', user_id=user.id) }}">
+        <ul class="list-unstyled">
+        {% for user in new_users %}
+            <li class="submitted-user-name-container">
+                <span class="submitted-username">{{ user.username }}</span>
+                <span class="submitted-username-button">
+                    <a class="btn user-button btn-sm" href="{{ url_for('admin_bp.approve_username', user_id=user.id) }}">
                         Approve
-                    </a></span>
-                    <span><a class="btn btn-danger" href="{{ url_for('admin_bp.reject_username', user_id=user.id) }}">
+                    </a>
+                </span>
+                <span class="submitted-username-button">
+                    <a class="btn admin-button btn-sm" href="{{ url_for('admin_bp.reject_username', user_id=user.id) }}">
                         Reject
-                    </a></span>
-                </li>
-            {% endfor %}
+                    </a>
+                </span>
+            </li>
+        {% endfor %}
         </ul>
         {% endif %}
     </div>
-
 </div>
+{% else %}
+<h2>You are not authorized to view this page</h2>
+<a class="btn user-button" href="{{ url_for('home_bp.home') }}">Exit</a>
+{% endif %}
 {% endblock %}}

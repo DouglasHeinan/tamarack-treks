@@ -22,6 +22,13 @@ body {
     color: #fefae0;
     text-transform: uppercase;
     trasition-duration: 0.5s;
+    border-color: #ff4444;
+    border-width: 2px
+}
+
+.admin-button:hover {
+    background-color: #ff4444;
+    color: #fefae0;
 }
 
 .admin-text {
@@ -29,6 +36,10 @@ body {
     text-transform: uppercase;
     transition-duration: 0.5s;
     display: inline-block;
+}
+
+.centered-body {
+    text-align: center;
 }
 
 .no-underline, no-underline:hover {
@@ -88,13 +99,14 @@ body {
 }
 
 .more-link {
-    color: #606c38;
+    color: #bc6c25;
     text-transform: uppercase;
     transition-duration: 0.5s;
 }
 
 .more-link:hover {
-    color: #283618;
+    color: #dda15e;
+    cursor: pointer;
 }
 
 /*----------------------NAVBAR----------------------*/
@@ -643,10 +655,6 @@ a.trail-carousel-font:hover {
     color: #bc6c25;
 }
 
-.comments-container {
-    margin-top: 2em;
-}
-
 .comment-submit-btn {
     margin-top: 1em;
 }
@@ -668,6 +676,194 @@ a.trail-carousel-font:hover {
 
 .description-sm {
     display: none;
+}
+
+/*-----------------ADMIN DASHBOARD------------------*/
+.admin-body {
+    text-align: center;
+    margin: 1em auto 2em;
+}
+
+.admin-title {
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #bc6c25;
+    margin-bottom: 1em;
+}
+
+.admin-btn-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding-bottom: 1.5em;
+    border-bottom: solid 0.5px #080808;
+}
+
+.admin-btn-group .btn {
+    width: 33%;
+    margin: 0.5em auto;
+}
+
+.admin-unapproved-photo-group {
+    margin: 2em auto 2em;
+    padding-bottom: 1.5em;
+    border-bottom: solid 0.5px #080808;
+}
+
+.admin-unapproved-usernames-group {
+    padding-bottom: 1em;
+}
+
+.admin-section-title {
+    font-size: 25px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #bc6c25;
+    margin-bottom: 0.75em;
+}
+
+.admin-section-content {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #bc6c25;
+}
+
+.admin-link-text {
+    color: #283618;
+}
+
+.admin-link-text:hover {
+    color: #606c38;
+}
+
+.submitted-username {
+    color: #283618;
+    font-weight: bold;
+}
+
+.submitted-user-name-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5em;
+}
+
+.submitted-username, .submitted-username-button {
+    width: 25%;
+    margin: 0 3px;
+}
+
+.submitted-username-button .btn {
+    width: 100%;
+}
+
+/*-------------------SUBMITTED PIC------------------*/
+.submitted-pic-list-entry {
+    max-width: 90vw;
+    margin: 0 auto 2em;
+    border-bottom: .5px solid #808080;
+}
+
+.submitted-pic-container {
+    margin-bottom: 1em;
+}
+
+.submitted-pic {
+    width: 100%;
+    max-height: 80vh;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.submit-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1em;
+}
+
+/*--------------------DEAD LINKS--------------------*/
+.dead-link-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1em auto;
+    width: 95vw;
+}
+
+.dead-link-left {
+    display: flex;
+    justify-content: center;
+    width: 60%;
+}
+
+.dead-link-right {
+    display: flex;
+    justify-content: space-around;
+    width: 35%;
+}
+
+.dead-link-info .admin-link-text {
+    margin-right:
+}
+
+.dead-link-item-name {
+    color: #283618;
+    font-weight: bold;
+    margin-right: 0.5em;
+}
+
+/*--------------------FORM PAGES--------------------*/
+.ck-container {
+    margin-top: 2em;
+    max-width: 768px;
+}
+
+.form-container {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.form-data-pairing {
+    margin-bottom: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/*----------------USERNAME FORM PAGE----------------*/
+.form-page-wrapper {
+    text-align: center;
+}
+
+.form-title {
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #bc6c25;
+    margin-bottom: 1em;
+}
+
+.form-font {
+    color: #283618;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.form-label {
+    margin-right: 0.5em;
+    margin-bottom: 0;
+}
+
+.username-button {
+    margin: 0.5em auto 1.5em;
+}
+
+/*--------------------LOGIN FORM--------------------*/
+.login-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /*------------------MEDIA QUERIES-------------------*/
@@ -846,12 +1042,6 @@ a.trail-carousel-font:hover {
     }
 }
 
-@media (min-width: 768px) {
-    .listing-pic-container {
-        margin-right: 2em;
-    }
-}
-
 @media (max-width:768px) and (min-width:581px) {
     .listing-data {
         max-width: 66%;
@@ -861,6 +1051,12 @@ a.trail-carousel-font:hover {
 @media (max-width:768px) {
     .listing-info {
         font-size: 17px;
+    }
+}
+
+@media (min-width: 580px) {
+    .listing-pic-container {
+        margin-right: 2em;
     }
 }
 
@@ -1108,7 +1304,68 @@ a.trail-carousel-font:hover {
     }
 }
 
-/*-----------------COLOR REFERENCE-------------------*/
+/*--------------MEDIA ADMIN DASHBOARD---------------*/
+@media (max-width:1100px) {
+    .admin-btn-group .btn {
+        width: 50%;
+        margin: 0.5em auto;
+    }
+}
+
+/*-----------------MEDIA DEAD LINKS-----------------*/
+@media (max-width:768px) {
+    .dead-link-info {
+        flex-direction: column;
+        margin-top: 2em;
+        padding-bottom: 1em;
+        border-bottom: .5px solid #808080;
+    }
+    .dead-link-left {
+        flex-direction: column;
+    }
+    .dead-link-right {
+        margin-top: 1em;
+        flex-direction: column;
+        width: 50%;
+    }
+    .dead-link-right .btn {
+        margin: 0.5em auto;
+        width: 75%;
+    }
+}
+
+@media (max-width:540px) {
+    .dead-link-right .btn {
+        width: 100%;
+    }
+}
+
+/*-----------------MEDIA FORM PAGES-----------------*/
+@media (max-width:1100px) {
+    .form-container {
+        width: 60%;
+    }
+}
+
+@media (max-width:768px) {
+    .form-container {
+        width: 80%;
+    }
+}
+
+@media (max-width:540px) {
+    .form-container {
+        width: 50%;
+    }
+    .form-data-pairing {
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 2em;
+    }
+}
+
+
+/*----------------COLOR REFERENCE-------------------*/
 /*
 light green = color: #606c38;
 

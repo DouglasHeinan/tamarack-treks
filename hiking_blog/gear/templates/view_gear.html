@@ -54,7 +54,8 @@
 <div class="container-fluid">
     <div class="section-background-two">
         <div class="paragraph-spacing">
-            <p class="body-font">{{ gear.description }}</p>
+            <p class="body-font description-lg">{{ gear.description }}</p>
+            <p class="body-font description-sm">{{ gear.description[:400] }}<span><a class="more-link" data-bs-toggle="modal" data-bs-target="#trailDescriptionModal"> ...more</a></span></p>
         </div>
     </div>
     <div class="company-names-and-links">
@@ -65,7 +66,7 @@
                     {{ company }}:
                 </h6>
                 <a class="btn user-button price-button" href="{{ info[company]['link'] }}" target="_blank">
-                    ${{ info[company]["price"] }}
+                    {{ info[company]["price"] }}
                 </a>
             </div>
             {% endif %}
@@ -81,10 +82,9 @@
     {% endif %}
 
 <!-------------Comments-------------->
-<div class="container-fluid comments-container">
+<div class="container-fluid ck-container">
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='comment_text') }}
-    {# wtf.quick_form(form, novalidate=True, button_map={"submit_button": "primary"}) #}
     <form method="POST" action="{{ url_for('gear_bp.view_gear', db_id=gear.id) }}">
         {{ form.csrf_token }}
         {{ form.comment_text.label }}

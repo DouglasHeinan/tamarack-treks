@@ -53,8 +53,9 @@ def view_gear(db_id):
 
 @gear_bp.route("/gear/edit_comment/<comment_id>", methods=["GET", "POST"])
 def edit_gear_comment(comment_id):
-    """Allows a user to edit one of their own comments on a piece of gear from the database."""
-    gear_id = request.args["gear_id"]
+    """Allows a user to edit one of
+     their own comments on a piece of gear from the database."""
+    db_id = request.args["gear_id"]
     comment = GearComments.query.get(comment_id)
     form = CommentForm(
         comment_text=comment.text
@@ -63,11 +64,11 @@ def edit_gear_comment(comment_id):
         comment.text = form.comment_text.data
         db.session.commit()
         form.comment_text.data = ""
-        return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
-    return render_template("form_page.html",
+        return redirect(url_for("gear_bp.view_gear", db_id=db_id))
+    return render_template("edit_gear_comment_form_page.html",
                            form=form,
-                           form_header="Edit Comment",
-                           form_sub_header="Edit your comment here.",
+                           comment_id=comment_id,
+                           db_id=db_id,
                            text_box="comment_text")
 
 

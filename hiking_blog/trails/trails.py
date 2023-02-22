@@ -1,7 +1,7 @@
 """Contains the functionality for viewing trail info and creating trail entries in the database."""
 from flask import render_template, redirect, url_for, flash, Blueprint, request, send_from_directory
 from flask_login import current_user, login_required
-from hiking_blog.forms import CommentForm, AddTrailPicForm
+from hiking_blog.forms import CommentForm, AddTrailPhotoForm
 from hiking_blog.models import Trails, TrailComments, TrailPictures, RatedPhoto, db
 from hiking_blog.admin.admin import allowed_file, create_initial_trail_directory, delete_comment, NO_TAGS
 from hiking_blog.auth.auth import admin_only
@@ -61,20 +61,20 @@ def view_trail(db_id):
 @trail_bp.route("/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
 def edit_trail_comment(comment_id):
     """Allows a user to edit one of their own comments on a piece of gear from the database."""
-    trail_id = request.args["trail_id"]
+    db_id = request.args["trail_id"]
     comment = TrailComments.query.get(comment_id)
     form = CommentForm(
         comment_text=comment.text
     )
     if form.validate_on_submit():
-        comment.text = form.comment_text.data
+        comment.text = re.sub(NO_TAGS, '', form.comment_text.data)
         db.session.commit()
         form.comment_text.data = ""
-        return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
-    return render_template("form_page.html",
+        return redirect(url_for("trail_bp.view_trail", db_id=db_id))
+    return render_template("edit_trail_comment_form_page.html",
                            form=form,
-                           h_two="Edit Comment",
-                           p_tag="Edit your comment here.",
+                           comment_id=comment_id,
+                           db_id=db_id,
                            text_box="comment_text")
 
 
@@ -101,17 +101,14 @@ def admin_delete_trail_comment(comment_id):
 
 @trail_bp.route("/<int:trail_id>/add_trail_pic", methods=["GET", "POST"])
 @login_required
-def add_trail_pic(trail_id):
+def add_trail_photo(trail_id):
     """Adds a new trail picture to the database."""
-    form = AddTrailPicForm()
+    form = AddTrailPhotoForm()
     if form.validate_on_submit():
         message, result = check_file(form, trail_id)
         flash(message)
         return result
-    return render_template("form_page.html",
-                           form=form,
-                           form_header="Add New Trail Pictures",
-                           form_sub_header="Share some photos of this trail!")
+    return render_template("add_trail_photo_form_page.html", form=form, trail_id=trail_id)
 
 
 @trail_bp.route("/trails/static/dev_pics/<file_name>")

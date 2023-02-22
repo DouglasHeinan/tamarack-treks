@@ -3,7 +3,7 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, send_from_directory, request
 from flask_login import current_user, login_required
 from hiking_blog.auth.auth import admin_only
-from hiking_blog.forms import AddAdminForm, AddTrailForm, AddNewTrailPicForm, GearForm, CommentForm
+from hiking_blog.forms import UsernameForm, AddTrailForm, AddNewTrailPhotoForm, GearForm, CommentForm
 from hiking_blog.models import User, Trails, Gear, TrailPictures
 from hiking_blog.contact import send_async_email, send_email, send_username_rejected_notification, EMAIL
 from hiking_blog.db import db
@@ -58,19 +58,23 @@ def add_admin():
     giving the newly appointed admin site-runner privileges.
     """
 
-    form = AddAdminForm()
+    form = UsernameForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if not user:
             flash("That username does not exist. Please try again.")
             return redirect(url_for("auth_bp.login"))
+        if user.is_admin:
+            flash("User already has admin status")
+            return redirect(url_for("admin_bp.add_admin"))
         user.is_admin = True
         db.session.commit()
         return redirect(url_for("admin_bp.admin_dashboard"))
-    return render_template("form_page.html",
+    return render_template("username_form_page.html",
                            form=form,
                            form_header="Add Admin",
-                           form_sub_header="Enter the username of the user to be given admin status:")
+                           form_sub_header="Enter the username of the user to be given admin status:",
+                           form_action="admin_bp.add_admin")
 
 
 @admin_bp.route("/admin/add_trail", methods=["GET", "POST"])
@@ -92,11 +96,8 @@ def add_trail():
         db.session.add(new_hiking_trail)
         db.session.commit()
         trail_id = new_hiking_trail.id
-        return redirect(url_for("admin_bp.add_initial_trail_pics", trail_id=trail_id))
-    return render_template("form_page.html",
-                           form=form,
-                           form_header="Add a new trail description to the database",
-                           form_sub_header="")
+        return redirect(url_for("admin_bp.add_initial_trail_photos", trail_id=trail_id))
+    return render_template("trail_form_page.html", form=form)
 
 
 @admin_bp.route("/admin/edit_trail/<int:trail_id>", methods=["GET", "POST"])
@@ -122,15 +123,12 @@ def edit_trail(trail_id):
         update_trail_entry(trail, form)
         db.session.commit()
         return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
-    return render_template("form_page.html",
-                           form=form,
-                           form_header="Edit this trail description.",
-                           form_sub_header="")
+    return render_template("edit_trail_form_page.html", form=form, trail_id=trail_id)
 
 
 @admin_bp.route("/<int:trail_id>/add_initial_trail_pics", methods=["GET", "POST"])
 @login_required
-def add_initial_trail_pics(trail_id):
+def add_initial_trail_photos(trail_id):
     """
     Creates three new files to store newly added trail images upon admin creation of a new trail entry.
 
@@ -139,7 +137,7 @@ def add_initial_trail_pics(trail_id):
     submitted to the admin for review as with all user submitted images.
     """
 
-    form = AddNewTrailPicForm()
+    form = AddNewTrailPhotoForm()
     if form.validate_on_submit():
         file_one = form.filename_one.data
         file_two = form.filename_two.data
@@ -148,10 +146,7 @@ def add_initial_trail_pics(trail_id):
         flash(message)
         return result
     else:
-        return render_template("form_page.html",
-                               form=form,
-                               form_header="Add New Trail Pictures",
-                               form_sub_header="Share some photos of this trail!")
+        return render_template("add_initial_trail_photos.html", form=form, trail_id=trail_id)
 
 
 @admin_bp.route("/admin/add_gear", methods=["GET", "POST"])
@@ -174,10 +169,7 @@ def add_gear():
         db.session.commit()
         gear_id = new_gear_description.id
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
-    return render_template("form_page.html",
-                           form=form,
-                           form_header="Add a new gear description to the database",
-                           form_sub_header="")
+    return render_template("gear_form_page.html", form=form)
 
 
 @admin_bp.route("/admin/edit_gear/<int:gear_id>", methods=["GET", "POST"])
@@ -202,10 +194,7 @@ def edit_gear(gear_id):
         update_gear_entry(gear, form)
         db.session.commit()
         return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
-    return render_template("form_page.html",
-                           form=form,
-                           form_header="Edit this gear description.",
-                           form_sub_header="")
+    return render_template("edit_gear_form_page.html", form=form, gear_id=gear_id)
 
 
 @admin_bp.route("/admin/dead_links/")
@@ -444,7 +433,6 @@ def check_files(trail_id, file_one, file_two, file_three):
     file_one, file_two, file_three : file
         The names of image files input by the user
     """
-
     message = None
     if file_one.filename == "" or file_two.filename == "" or file_three.filename == "":
         message = "No file selected."
@@ -604,11 +592,7 @@ def delete_comment(comment, db_id, page, admin_id):
     form = CommentForm(
         comment_text=comment.text
     )
-    next_page = render_template("form_page.html",
-                                form=form,
-                                h_two="Admin Edit Comment",
-                                p_tag="Edit this comment, admin:",
-                                text_box="comment_text")
+    next_page = render_template("delete_comment_form_page.html", form=form, text_box="comment_text")
     if form.validate_on_submit():
         commenter = User.query.get(admin_id)
         comment.deleted_by = commenter.username
@@ -661,7 +645,7 @@ def update_gear_entry(gear, form):
     gear.dimensions = form.dimensions.data
     gear.img = form.img.data
     gear.rating = form.rating.data
-    gear.description = form.description.data
+    gear.description = re.sub(NO_TAGS, '', form.description.data)
     gear.gear_trail = "Gear"
     gear.moosejaw_url = form.moosejaw_url.data
     gear.moosejaw_price = form.moosejaw_price.data
@@ -675,16 +659,19 @@ def update_gear_entry(gear, form):
     gear.backcountry_price = form.backcountry_price.data
     gear.backcountry_link_dead = False
     gear.backcountry_out_of_stock = False
+    gear.keywords = form.keywords.data
 
 
 def update_trail_entry(trail, form):
     """Activated during the edit_trail and add_trail functions, assigns all values in the database."""
     trail.name = form.name.data
     trail.description = re.sub(NO_TAGS, '', form.description.data)
+    trail.gear_trail = "Trail"
     trail.latitude = form.latitude.data
     trail.longitude = form.longitude.data
     trail.hiking_dist = form.hiking_distance.data
     trail.elev_change = form.elevation_change.data
+    trail.difficulty = form.difficulty.data
 
 
 def populate_gear_form(gear):

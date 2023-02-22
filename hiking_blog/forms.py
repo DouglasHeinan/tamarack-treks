@@ -2,9 +2,9 @@
 
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import DataRequired, URL, Length, Email
-from wtforms import StringField, SubmitField, SelectField, PasswordField
+from wtforms import StringField, SelectField, PasswordField
 
 GEAR_CATEGORIES = ["Tents", "Sleeping Bags", "Trekking Poles", "Furniture", "Kitchen"]
 
@@ -20,7 +20,6 @@ class SignUpForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=50)])
     verify_password = PasswordField("Verify Password", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
 
 
 class LoginForm(FlaskForm):
@@ -32,38 +31,22 @@ class LoginForm(FlaskForm):
 
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=50)])
-    submit_button = SubmitField("Submit")
 
 
 class UsernameRecoveryForm(FlaskForm):
     """A class used for reminding a user of their username."""
     email = StringField("Email", validators=[DataRequired(), Email()])
-    submit_button = SubmitField("Submit")
 
 
-class ChangeUsernameForm(FlaskForm):
-    """A class used for creating a username reset form."""
+class UsernameForm(FlaskForm):
+    """A class used for creating a form that resets a username, recovers a password, or add an admin."""
     username = StringField("Username", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
-
-
-class PasswordRecoveryForm(FlaskForm):
-    """A class used for creating a password recovery form."""
-    username = StringField("Username", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
 
 
 class ChangePasswordForm(FlaskForm):
     """A class used for creating a password reset form."""
     new_password = PasswordField("New Password", validators=[DataRequired(), Length(min=8, max=50)])
-    verify_password = PasswordField("New Password", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
-
-
-class AddAdminForm(FlaskForm):
-    """A class used for creating a form to add an admin."""
-    username = StringField("Username:", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
+    verify_password = PasswordField("Verify Password", validators=[DataRequired()])
 
 
 class AddTrailForm(FlaskForm):
@@ -77,24 +60,21 @@ class AddTrailForm(FlaskForm):
     description = CKEditorField("Description", validators=[DataRequired()])
     latitude = StringField("Latitude", validators=[DataRequired()])
     longitude = StringField("Longitude", validators=[DataRequired()])
-    hiking_distance = StringField("Hiking Distance in Miles", validators=[DataRequired()])
-    elevation_change = StringField("Elevation Change", validators=[DataRequired()])
+    hiking_distance = StringField("Hiking Distance", validators=[DataRequired()])
+    elevation_change = StringField("Elev Change", validators=[DataRequired()])
     difficulty = SelectField("Difficulty", choices=["Easy", "Medium", "Hard"], validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
 
 
-class AddTrailPicForm(FlaskForm):
+class AddTrailPhotoForm(FlaskForm):
     """A class for a form that submits a new image file."""
-    filename = FileField("File", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
+    filename = FileField("File", validators=[FileRequired()])
 
 
-class AddNewTrailPicForm(FlaskForm):
+class AddNewTrailPhotoForm(FlaskForm):
     """A class for a form that submits a three new image files."""
-    filename_one = FileField("File", validators=[DataRequired()])
-    filename_two = FileField("File", validators=[DataRequired()])
-    filename_three = FileField("File", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
+    filename_one = FileField("File", validators=[FileRequired()])
+    filename_two = FileField("File", validators=[FileRequired()])
+    filename_three = FileField("File", validators=[FileRequired()])
 
 
 class ContactForm(FlaskForm):
@@ -103,7 +83,6 @@ class ContactForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     subject = StringField("Subject", validators=[DataRequired()])
     message = CKEditorField("Message", validators=[DataRequired()])
-    submit_button = SubmitField("Submit")
 
 
 class GearForm(FlaskForm):
@@ -113,21 +92,21 @@ class GearForm(FlaskForm):
     When submitted, the information provided will be added to the gear table of the database.
     """
 
-    name = StringField("Name of Piece", validators=[DataRequired()])
-    category = SelectField("Gear Category", choices=GEAR_CATEGORIES, validators=[DataRequired()])
+    name = StringField("Name", validators=[DataRequired()])
+    category = SelectField("Category", choices=GEAR_CATEGORIES, validators=[DataRequired()])
     msrp = StringField("MSRP", validators=[DataRequired()])
-    weight = StringField("Item Weight", validators=[DataRequired()])
-    dimensions = StringField("Item Dimensions", validators=[DataRequired()])
+    weight = StringField("Weight", validators=[DataRequired()])
+    dimensions = StringField("Dimensions", validators=[DataRequired()])
     img = StringField("Image URL", validators=[DataRequired(), URL()])
     rating = StringField("Gear Rating", validators=[DataRequired()])
     description = CKEditorField("Review", validators=[DataRequired()])
-    moosejaw_url = StringField("Moosejaw Link", validators=[])
-    moosejaw_price = StringField("Moosejaw Price", validators=[])
+    moosejaw_url = StringField("MJ Link", validators=[])
+    moosejaw_price = StringField("MJ Price", validators=[])
     rei_url = StringField("REI Link", validators=[])
     rei_price = StringField("REI Price", validators=[])
-    backcountry_url = StringField("Backcountry Link", validators=[])
-    backcountry_price = StringField("Backcountry Price", validators=[])
-    submit_button = SubmitField("Submit")
+    backcountry_url = StringField("BC Link", validators=[])
+    backcountry_price = StringField("BC Price", validators=[])
+    keywords = StringField("Keywords", validators=[])
 
 
 class CommentForm(FlaskForm):

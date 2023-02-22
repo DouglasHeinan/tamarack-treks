@@ -1,0 +1,52 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container form-page-wrapper">
+    <h2 class="mb-4 mt-5 section-font-one">Edit trail entry.</h2>
+    <h6 class="body-font mb-3">Make changes to this trail entry's information</h6>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='description') }}
+    <form class="mb-5" method="POST" action="{{ url_for('admin_bp.edit_trail', trail_id=trail_id) }}">
+        {{ form.csrf_token }}
+        <div class="form-container">
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.name.label }}:</span>
+                {{ form.name }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.latitude.label }}:</span>
+                {{ form.latitude }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.longitude.label }}:</span>
+                {{ form.longitude }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.hiking_distance.label }}:</span>
+                {{ form.hiking_distance }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.elevation_change.label }}:</span>
+                {{ form.elevation_change }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.difficulty.label }}:</span>
+                {{ form.difficulty }}
+            </div>
+        </div>
+        <div class="container-fluid ck-container mb-3">
+            <span class="form-font form-label">{{ form.description.label }}:</span>
+            {{ form.description }}
+        </div>
+        <input class="btn btn-sm user-button username-button" type="submit" value="Submit">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container form-page-wrapper">
+    <h2 class="mb-4 mt-5 section-font-one">Admin Delete Comment</h2>
+    <h6 class="body-font mb-3">Edit this comment, admin</h6>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='comment_text') }}
+    <form method="POST">
+        {{ form.csrf_token }}
+        <div class="form-container">
+            <span class="form-font form-label">{{ form.comment_text.label }}:</span>
+            {{ form.comment_text }}
+        </div>
+        <input class="btn user-button comment-submit-btn" type="submit" value="Submit">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

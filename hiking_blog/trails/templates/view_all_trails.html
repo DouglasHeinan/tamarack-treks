@@ -33,11 +33,13 @@
                                         <h5 class="listing-info">{{trail.elev_change}} ft.</h5>
                                     </div>
                                 </div>
-                                {% if trail.description|length > 99 %}
-                                <p class="mt-3 listing-description">{{ trail.description[:100] }}...</p>
-                                {% else %}
-                                <p class="mt-3 listing-description">{{ trail.description }}</p>
-                                {% endif %}
+                                <div class="listing-description">
+                                    {% if trail.description|length > 99 %}
+                                    <p class="mt-3 listing-description-text">{{ trail.description[:100] }}...</p>
+                                    {% else %}
+                                    <p class="mt-3 listing-description-text">{{ trail.description }}</p>
+                                    {% endif %}
+                                </div>
                             </div>
                         </a>
                     </div>

@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="container form-page-wrapper">
+    <h2 class="mb-4 mt-5 section-font-one">Login</h2>
+    <h6 class="body-font mb-3">Sign in to view your profile</h6>
+    <form class="mb-5" method="POST" action="{{ url_for('auth_bp.login') }}">
+        {{ form.csrf_token }}
+        <div class="form-container">
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.username.label }}:</span>
+                {{ form.username }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.password.label }}:</span>
+                {{ form.password }}
+            </div>
+        </div>
+        <input class="btn btn-sm user-button username-button" type="submit" value="Submit">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if message != None %}
+            <p class="text-danger"><strong>{{ message }}</strong></p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+<div class="login-options">
+    <div>
+        <p class="body-font">
+            Not yet a member?
+            <a class="more-link" href="{{ url_for('auth_bp.sign_up') }}">Sign Up</a>
+        </p>
+    </div>
+    <div>
+        <p class="body-font">
+            Forgot your username or password?
+            <a class="more-link" href="{{ url_for('auth_bp.password_recovery') }}">Click here.</a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="container form-page-wrapper">
+    <h2 class="mb-4 mt-5 section-font-one">Add new trail</h2>
+    <h6 class="body-font mb-3">Add a new trail entry to the database</h6>
+    <form class="mb-5" method="POST" enctype="multipart/form-data" action="{{ url_for('admin_bp.add_initial_trail_photos', trail_id=trail_id) }}">
+        {{ form.csrf_token }}
+        <div class="form-container">
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.filename_one.label }}:</span>
+                {{ form.filename_one }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.filename_two.label }}:</span>
+                {{ form.filename_two }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.filename_three.label }}:</span>
+                {{ form.filename_three }}
+            </div>
+        </div>
+        <input class="btn btn-sm user-button username-button" type="submit" value="Submit">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

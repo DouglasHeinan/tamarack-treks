@@ -1,0 +1,84 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container form-page-wrapper">
+    <h2 class="mb-4 mt-5 section-font-one">Edit gear entry</h2>
+    <h6 class="body-font mb-3">Make changes to this gear entry's information</h6>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='description') }}
+    <form class="mb-5" method="POST" action="{{ url_for('admin_bp.edit_gear', gear_id=gear_id) }}">
+        {{ form.csrf_token }}
+        <div class="form-container">
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.name.label }}:</span>
+                {{ form.name }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.category.label }}:</span>
+                {{ form.category }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.msrp.label }}:</span>
+                {{ form.msrp }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.weight.label }}:</span>
+                {{ form.weight }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.dimensions.label }}:</span>
+                {{ form.dimensions }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.img.label }}:</span>
+                {{ form.img }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.rating.label }}:</span>
+                {{ form.rating }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.moosejaw_url.label }}:</span>
+                {{ form.moosejaw_url }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.moosejaw_price.label }}:</span>
+                {{ form.moosejaw_price }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.rei_url.label }}:</span>
+                {{ form.rei_url }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.rei_price.label }}:</span>
+                {{ form.rei_price }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.backcountry_url.label }}:</span>
+                {{ form.backcountry_url }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.backcountry_price.label }}:</span>
+                {{ form.backcountry_price }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.keywords.label }}:</span>
+                {{ form.keywords }}
+            </div>
+        </div>
+        <div class="container-fluid ck-container mb-3">
+            <span class="form-font form-label">{{ form.description.label }}:</span>
+            {{ form.description }}
+        </div>
+        <input class="btn btn-sm user-button username-button" type="submit" value="Submit">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}
