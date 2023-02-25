@@ -17,6 +17,10 @@ body {
 }
 
 /*---------------SITE WIDE UTILITIES----------------*/
+.page-wrapper {
+    text-align: center;
+}
+
 .admin-button {
     background-color: #ff4444;
     color: #fefae0;
@@ -71,6 +75,12 @@ body {
     color: #283618;
 }
 
+.small-section-font {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    color: #bc6c25;
+}
+
 .background-color-white {
     background-color: #ffffff;
 }
@@ -82,6 +92,12 @@ body {
 .body-font {
     color: #283618;
     line-height: 1.75em;
+}
+
+.bold-body-font {
+    color: #283618;
+    line-height: 1.75em;
+    font-weight: bold;
 }
 
 .paragraph-spacing {
@@ -107,6 +123,11 @@ body {
 .more-link:hover {
     color: #dda15e;
     cursor: pointer;
+}
+
+::placeholder {
+    color: #283618;
+    opacity: 0.3;
 }
 
 /*----------------------NAVBAR----------------------*/
@@ -414,6 +435,40 @@ h5.listing-info:nth-child(odd) {
     justify-content: center;
 }
 
+/*-------------------SEARCH PAGE--------------------*/
+.search-form {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.no-results-font {
+    text-align: center;
+    font-size: 2em;
+    margin-top: 1em;
+    color: #283618;
+    text-transform: uppercase;
+}
+
+.search-field {
+    margin-right: 0.5em;
+    border-radius: 0.375em;
+    border: 0.5px solid #dda15e;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    color: #283618;
+}
+
+.search-field:focus {
+    outline: none;
+}
+
+.search-listing-container {
+    display: flex;
+    padding-bottom: 3em;
+}
+
 /*------------------VIEW GEAR PAGE------------------*/
 .gear-img {
     object-fit: contain;
@@ -613,6 +668,12 @@ a.trail-carousel-font:hover {
     margin: 1em auto;
 }
 
+.photo-submitted-msg {
+    margin: 1em auto 0;
+    max-width: 75%;
+    text-align: center;
+}
+
 .trail-info {
     display: flex;
     justify-content: space-around;
@@ -676,6 +737,122 @@ a.trail-carousel-font:hover {
 
 .description-sm {
     display: none;
+}
+
+/*-------------USER PROFILE DASHBOARD---------------*/
+.profile-home-sections {
+    display: flex;
+    flex-direction: column;
+    align-item: flex-start;
+    justify-content: space-around;
+    max-width: 95%;
+    margin: 1em auto;
+    text-align: left;
+}
+
+.profile-home-section {
+    padding: 1em 0;
+    border-bottom: 1px ridge #808080;
+}
+
+.profile-home-section-title {
+    color: #283618;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.5em;
+    transition-duration: 0.5s;
+    line-height: 2em;
+}
+
+.profile-recent-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.favorite-card {
+    margin: 0 0.5em;
+    width: 35%;
+}
+
+.recent-photo-container {
+    width: 35%;
+}
+
+.recent-photo-link {
+    cursor: pointer;
+}
+
+.recent-photo-thumb {
+    height: 60vh;
+    width: 95%;
+    object-fit: cover;
+    border-radius: 8px;
+    border-style: solid;
+    border-color: #bc6c25;
+    border-width: thin;
+}
+
+
+
+
+
+.comment-group {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    height: 400px;
+    justify-content: space-around;
+    margin: 1em auto 0;
+}
+
+.comment-parent-pairing {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    max-width: 45%
+}
+
+.comment-parent-post {
+    margin-left: 1em;
+    padding_top: 0;
+}
+
+.comment-parent-pairing p {
+    margin-bottom: 0.25rem;
+}
+
+
+
+.profile-avatar-section {
+    margin-top: 1em;
+    width: 80%;
+    margin: 1em auto 2em;
+}
+
+.avatar-title-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.profile-avatar-section-title {
+    color: #283618;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.5em;
+    transition-duration: 0.5s;
+    line-height: 2em;
+}
+
+.profile-avatar {
+    width: 15%;
+}
+
+.avatar-button-container {
+    text-align: center;
 }
 
 /*-----------------ADMIN DASHBOARD------------------*/
@@ -761,6 +938,7 @@ a.trail-carousel-font:hover {
 .submitted-pic-list-entry {
     max-width: 90vw;
     margin: 0 auto 2em;
+    padding-bottom: 2em;
     border-bottom: .5px solid #808080;
 }
 
@@ -778,7 +956,7 @@ a.trail-carousel-font:hover {
 .submit-buttons {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 1em;
+    margin: 2.5em auto 1em;
 }
 
 /*--------------------DEAD LINKS--------------------*/
@@ -813,6 +991,10 @@ a.trail-carousel-font:hover {
 }
 
 /*--------------------FORM PAGES--------------------*/
+.form-page-wrapper {
+    text-align: center;
+}
+
 .ck-container {
     margin-top: 2em;
     max-width: 768px;
@@ -831,10 +1013,6 @@ a.trail-carousel-font:hover {
 }
 
 /*----------------USERNAME FORM PAGE----------------*/
-.form-page-wrapper {
-    text-align: center;
-}
-
 .form-title {
     font-size: 35px;
     font-weight: bold;
@@ -1016,11 +1194,17 @@ a.trail-carousel-font:hover {
         margin-left: 6em;
         margin-right: 6em;
     }
-    .listing-img {
-        max-width: 300px;
+    .listing-pic-container {
+        width: 60%;
+    }
+    .listing-data-and-description {
+        width: 100%;
     }
     .listing-data {
         flex-wrap: wrap;
+    }
+    .listing-pair {
+        padding: 0 1em;
     }
     .listing-data:nth-child(3) {
         width: 100%;
@@ -1077,6 +1261,20 @@ a.trail-carousel-font:hover {
         margin-top: 1em;;
     }
 }
+
+/*----------------MEDIA SEARCH PAGE-----------------*/
+@media (max-width:1100px) {
+    .search-listing-container {
+        align-items: center;
+    }
+}
+
+@media (max-width:580px) {
+    .search-listing-container {
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 1em;
+    }
 
 /*-----------------MEDIA VIEW GEAR------------------*/
 @media (min-width:1100px) {

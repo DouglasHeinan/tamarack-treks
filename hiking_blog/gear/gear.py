@@ -6,8 +6,9 @@ from hiking_blog.forms import CommentForm
 from hiking_blog.models import Gear, GearComments
 from hiking_blog.auth.auth import admin_only
 from hiking_blog.db import db
-import re
 from datetime import datetime
+import re
+import html
 
 gear_bp = Blueprint(
     "gear_bp", __name__,
@@ -127,8 +128,9 @@ def create_new_gear_comment(form, gear):
         An object from the gear table of the database.
     """
 
+    comment_text = re.sub(NO_TAGS, '', form.comment_text.data)
     new_comment = GearComments(
-        text=re.sub(NO_TAGS, '', form.comment_text.data),
+        text=html.unescape(comment_text),
         deleted_by=None,
         date_time_added=datetime.now(),
         commenter=current_user,

@@ -30,16 +30,28 @@ def search():
     When the user submits the search form, this function runs the input through several other functions to clean the
     input of any non-letter characters and create a sorted list of pages related to the user's input.
     """
-
     form = SearchForm()
     if form.validate_on_submit():
         searched = form.searched.data
+        print(searched)
         clean_search = create_search_list(searched)
         print(f"SEARCH: {clean_search}")
         results = run_search_functions(clean_search)
         sorted_results = sorted(results, reverse=True, key=operator.itemgetter("relevance_points"))
-        print(f"final results: {sorted_results}")
-        return render_template("search.html", form=form, searched=searched, sorted_results=sorted_results)
+        final_results = get_final_results(sorted_results)
+        print(f"final results: {final_results}")
+        return render_template(
+            "search.html",
+            form=form,
+            searched=searched,
+            final_results=final_results,
+        )
+    return render_template(
+        "search.html",
+        form=form,
+        searched="",
+        final_results=None
+    )
 
 
 def create_search_list(searched):
@@ -351,6 +363,17 @@ def clean_and_count_words(text, search_item):
     text_word_counts = Counter(clean_word_list)
     adjustment = text_word_counts[search_item]
     return adjustment
+
+
+def get_final_results(sorted_results):
+    the_list = []
+    for result in sorted_results:
+        if result["gear/trail"] == "Gear":
+            new_result = Gear.query.get(result["id"])
+        else:
+            new_result = Trails.query.get(result["id"])
+        the_list.append(new_result)
+    return the_list
 
 
 def print_results(category, results):

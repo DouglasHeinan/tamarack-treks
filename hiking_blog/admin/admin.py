@@ -268,19 +268,25 @@ def submitted_trail_pics(date):
         created to store the file that stores their photos.
     """
 
-    pics = {}
+    photos = {}
     user_trail_directories = os.listdir(f"hiking_blog/admin/static/submitted_trail_pics/{date}")
     for directory in user_trail_directories:
-        pics[str(directory)] = os.listdir(f"hiking_blog/admin/static/submitted_trail_pics/{date}/{directory}")
+        photos[str(directory)] = os.listdir(f"hiking_blog/admin/static/submitted_trail_pics/{date}/{directory}")
+    is_empty = True
+    for key in photos:
+        if photos[key]:
+            is_empty = False
     return render_template(
-        "submitted_trail_pics.html", user_trail_directories=user_trail_directories, pics=pics, date=date
+        "submitted_trail_pics.html",
+        user_trail_directories=user_trail_directories,
+        photos=photos, date=date, is_empty=is_empty
     )
 
 
-@admin_bp.route("/admin/approve_submitted_photo/<date>/<user_trail>/<pic>")
+@admin_bp.route("/admin/approve_submitted_photo/<date>/<user_trail>/<photo>")
 @login_required
 @admin_only
-def approve_submitted_trail_pic(date, user_trail, pic):
+def approve_submitted_trail_pic(date, user_trail, photo):
     """
     Saves user-submitted photos to the database and posts them to the app.
 
@@ -295,7 +301,7 @@ def approve_submitted_trail_pic(date, user_trail, pic):
     user_trail : str
         A string that combines the user's username and the relevant trail's trail name. This is the name of the file
         that stores the user's photos. It is contained inside the date file.
-    pic : str
+    photo : str
         The file name of the user submitted photo. Must use one of the ALLOWED_EXTENSIONS.
     """
 
@@ -303,17 +309,7 @@ def approve_submitted_trail_pic(date, user_trail, pic):
     trail_name = user_trail.split("^")[1]
     user = User.query.filter_by(username=username).first()
     trail = Trails.query.filter_by(name=trail_name).first()
-    new_pic = TrailPictures(
-        community_rating="Be the first to rate this photo!",
-        img=pic,
-        poster_id=user.id,
-        trail_id=trail.id,
-        date_time_added=datetime.now()
-    )
-    db.session.add(new_pic)
-    db.session.commit()
-    save_pic = "keep"
-    move_file_and_email_user(user_trail, save_pic, date, pic)
+    add_new_trail_photo(user, trail, photo, date)
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
@@ -375,7 +371,9 @@ def save_for_appeal(date, user_trail, pic):
     """
     # -------------------ADD RADIO BUTTONS FOR REASON WHY-------------------------------
     save_pic = "temp"
+    print("about to move file")
     move_file_and_email_user(user_trail, save_pic, date, pic)
+    print("done moving file")
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
@@ -393,7 +391,10 @@ def move_file_and_email_user(user_trail, save_pic, date, pic):
     """Moves user-submitted photos to the appropriate directory and emails user of the photo's status."""
     create_photo_notification_email(user_trail, save_pic)
     origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
-    sorting_directory = "approved"
+    if save_pic == "keep":
+        sorting_directory = "approved"
+    else:
+        sorting_directory = "save_for_appeal_pics"
     target = create_file_name(sorting_directory, date, user_trail)
     shutil.move(origin, target)
 
@@ -433,6 +434,7 @@ def check_files(trail_id, file_one, file_two, file_three):
     file_one, file_two, file_three : file
         The names of image files input by the user
     """
+
     message = None
     if file_one.filename == "" or file_two.filename == "" or file_three.filename == "":
         message = "No file selected."
@@ -440,11 +442,21 @@ def check_files(trail_id, file_one, file_two, file_three):
     elif allowed_file(file_one.filename) and allowed_file(file_two.filename) and allowed_file(file_three.filename):
         directory = create_initial_trail_directory(trail_id)
         create_initial_trail_pic_files(directory, file_one, file_two, file_three)
-        result = redirect(url_for("admin_bp.admin_dashboard"))
+        photos = [file_one, file_two, file_three]
+        approve_initial_trail_photos(trail_id, photos)
+        result = redirect(url_for("trail_bp.view_trail", db_id=trail_id))
     else:
         message = "Invalid file type."
         result = redirect(url_for("admin_bp.add_initial_trail_pic", trail_id=trail_id))
     return result, message
+
+
+def approve_initial_trail_photos(trail_id, photos):
+    user = User.query.get(current_user.id)
+    trail = Trails.query.get(trail_id)
+    date = datetime.today().strftime("%m-%d-%Y")
+    for photo in photos:
+        add_new_trail_photo(user, trail, photo.filename, date)
 
 
 # ----------------------------------------FILE AND DIRECTORY SORTING FUNCTIONS----------------------------------------
@@ -634,6 +646,21 @@ def reject_username(user_id):
     user.username_needs_verification = False
     db.session.commit()
     return redirect(url_for("admin_bp.admin_dashboard"))
+
+
+def add_new_trail_photo(user, trail, photo, date):
+    new_pic = TrailPictures(
+        community_rating="Be the first to rate this photo!",
+        img=photo,
+        poster_id=user.id,
+        trail_id=trail.id,
+        date_time_added=datetime.now()
+    )
+    db.session.add(new_pic)
+    db.session.commit()
+    save_pic = "keep"
+    user_trail = f"{user.username}^{trail.name}"
+    move_file_and_email_user(user_trail, save_pic, date, photo)
 
 
 def update_gear_entry(gear, form):

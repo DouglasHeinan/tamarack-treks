@@ -11,3 +11,22 @@
 
 
 "{{ url_for('trail_bp.display_trail_pics', file_name=trail.trail_page_pics[0].img) }}"
+
+
+                <div class="modal fade" id="trailDescriptionModal" tabindex="-1" aria-labelledby="trailDescriptionLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="trailDescriptionLabel">{{ trail.name }}</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ trail.description }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-sm user-button" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>

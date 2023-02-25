@@ -15,7 +15,18 @@ user_profile_bp = Blueprint(
 def user_profile_dashboard(user_id):
     """Renders the user-profile dashboard"""
     user = User.query.get(user_id)
-    return render_template("user_profile.html", user=user)
+    recent_favorites = get_recent_favorites(user.favorites)
+    recent_rated_photos = get_recent_rated_photos(user.rated_pics)
+    recent_submitted_photos = get_recent_submitted_photos(user.trail_page_pics)
+    recent_comments = get_recent_comments(user.gear_page_comments, user.trail_page_comments)
+    return render_template(
+        "user_profile.html",
+        user=user,
+        recent_favorites=recent_favorites,
+        recent_rated_photos=recent_rated_photos,
+        recent_submitted_photos=recent_submitted_photos,
+        recent_comments=recent_comments,
+    )
 
 
 @user_profile_bp.route("/user_profile/<user_id>/comments")
@@ -45,6 +56,43 @@ def view_favorites(user_id):
     user = User.query.get(user_id)
     favorites = Favorites.query.filter_by(user_id=user_id).all()
     return render_template("user_profile_favorites.html", favorites=favorites, user=user)
+
+
+# ----------------------------------DASHBOARD FUNCTIONS---------------------------------
+def get_recent_favorites(user_favorites):
+    user_favorites.sort(key=get_date_time_added)
+    favorites = []
+    for favorite in user_favorites[-3:]:
+        if favorite.gear_trail == "Gear":
+            new_favorite = Gear.query.filter_by(name=favorite.name).first()
+        else:
+            new_favorite = Trails.query.filter_by(name=favorite.name).first()
+        favorites.append(new_favorite)
+    recent_favorites = favorites[-3:]
+    return recent_favorites
+
+
+def get_recent_rated_photos(rated_photos):
+    rated_photos.sort(key=get_date_time_added)
+    recent_rated = rated_photos[-3:]
+    return recent_rated
+
+
+def get_recent_submitted_photos(submitted_photos):
+    submitted_photos.sort(key=get_date_time_added)
+    recent_submitted = submitted_photos[-3:]
+    return recent_submitted
+
+
+def get_recent_comments(gear_comments, trail_comments):
+    gear_comments.sort(key=get_date_time_added)
+    trail_comments.sort(key=get_date_time_added)
+    recent_submitted = gear_comments[-3:] + trail_comments[-3:]
+    return recent_submitted
+
+
+def get_date_time_added(entry):
+    return entry.date_time_added
 
 
 # -------------------------------------------PHOTO RATING FUNCTIONS----------------------------------------
@@ -178,3 +226,4 @@ def create_new_favorite(favorite, user_id):
         new_favorite.img = favorite.trail_page_pics[0].img
     db.session.add(new_favorite)
     db.session.commit()
+

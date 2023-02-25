@@ -101,13 +101,22 @@
         </div>
     </div>
     <div class="text-center">
+
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <p class="text-success mt-4"><strong>{{ message }}</strong></p>
-            {% endfor %}
-        {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message != None %}
+                    <div class="photo-modal">
+                        <div class="photo-modal-content">
+                            <span class="close-button">&times;</span>
+                            <p class="photo-submitted-msg body-font">{{ message }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         {% endwith %}
+
         <div class="row trail-info-and-links">
             <div class="">
                 <a class="btn user-button trail-page-link mt-3" href="http://www.google.com/maps/place/{{ trail.latitude }},{{ trail.longitude }}" target="_blank">
@@ -155,17 +164,18 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="trailDescriptionLabel">{{ trail.name }}</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                {{ trail.description }}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-sm user-button" data-bs-dismiss="modal">Close</button>
-                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ trail.description }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm user-button" data-bs-dismiss="modal">Close</button>
+                    </div>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
     {% if current_user.is_admin %}
     <div class="admin-edit-button">

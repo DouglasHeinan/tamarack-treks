@@ -1,16 +1,159 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<div class="page-wrapper">
+    <h3 class="section-font-one">Welcome to your profile, {{ user.username }}</h3>
+    <div class="profile-home-sections">
+        <div class="profile-home-section">
+            <h5 class="profile-home-section-title">Favorite trails and gear</h5>
+            <div class="profile-recent-container">
+            {% for favorite in recent_favorites %}
+                {% if favorite.gear_trail == "Gear" %}
+                <div class="card card-border my-2 favorite-card">
+                    <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.id) }}">
+                        <img class="card-img zoom-img mt-2" src="{{ favorite.img }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center card-text">
+                                {{ favorite.name }}
+                            </h5>
+                        </div>
+                    </a>
+                </div>
+                {% else %}
+                <div class="card card-border my-2 favorite-card">
+                    <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=favorite.id) }}">
+                        <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.trail_page_pics[0].img) }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center card-text">
+                                {{ favorite.name }}
+                            </h5>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+            {% if recent_favorites == [] %}
+            <h5 class="small-section-font">No pages favorited</h5>
+            {% else %}
+            <div class="view-all-links-big-screen">
+                <div class="view-all-links-align">
+                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">See all favorites</a></h5>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="profile-home-section">
+            <h5 class="profile-home-section-title">Rated Photos</h5>
+            <div class="profile-recent-container">
+                {% for photo in recent_rated_photos %}
+                <div class="recent-photo-container">
+                    <a class="recent-photo-link" data-bs-toggle="modal" data-bs-target="#showRatedPhotoModal-{{recent_rated_photos.index(photo)}}">
+                        <img class="recent-photo-thumb" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.rated_pic.img)  }}">
+                    </a>
+                </div>
+                <div class="modal fade" id="showRatedPhotoModal-{{recent_rated_photos.index(photo)}}" tabindex="-1" aria-labelledby="showRatedPhotoLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="showRatedPhotoLabel">{{ photo.rated_pic.parent_trail_posts.name }}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.rated_pic.img)  }}" class="img-thumbnail">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm user-button" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if recent_rated_photos == [] %}
+            <h5 class="small-section-font">No photos rated</h5>
+            {% else %}
+            <div class="view-all-links-big-screen">
+                <div class="view-all-links-align">
+                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_rated_photos', user_id=user.id) }}">See all rated photos</a></h5>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="profile-home-section">
+            <h5 class="profile-home-section-title">Submitted Photos</h5>
+            <div class="profile-recent-container">
+                {% for photo in recent_submitted_photos %}
+                <div class="recent-photo-container">
+                    <a class="recent-photo-link" data-bs-toggle="modal" data-bs-target="#showSubmittedPhotoModal-{{recent_submitted_photos.index(photo)}}">
+                        <img class="recent-photo-thumb" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img)  }}">
+                    </a>
+                </div>
+                <div class="modal fade" id="showSubmittedPhotoModal-{{recent_submitted_photos.index(photo)}}" tabindex="-1" aria-labelledby="showSubmittedPhotoLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="showSubmittedPhotoLabel">{{ photo.parent_trail_posts.name }}</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img)  }}" class="img-thumbnail">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm user-button" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if recent_submitted_photos == [] %}
+            <h5 class="small-section-font">No photos submitted</h5>
+            {% else %}
+            <div class="view-all-links-big-screen">
+                <div class="view-all-links-align">
+                    <h5 class=""><a class="view-all-links" href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id) }}">See all submitted photos</a></h5>
+                </div>
+            </div>
+            {% endif %}
+        </div>
 
-<h3>Welcome to your profile {{ user.username }}</h3>
 
-<ul class="list-unstyled">
-    <li><a href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">View past comments</a></li>
-    <li><a href="https://en.gravatar.com/">Customize your avatar</a></li>
-    <li><a href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">View favorite trails and gear</a></li>
-    <li><a href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id) }}">View submitted photos</a></li>
-    <li><a href="{{ url_for('user_profile_bp.view_rated_photos', user_id=user.id) }}">View rated photos</a></li>
-</ul>
+        <div class="profile-home-section">
+            <h5 class="profile-home-section-title">User Comments</h5>
+            <div class="profile-comments-container">
+                <div class="comment-group">
+                    {% for comment in recent_comments %}
+                    <div class="comment-parent-pairing">
+                        <p class="bold-body-font">{{ comment.text }}</p>
+                        <p class="comment-parent-post body-font">-{{ comment.parent_posts.name }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if recent_comments == [] %}
+            <h5 class="small-section-font">No comments submitted</h5>
+            {% else %}
+            <div class="view-all-links-big-screen">
+                <div class="view-all-links-align">
+                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">See all user comments</a></h5>
+                </div>
+            </div>
+            {% endif %}
+        </div>
 
+
+        <div class="profile-avatar-section">
+            <div class="avatar-title-image">
+                <h4 class="profile-avatar-section-title">Your Avatar:</h4>
+                <img class="profile-avatar" src="{{ user.email | gravatar }}">
+            </div>
+            <p class="bold-body-font">Our user avatars are provided by Gravatar. Your initial avatar was chosen at random, but you can customize it! Gravatar allows you to upload images to create an avatar that better represents you. It's totally free and can be used across all apps or websites affiliated with Gravatar. Click the link below if you'd like to create or edit your Gravatar avatar.</p>
+            <div class="avatar-button-container">
+                <a class="btn btn-lg user-button" href="https://en.gravatar.com/">Create your avatar!</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

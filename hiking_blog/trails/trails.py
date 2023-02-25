@@ -2,18 +2,19 @@
 from flask import render_template, redirect, url_for, flash, Blueprint, request, send_from_directory
 from flask_login import current_user, login_required
 from hiking_blog.forms import CommentForm, AddTrailPhotoForm
-from hiking_blog.models import Trails, TrailComments, TrailPictures, RatedPhoto, db
+from hiking_blog.models import Trails, TrailComments, RatedPhoto, db
 from hiking_blog.admin.admin import allowed_file, create_initial_trail_directory, delete_comment, NO_TAGS
 from hiking_blog.auth.auth import admin_only
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
 import re
+import html
 
 PICTURE_UPLOAD_SUCCESS = "You're photos have been successfully uploaded! They will now need to be vetted by one " \
                          "of our administrators. This process usually only takes a day or two. Once you're photo " \
-                         "has been approved, you will be notified via email. Thank you for supporting the blah-blah " \
-                         "community!"
+                         "has been approved, you will be notified via email. Thank you for supporting the Tamarack " \
+                         "Treks community!"
 
 trail_bp = Blueprint(
     "trail_bp", __name__,
@@ -119,8 +120,9 @@ def display_trail_pics(file_name):
 
 def create_new_trail_comment(form, trail):
     """Creates a new entry in the trail_comments table of the database."""
+    comment_text = re.sub(NO_TAGS, '', form.comment_text.data)
     new_comment = TrailComments(
-        text=re.sub(NO_TAGS, '', form.comment_text.data),
+        text=html.unescape(comment_text),
         deleted_by=None,
         date_time_added=datetime.now(),
         commenter=current_user,
