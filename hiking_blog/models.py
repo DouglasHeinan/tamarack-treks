@@ -74,7 +74,8 @@ class Favorites(db.Model):
     """A class used to represent trail and gear a User has favorited."""
     __tablename__ = "favorites"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    favorite_id = db.Column(db.Integer, nullable=False)
     gear_trail = db.Column(db.String, nullable=False)
     date_time_added = db.Column(db.DateTime, nullable=False)
     img = db.Column(db.String(250), nullable=False)

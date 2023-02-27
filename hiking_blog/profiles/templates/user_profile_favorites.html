@@ -2,15 +2,72 @@
 
 {% block content %}
 
-{% if favorites %}
-{% for favorite in favorites %}
-<div>
-    <img class="img-thumbnail" src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.img) }}">
-    <h4>{{ favorite.name }}</h4>
-</div>
-{% endfor %}
-{% else %}
-<p>No Favorites</p>
-{% endif %}
+<div class="page-wrapper">
+    <div class="profile-home-sections">
+        <h3 class="section-font-one">{{ user.username }}'s favorites</h3>
 
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        {% if message != None %}
+        <p class="text-center admin-warning-text">{{ message }}</p>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="profile-favorite-section">
+            <div class="profile-home-section-title-container">
+                <h5 class="profile-home-section-title">Favorite gear</h5>
+            </div>
+            {% if gear_favorites %}
+            <div class="favorite-container">
+                {% for favorite in gear_favorites %}
+                <div class="card card-border my-2 favorite-card">
+                    <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.favorite_id) }}">
+                        <img class="favorite-card-gear-img zoom-img mt-2" src="{{ favorite.img }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center favorite-card-text">
+                                {{ favorite.name }}
+                            </h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h5 class="small-section-font">No favorite gear</h5>
+            {% endif %}
+        </div>
+        <div class="profile-favorite-section">
+            <div class="profile-home-section-title-container">
+                <h5 class="profile-home-section-title">Favorite trails</h5>
+            </div>
+            {% if trail_favorites %}
+            <div class="favorite-container">
+                {% for favorite in trail_favorites %}
+                <div class="card card-border my-2 favorite-card">
+                    <a class="no-underline" href="{{ url_for('trail_bp.view_trail', db_id=favorite.favorite_id) }}">
+                        <img class="favorite-card-img-top zoom-img img-fluid"
+                             src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.img) }}">
+                        <div class="favorite-card-name">
+                            <h5 class="card-title text-center favorite-card-text">
+                                {{ favorite.name }}
+                            </h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h5 class="small-section-font">No favorite trails</h5>
+            {% endif %}
+        </div>
+        <div class="profile-how-to-container">
+            <h5 class="big-body-font profile-how-to">
+                To add trail and gear pages to your favorites, click the <button class="btn btn-sm user-button trail-page-link">Favorite this page</button> button on that page.
+            </h5>
+        </div>
+    </div>
+</div>
 {% endblock %}

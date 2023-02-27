@@ -5,11 +5,13 @@
     <h3 class="section-font-one">Welcome to your profile, {{ user.username }}</h3>
     <div class="profile-home-sections">
         <div class="profile-home-section">
-            <h5 class="profile-home-section-title">Favorite trails and gear</h5>
+            <div class="profile-home-section-title-container">
+                <h5 class="profile-home-section-title">Favorite trails and gear</h5>
+            </div>
             <div class="profile-recent-container">
             {% for favorite in recent_favorites %}
                 {% if favorite.gear_trail == "Gear" %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 profile-card">
                     <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.id) }}">
                         <img class="card-img zoom-img mt-2" src="{{ favorite.img }}">
                         <div class="card-body">
@@ -20,7 +22,7 @@
                     </a>
                 </div>
                 {% else %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 profile-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=favorite.id) }}">
                         <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.trail_page_pics[0].img) }}">
                         <div class="card-body">
@@ -38,18 +40,25 @@
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">See all favorites</a></h5>
+                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">All favorites</a></h5>
                 </div>
             </div>
             {% endif %}
         </div>
         <div class="profile-home-section">
-            <h5 class="profile-home-section-title">Rated Photos</h5>
+            <div class="profile-home-section-title-container">
+                <h5 class="profile-home-section-title">Rated Photos</h5>
+            </div>
             <div class="profile-recent-container">
                 {% for photo in recent_rated_photos %}
-                <div class="recent-photo-container">
-                    <a class="recent-photo-link" data-bs-toggle="modal" data-bs-target="#showRatedPhotoModal-{{recent_rated_photos.index(photo)}}">
-                        <img class="recent-photo-thumb" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.rated_pic.img)  }}">
+                <div class="card card-border my-2 profile-card">
+                    <a class="no-underline" data-bs-toggle="modal" data-bs-target="#showRatedPhotoModal-{{recent_rated_photos.index(photo)}}">
+                        <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.rated_pic.img)  }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center card-text">
+                                {{ photo.rated_pic.parent_trail_posts.name }}
+                            </h5>
+                        </div>
                     </a>
                 </div>
                 <div class="modal fade" id="showRatedPhotoModal-{{recent_rated_photos.index(photo)}}" tabindex="-1" aria-labelledby="showRatedPhotoLabel" aria-hidden="true">
@@ -75,18 +84,25 @@
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_rated_photos', user_id=user.id) }}">See all rated photos</a></h5>
+                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_rated_photos', user_id=user.id) }}">All rated photos</a></h5>
                 </div>
             </div>
             {% endif %}
         </div>
         <div class="profile-home-section">
-            <h5 class="profile-home-section-title">Submitted Photos</h5>
+            <div class="profile-home-section-title-container">
+                <h5 class="profile-home-section-title">Submitted Photos</h5>
+            </div>
             <div class="profile-recent-container">
                 {% for photo in recent_submitted_photos %}
-                <div class="recent-photo-container">
-                    <a class="recent-photo-link" data-bs-toggle="modal" data-bs-target="#showSubmittedPhotoModal-{{recent_submitted_photos.index(photo)}}">
-                        <img class="recent-photo-thumb" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img)  }}">
+                <div class="card card-border my-2 profile-card">
+                    <a class="no-underline" data-bs-toggle="modal" data-bs-target="#showSubmittedPhotoModal-{{recent_submitted_photos.index(photo)}}">
+                        <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img)  }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center card-text">
+                                {{ photo.parent_trail_posts.name }}
+                            </h5>
+                        </div>
                     </a>
                 </div>
                 <div class="modal fade" id="showSubmittedPhotoModal-{{recent_submitted_photos.index(photo)}}" tabindex="-1" aria-labelledby="showSubmittedPhotoLabel" aria-hidden="true">
@@ -112,46 +128,91 @@
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5 class=""><a class="view-all-links" href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id) }}">See all submitted photos</a></h5>
+                    <h5 class=""><a class="view-all-links" href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='date') }}">All submitted photos</a></h5>
                 </div>
             </div>
             {% endif %}
         </div>
-
-
         <div class="profile-home-section">
-            <h5 class="profile-home-section-title">User Comments</h5>
+            <div class="profile-home-section-title-container">
+                <h5 class="profile-home-section-title">User Trail Comments</h5>
+            </div>
             <div class="profile-comments-container">
-                <div class="comment-group">
-                    {% for comment in recent_comments %}
-                    <div class="comment-parent-pairing">
-                        <p class="bold-body-font">{{ comment.text }}</p>
-                        <p class="comment-parent-post body-font">-{{ comment.parent_posts.name }}</p>
+                <div class="profile-recent-container">
+                    {% for comment in recent_trail_comments %}
+                    <div class="card card-border my-2 profile-card comment-card">
+                        <a class="no-underline comment-box" href="{{ url_for('trail_bp.view_trail',db_id=comment.trail_id) }}">
+                            <p class="body-font comment-date">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                            <div class="comment-text-box">
+                                {% if comment.text|length < 100 %}
+                                <p class="bold-body-font">{{ comment.text }}</p>
+                                {% else %}
+                                <p class="bold-body-font">{{ comment.text[:99] }}...</p>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title text-center card-text">
+                                {{ comment.parent_posts.name }}
+                            </h5>
+                        </a>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-            {% if recent_comments == [] %}
-            <h5 class="small-section-font">No comments submitted</h5>
+            {% if recent_trail_comments == [] %}
+            <h5 class="small-section-font">No trail comments submitted</h5>
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">See all user comments</a></h5>
+                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">All user comments</a></h5>
                 </div>
             </div>
             {% endif %}
         </div>
-
-
-        <div class="profile-avatar-section">
-            <div class="avatar-title-image">
-                <h4 class="profile-avatar-section-title">Your Avatar:</h4>
-                <img class="profile-avatar" src="{{ user.email | gravatar }}">
+        <div class="profile-home-section">
+            <div class="profile-home-section-title-container">
+                <h5 class="profile-home-section-title">User Gear Comments</h5>
             </div>
-            <p class="bold-body-font">Our user avatars are provided by Gravatar. Your initial avatar was chosen at random, but you can customize it! Gravatar allows you to upload images to create an avatar that better represents you. It's totally free and can be used across all apps or websites affiliated with Gravatar. Click the link below if you'd like to create or edit your Gravatar avatar.</p>
-            <div class="avatar-button-container">
-                <a class="btn btn-lg user-button" href="https://en.gravatar.com/">Create your avatar!</a>
+            <div class="profile-comments-container">
+                <div class="profile-recent-container">
+                    {% for comment in recent_gear_comments %}
+                    <div class="card card-border my-2 profile-card comment-card">
+                        <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
+                            <p class="body-font comment-date">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                            <div class="comment-text-box">
+                                <p class="bold-body-font">{{ comment.text }}</p>
+                            </div>
+                            <h5 class="card-title text-center card-text">
+                                {{ comment.parent_posts.name }}
+                            </h5>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
+            {% if recent_trail_comments == [] %}
+            <h5 class="small-section-font">No gear comments submitted</h5>
+            {% else %}
+            <div class="view-all-links-big-screen">
+                <div class="view-all-links-align">
+                    <h5>
+                        <a class="view-all-links"
+                           href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">
+                            All user comments
+                        </a>
+                    </h5>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="profile-avatar-section">
+        <div class="avatar-title-image">
+            <h4 class="profile-avatar-section-title">Your Avatar:</h4>
+            <img class="profile-avatar" src="{{ user.email | gravatar }}">
+        </div>
+        <p class="bold-body-font">Our user avatars are provided by Gravatar. Your initial avatar was chosen at random, but you can customize it! Gravatar allows you to upload images to create an avatar that better represents you. It's totally free and can be used across all apps or websites affiliated with Gravatar. Click the link below if you'd like to create or edit your Gravatar avatar.</p>
+        <div class="avatar-button-container">
+            <a class="btn btn-lg user-button" href="https://en.gravatar.com/">Edit your avatar!</a>
         </div>
     </div>
 </div>

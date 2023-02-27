@@ -2,9 +2,98 @@
 
 {% block content %}
 
-{% for pic in user.trail_page_pics %}
-<img class="img-thumbnail" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.img) }}">
-{% endfor %}
+<div class="page-wrapper">
+    <div class="profile-home-sections">
+        <h3 class="section-font-one">{{ user.username }}'s submitted photos</h3>
+        <div class="profile-favorite-section">
+            <div class="profile-home-section-title-container">
+                <div class="section-title-filter-button-container">
+                    <h5 class="profile-home-section-title">All submitted photos</h5>
+                    <a class="btn btn-sm user-button dropdown-toggle"
+                        role="button" id="filterDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        href="#">
+                    Filter
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                        <div class="dropdown-item">
+                            <a class="bold-body-font no-underline"
+                               href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='date') }}">Date
+                                Submitted
+                            </a>
+                        </div>
+                        <div class="dropdown-item">
+                            <a class="bold-body-font no-underline"
+                               href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='rating') }}">Community
+                                Rating
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if date %}
+            {% if photos %}
+            <div class="favorite-container">
+                {% for photo in photos %}
+                <div class="card card-border my-2 favorite-card">
+                    <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=photo.parent_trail_posts.id) }}">
+                        <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img) }}">
+                        <div class="card-body">
+                            <div class="submitted-photo-card-info">
+                                <h5 class="card-title text-center favorite-card-text">
+                                    {{ photo.parent_trail_posts.name }}
+                                </h5>
+                                <p class="bold-body-font text-center">{{ photo.date_time_added.strftime("%m/%d/%Y") }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h5 class="small-section-font">No submitted photos</h5>
+            {% endif %}
+            {% else %}
+            {% if photos %}
+            <div class="favorite-container">
+                {% for photo in photos %}
+                <div class="card card-border my-2 favorite-card">
+                    <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=photo.parent_trail_posts.id) }}">
+                        <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img) }}">
+                        <div class="card-body">
+                            <div class="submitted-photo-card-info">
+                                <h5 class="card-title text-center favorite-card-text">
+                                    {{ photo.parent_trail_posts.name }}
+                                </h5>
+                                <p class="bold-body-font text-center">{{ photo.community_rating }}/5</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h5 class="small-section-font">No submitted photos</h5>
+            {% endif %}
+            {% endif %}
+        </div>
 
+
+        <div class="profile-how-to-container">
+            <h5 class="big-body-font profile-how-to">
+                To submit a photo, click the
+                <button class="btn btn-sm profile-dropdown-example dropdown-toggle">
+                    Photo info
+                </button> dropdown on that photo and select <span class="trail-carousel-font profile-submit-example">"Submit a photo"</span> from the dropdown.
+            </h5>
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}
+
+
+
+

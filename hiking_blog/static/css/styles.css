@@ -42,12 +42,20 @@ body {
     display: inline-block;
 }
 
+.admin-warning-text {
+    color: #ff4444;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.25em;
+}
+
 .centered-body {
     text-align: center;
 }
 
 .no-underline, no-underline:hover {
     text-decoration: none;
+    cursor: pointer;
 }
 
 .user-button {
@@ -98,6 +106,13 @@ body {
     color: #283618;
     line-height: 1.75em;
     font-weight: bold;
+}
+
+.big-body-font {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    color: #283618;
+    line-height: 1.5em;
 }
 
 .paragraph-spacing {
@@ -250,8 +265,9 @@ body {
 
 .view-all-links-align {
     width: 33%;
-    text-align: center;
-    margin-top: 30px;
+    text-align: right;
+    margin-top: 1em;
+    margin-right: 4em;
 }
 
 .card-img {
@@ -261,7 +277,7 @@ body {
 
 .card-img-top {
     width: 100%;
-    height: 25vw;
+    height: 30vh;
     object-fit: cover;
 }
 
@@ -755,6 +771,13 @@ a.trail-carousel-font:hover {
     border-bottom: 1px ridge #808080;
 }
 
+.profile-home-section-title-container {
+    width: 50%;
+    text-align: left;
+    margin-bottom: 1em;
+    margin-left: 4em;
+}
+
 .profile-home-section-title {
     color: #283618;
     text-transform: uppercase;
@@ -762,6 +785,7 @@ a.trail-carousel-font:hover {
     font-size: 1.5em;
     transition-duration: 0.5s;
     line-height: 2em;
+    margin-right: 1em;
 }
 
 .profile-recent-container {
@@ -771,59 +795,49 @@ a.trail-carousel-font:hover {
     margin: 0 auto;
 }
 
-.favorite-card {
+.profile-card {
     margin: 0 0.5em;
     width: 35%;
 }
 
-.recent-photo-container {
-    width: 35%;
+.comment-card {
+    height: 35vh;
+    background-color: #fefae0;
+    padding: 0.5em 0;
 }
 
-.recent-photo-link {
-    cursor: pointer;
-}
-
-.recent-photo-thumb {
-    height: 60vh;
-    width: 95%;
-    object-fit: cover;
-    border-radius: 8px;
-    border-style: solid;
-    border-color: #bc6c25;
-    border-width: thin;
-}
-
-
-
-
-
-.comment-group {
+.comment-box {
+    height: 100%;
     display: flex;
-    flex-wrap: wrap;
-    width: 80%;
-    height: 400px;
-    justify-content: space-around;
-    margin: 1em auto 0;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.comment-date {
+    margin-left: 1em;
+}
+
+.comment-date-parent p {
+    margin-bottom: 0;
+    margin-left: 2em;
+}
+
+.comment-text-box {
+    height: 80%;
+    width: 85%;
+    margin: 0 auto 0.25em;
 }
 
 .comment-parent-pairing {
     display: flex;
     flex-direction: column;
-    width: 45%;
-    max-width: 45%
+    justify-content: space-between;
 }
 
 .comment-parent-post {
     margin-left: 1em;
     padding_top: 0;
 }
-
-.comment-parent-pairing p {
-    margin-bottom: 0.25rem;
-}
-
-
 
 .profile-avatar-section {
     margin-top: 1em;
@@ -853,6 +867,85 @@ a.trail-carousel-font:hover {
 
 .avatar-button-container {
     text-align: center;
+}
+
+.profile-how-to-container {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.profile-how-to {
+    text-align: center;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.profile-dropdown-example {
+    background-color: transparent;
+    color: #000;
+    text-transform: uppercase;
+    border-color: #000;
+    border-width: 2px;
+    margin: 0 0.25em;
+}
+
+.profile-submit-example {
+    font-size: 0.7em;
+    margin: 0 0.25em;
+}
+
+/*------------------PROFILE MENUS-------------------*/
+.profile-favorite-section {
+    padding: 2em 0;
+    border-bottom: 1px ridge #808080;
+}
+
+.favorite-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    row-gap: 2em;
+}
+
+.favorite-card {
+    width: 20%;
+    height: 35vh;
+    margin: 0 0.5em;
+}
+
+.favorite-card-img-top {
+    width: 100%;
+    object-fit: cover;
+    height: 25vh;
+}
+
+.favorite-card-gear-img {
+    width: 100%;
+    object-fit: contain;
+    height: 25vh;
+}
+
+.favorite-card-name {
+    max-height: 20%;
+    padding-top: 2em;
+}
+
+.favorite-card-text {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #bc6c25;
+    transition-duration: 0.5s;
+}
+
+.section-title-filter-button-container {
+    display: flex;
+    align-items: center;
+}
+
+.section-title-filter-button-container h5 {
+    margin-bottom: 0
 }
 
 /*-----------------ADMIN DASHBOARD------------------*/
@@ -1123,7 +1216,6 @@ a.trail-carousel-font:hover {
 
 @media (max-width:576px) {
     .view-all-links-align {
-        text-align: center;
         width: 100%;
         margin-top: 10px;
     }
