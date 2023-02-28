@@ -1094,8 +1094,11 @@ a.trail-carousel-font:hover {
 }
 
 .form-container {
-    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     margin: 0 auto;
+    width: 45%;
 }
 
 .form-data-pairing {
