@@ -9,7 +9,7 @@
     {{ ckeditor.config(name='comment_text') }}
     <form method="POST" action="{{ url_for('trail_bp.edit_trail_comment', comment_id=comment_id, trail_id=db_id) }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <span class="form-font form-label">{{ form.comment_text.label }}:</span>
             {{ form.comment_text }}
         </div>

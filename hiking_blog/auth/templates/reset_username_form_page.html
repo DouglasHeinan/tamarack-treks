@@ -7,7 +7,7 @@
     <h6 class="body-font mb-3">Enter your new username below:</h6>
     <form method="POST" action="{{ url_for('auth_bp.reset_username', user_id=user_id) }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <span class="form-font form-label">{{ form.username.label }}:</span>
             {{ form.username }}
         </div>

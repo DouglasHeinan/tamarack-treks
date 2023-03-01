@@ -7,7 +7,7 @@
     <h6 class="body-font mb-3">Sign up to comment, submit trail photos, create a user profile and more!</h6>
     <form class="mb-5" method="POST" action="{{ url_for('auth_bp.sign_up') }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <div class="form-data-pairing">
                 <span class="form-font form-label">{{ form.username.label }}:</span>
                 {{ form.username }}

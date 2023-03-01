@@ -7,7 +7,7 @@
     <h6 class="body-font mb-3">Submit your username and we'll send a verification email to walk you</h6>
     <form method="POST" action="{{ url_for(form_action) }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <span class="form-font form-label">{{ form.username.label }}:</span>
             {{ form.username }}
         </div>

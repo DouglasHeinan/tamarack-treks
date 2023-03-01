@@ -9,7 +9,7 @@
     {{ ckeditor.config(name='comment_text') }}
     <form method="POST">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <span class="form-font form-label">{{ form.comment_text.label }}:</span>
             {{ form.comment_text }}
         </div>

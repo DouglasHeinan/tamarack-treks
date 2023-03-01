@@ -7,7 +7,7 @@
     <h6 class="body-font mb-3">{{ form_sub_header }}</h6>
     <form method="POST" action="{{ url_for(form_action) }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <span class="form-font form-label">{{ form.username.label }}:</span>
             {{ form.username }}
         </div>

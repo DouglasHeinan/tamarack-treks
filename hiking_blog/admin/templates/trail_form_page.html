@@ -9,7 +9,7 @@
     {{ ckeditor.config(name='description') }}
     <form class="mb-5" method="POST" action="{{ url_for('admin_bp.add_trail') }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <div class="form-data-pairing">
                 <span class="form-font form-label">{{ form.name.label }}:</span>
                 {{ form.name }}

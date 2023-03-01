@@ -70,7 +70,7 @@ def add_admin():
         user.is_admin = True
         db.session.commit()
         return redirect(url_for("admin_bp.admin_dashboard"))
-    return render_template("username_form_page.html",
+    return render_template("add_admin_form_page.html",
                            form=form,
                            form_header="Add Admin",
                            form_sub_header="Enter the username of the user to be given admin status:",

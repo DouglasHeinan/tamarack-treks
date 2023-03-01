@@ -7,7 +7,7 @@
     <h6 class="body-font mb-3">Sign in to view your profile</h6>
     <form class="mb-5" method="POST" action="{{ url_for('auth_bp.login') }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <div class="form-data-pairing">
                 <span class="form-font form-label">{{ form.username.label }}:</span>
                 {{ form.username }}

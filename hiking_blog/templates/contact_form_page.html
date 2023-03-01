@@ -9,7 +9,7 @@
     {{ ckeditor.config(name='message') }}
     <form method="POST" action="{{ url_for('contact_bp.contact') }}">
         {{ form.csrf_token }}
-        <div class="form-container">
+        <div class="non-bs-form-container">
             <div class="form-data-pairing">
                 <span class="form-font form-label">{{ form.name.label }}:</span>
                 {{ form.name }}
