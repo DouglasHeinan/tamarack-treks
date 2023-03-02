@@ -465,6 +465,11 @@ h5.listing-info:nth-child(odd) {
     justify-content: center;
 }
 
+.bad-search-info {
+    margin: 0 4em;
+    padding: 0.5em 0 0;
+}
+
 /*-------------------SEARCH PAGE--------------------*/
 .search-form {
     display: flex;
@@ -503,7 +508,7 @@ h5.listing-info:nth-child(odd) {
 .gear-img {
     object-fit: contain;
     max-width: 65vw;
-    max-height: 65vh;
+    max-height: 55vh;
 }
 
 .gear-title {
@@ -599,7 +604,7 @@ h5.listing-info:nth-child(odd) {
 }
 
 /*-----------------VIEW TRAIL PAGE------------------*/
-.view-gear-body {
+.view-trail-body {
     margin-top: 2em;
     text-align: center;
 }
@@ -1384,11 +1389,11 @@ a.trail-carousel-font:hover {
 @media (min-width:1100px) {
     .gear-pic-and-specs {
         max-width: 900px;
-        margin: 0 auto 3em;
+        margin: 0.5em auto 3em;
         justify-content: center;
     }
     .gear-img {
-        max-height: 70vh;
+        max-height: 60vh;
         max-width: 40vw;
     }
     .gear-specs {
@@ -1404,6 +1409,7 @@ a.trail-carousel-font:hover {
         flex-direction: column;
         align-items: center;
         margin-bottom: 3em;
+        margin-top: 1.5em;
     }
     .gear-specs {
         flex-direction: row;

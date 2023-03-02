@@ -55,7 +55,24 @@
     <div class="section-background-two">
         <div class="paragraph-spacing">
             <p class="body-font description-lg">{{ gear.description }}</p>
-            <p class="body-font description-sm">{{ gear.description[:400] }}<span><a class="more-link" data-bs-toggle="modal" data-bs-target="#trailDescriptionModal"> ...more</a></span></p>
+            <p class="body-font description-sm">{{ gear.description[:400] }}<span><a class="more-link" data-bs-toggle="modal" data-bs-target="#gearDescriptionModal"> ...more</a></span></p>
+        </div>
+        <div class="modal fade" id="gearDescriptionModal" tabindex="-1" aria-labelledby="gearDescriptionLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="gearDescriptionLabel">{{ gear.name }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ gear.description }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm user-button" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="company-names-and-links">
