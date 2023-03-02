@@ -922,7 +922,7 @@ a.trail-carousel-font:hover {
     row-gap: 2em;
 }
 
-.favorite-card {
+.favorite-gear-card, .favorite-trail-card {
     width: 20%;
     height: 35vh;
     margin: 0 0.5em;
@@ -1232,8 +1232,7 @@ a.trail-carousel-font:hover {
 
 @media (max-width:576px) {
     .view-all-links-align {
-        width: 100%;
-        margin-top: 10px;
+
     }
 }
 
@@ -1613,6 +1612,18 @@ a.trail-carousel-font:hover {
 }
 
 /*---------------MEDIA USER PROFILE-----------------*/
+@media (max-width:1100px) {
+    .favorite-gear-card {
+        height: 30vh;
+    }
+    .favorite-gear-card, .favorite-trail-card {
+        width: 30%;
+    }
+    .favorite-card-gear-img, favorite-card-img-top {
+        height: 20vh;
+    }
+}
+
 @media (max-width: 768px) {
     .profile-title-container {
         text-align: center;
@@ -1625,12 +1636,14 @@ a.trail-carousel-font:hover {
     .view-all-links-align {
         margin: 0.5em auto 0;
         text-align: center;
+        width: 100%;
+    }
+    .favorite-gear-card, .favorite-trail-card {
+        width: 40%;
     }
 }
 
 @media (max-width: 600px) {
-
-
     .profile-title {
         margin: 0;
     }
@@ -1653,7 +1666,12 @@ a.trail-carousel-font:hover {
     .profile-card {
         width: 90%
     }
-
+    .profile-sub-container {
+        row-gap: 1em;
+    }
+    .favorite-gear-card, .favorite-trail-card {
+        width: 75%;
+    }
 }
 
 /*--------------MEDIA ADMIN DASHBOARD---------------*/
