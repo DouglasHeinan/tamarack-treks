@@ -6,13 +6,13 @@
     <div class="profile-sections">
         <div class="profile-trail-section">
             <div class="profile-title-container">
-                <h5 class="profile-title">Favorite trails</h5>
+                <h5 class="profile-title">Favorite gear</h5>
             </div>
             <div class="profile-content-container">
-                {% for favorite in recent_trail_favorites %}
-                <div class="card card-border my-2 profile-card">
-                    <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=favorite.id) }}">
-                        <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.trail_page_pics[0].img) }}">
+                {% for favorite in recent_gear_favorites %}
+                <div class="card card-border my-2 pt-1 profile-card">
+                    <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.id) }}">
+                        <img class="card-img zoom-img" src="{{ favorite.img }}">
                         <div class="card-body">
                             <h5 class="card-title text-center card-text">
                                 {{ favorite.name }}
@@ -25,13 +25,13 @@
         </div>
         <div class="profile-section">
             <div class="profile-title-container">
-                <h5 class="profile-title">Favorite gear</h5>
+                <h5 class="profile-title">Favorite trails</h5>
             </div>
             <div class="profile-content-container">
-                {% for favorite in recent_gear_favorites %}
-                <div class="card card-border my-2 pt-1 profile-card">
-                    <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=favorite.id) }}">
-                        <img class="card-img zoom-img" src="{{ favorite.img }}">
+                {% for favorite in recent_trail_favorites %}
+                <div class="card card-border profile-card">
+                    <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.id) }}">
+                        <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.trail_page_pics[0].img) }}">
                         <div class="card-body">
                             <h5 class="card-title text-center card-text">
                                 {{ favorite.name }}

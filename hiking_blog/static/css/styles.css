@@ -1613,15 +1613,24 @@ a.trail-carousel-font:hover {
 }
 
 /*---------------MEDIA USER PROFILE-----------------*/
-@media (max-width: 540px) {
-    .profile-title {
-        margin: 0.5em 1em 0;
-    }
+@media (max-width: 768px) {
     .profile-title-container {
         text-align: center;
         margin: 0 auto;
         width: 100%;
     }
+    .profile-title {
+        margin: 0.5em 1em 0;
+    }
+    .view-all-links-align {
+        margin: 0.5em auto 0;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+
+
     .profile-title {
         margin: 0;
     }
@@ -1644,9 +1653,7 @@ a.trail-carousel-font:hover {
     .profile-card {
         width: 90%
     }
-    .view-all-links-align {
-        margin: 0.5em auto 0;
-    }
+
 }
 
 /*--------------MEDIA ADMIN DASHBOARD---------------*/
