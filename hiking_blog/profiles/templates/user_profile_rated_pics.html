@@ -3,12 +3,12 @@
 {% block content %}
 
 <div class="page-wrapper">
-    <div class="profile-home-sections">
-        <h3 class="section-font-one">{{ user.username }}'s rated photos</h3>
+    <div class="profile-sections">
+        <h3 class="section-font-one profile-title">{{ user.username }}'s rated photos</h3>
 
-        <div class="profile-favorite-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">All 5-star photos</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">All 5-star photos</h5>
             </div>
             {% if five_photos %}
             <div class="favorite-container">
@@ -30,9 +30,9 @@
             {% endif %}
         </div>
 
-        <div class="profile-favorite-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">All 4-star photos</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">All 4-star photos</h5>
             </div>
             {% if four_photos %}
             <div class="favorite-container">
@@ -54,9 +54,9 @@
             {% endif %}
         </div>
 
-        <div class="profile-favorite-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">All 3-star photos</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">All 3-star photos</h5>
             </div>
             {% if three_photos %}
             <div class="favorite-container">
@@ -78,9 +78,9 @@
             {% endif %}
         </div>
 
-        <div class="profile-favorite-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">All 2-star photos</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">All 2-star photos</h5>
             </div>
             {% if two_photos %}
             <div class="favorite-container">
@@ -102,9 +102,9 @@
             {% endif %}
         </div>
 
-        <div class="profile-favorite-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">All 1-star photos</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">All 1-star photos</h5>
             </div>
             {% if one_photos %}
             <div class="favorite-container">

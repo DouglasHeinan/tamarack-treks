@@ -15,14 +15,15 @@ user_profile_bp = Blueprint(
 def user_profile_dashboard(user_id):
     """Renders the user-profile dashboard"""
     user = User.query.get(user_id)
-    recent_favorites = get_recent_favorites(user.favorites)
+    recent_trail_favorites, recent_gear_favorites = get_recent_favorites(user.favorites)
     recent_rated_photos = get_recent_rated_photos(user.rated_pics)
     recent_submitted_photos = get_recent_submitted_photos(user.trail_page_pics)
     recent_trail_comments, recent_gear_comments = get_recent_comments(user.gear_page_comments, user.trail_page_comments)
     return render_template(
         "user_profile.html",
         user=user,
-        recent_favorites=recent_favorites,
+        recent_trail_favorites=recent_trail_favorites,
+        recent_gear_favorites=recent_gear_favorites,
         recent_rated_photos=recent_rated_photos,
         recent_submitted_photos=recent_submitted_photos,
         recent_trail_comments=recent_trail_comments,
@@ -90,15 +91,18 @@ def view_favorites(user_id):
 # ----------------------------------DASHBOARD FUNCTIONS---------------------------------
 def get_recent_favorites(user_favorites):
     user_favorites.sort(key=get_date_time_added)
-    favorites = []
-    for favorite in user_favorites[-3:]:
+    gear_favorites = []
+    trail_favorites = []
+    for favorite in user_favorites:
         if favorite.gear_trail == "Gear":
             new_favorite = Gear.query.filter_by(name=favorite.name).first()
+            gear_favorites.append(new_favorite)
         else:
             new_favorite = Trails.query.filter_by(name=favorite.name).first()
-        favorites.append(new_favorite)
-    recent_favorites = favorites[-3:]
-    return recent_favorites
+            trail_favorites.append(new_favorite)
+    recent_gear_favorites = gear_favorites[-3:]
+    recent_trail_favorites = trail_favorites[-3:]
+    return recent_trail_favorites, recent_gear_favorites
 
 
 def get_recent_rated_photos(rated_photos):

@@ -3,8 +3,8 @@
 {% block content %}
 
 <div class="page-wrapper">
-    <div class="profile-home-sections">
-        <h3 class="section-font-one">{{ user.username }}'s favorites</h3>
+    <div class="profile-sections">
+        <h3 class="section-font-one profile-title">{{ user.username }}'s favorites</h3>
 
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -16,14 +16,14 @@
         {% endif %}
         {% endwith %}
 
-        <div class="profile-favorite-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">Favorite gear</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">Favorite gear</h5>
             </div>
             {% if gear_favorites %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for favorite in gear_favorites %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border favorite-card">
                     <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.favorite_id) }}">
                         <img class="favorite-card-gear-img zoom-img mt-2" src="{{ favorite.img }}">
                         <div class="card-body">
@@ -39,12 +39,12 @@
             <h5 class="small-section-font">No favorite gear</h5>
             {% endif %}
         </div>
-        <div class="profile-favorite-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">Favorite trails</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">Favorite trails</h5>
             </div>
             {% if trail_favorites %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for favorite in trail_favorites %}
                 <div class="card card-border my-2 favorite-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail', db_id=favorite.favorite_id) }}">

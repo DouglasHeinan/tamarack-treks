@@ -2,26 +2,14 @@
 
 {% block content %}
 <div class="page-wrapper">
-    <h3 class="section-font-one">Welcome to your profile, {{ user.username }}</h3>
-    <div class="profile-home-sections">
-        <div class="profile-home-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">Favorite trails and gear</h5>
+    <h3 class="section-font-one profile-title">Welcome to your profile, {{ user.username }}</h3>
+    <div class="profile-sections">
+        <div class="profile-trail-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">Favorite trails</h5>
             </div>
-            <div class="profile-recent-container">
-            {% for favorite in recent_favorites %}
-                {% if favorite.gear_trail == "Gear" %}
-                <div class="card card-border my-2 profile-card">
-                    <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.id) }}">
-                        <img class="card-img zoom-img mt-2" src="{{ favorite.img }}">
-                        <div class="card-body">
-                            <h5 class="card-title text-center card-text">
-                                {{ favorite.name }}
-                            </h5>
-                        </div>
-                    </a>
-                </div>
-                {% else %}
+            <div class="profile-content-container">
+                {% for favorite in recent_trail_favorites %}
                 <div class="card card-border my-2 profile-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=favorite.id) }}">
                         <img class="card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=favorite.trail_page_pics[0].img) }}">
@@ -32,10 +20,28 @@
                         </div>
                     </a>
                 </div>
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
             </div>
-            {% if recent_favorites == [] %}
+        </div>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">Favorite gear</h5>
+            </div>
+            <div class="profile-content-container">
+                {% for favorite in recent_gear_favorites %}
+                <div class="card card-border my-2 pt-1 profile-card">
+                    <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=favorite.id) }}">
+                        <img class="card-img zoom-img" src="{{ favorite.img }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center card-text">
+                                {{ favorite.name }}
+                            </h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% if recent_gear_favorites == [] and recent_trail_favorites == [] %}
             <h5 class="small-section-font">No pages favorited</h5>
             {% else %}
             <div class="view-all-links-big-screen">
@@ -45,11 +51,12 @@
             </div>
             {% endif %}
         </div>
-        <div class="profile-home-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">Rated Photos</h5>
+
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">Rated Photos</h5>
             </div>
-            <div class="profile-recent-container">
+            <div class="profile-content-container">
                 {% for photo in recent_rated_photos %}
                 <div class="card card-border my-2 profile-card">
                     <a class="no-underline" data-bs-toggle="modal" data-bs-target="#showRatedPhotoModal-{{recent_rated_photos.index(photo)}}">
@@ -89,11 +96,11 @@
             </div>
             {% endif %}
         </div>
-        <div class="profile-home-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">Submitted Photos</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">Submitted Photos</h5>
             </div>
-            <div class="profile-recent-container">
+            <div class="profile-content-container">
                 {% for photo in recent_submitted_photos %}
                 <div class="card card-border my-2 profile-card">
                     <a class="no-underline" data-bs-toggle="modal" data-bs-target="#showSubmittedPhotoModal-{{recent_submitted_photos.index(photo)}}">
@@ -133,12 +140,12 @@
             </div>
             {% endif %}
         </div>
-        <div class="profile-home-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">User Trail Comments</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">User Trail Comments</h5>
             </div>
             <div class="profile-comments-container">
-                <div class="profile-recent-container">
+                <div class="profile-content-container">
                     {% for comment in recent_trail_comments %}
                     <div class="card card-border my-2 profile-card comment-card">
                         <a class="no-underline comment-box" href="{{ url_for('trail_bp.view_trail',db_id=comment.trail_id) }}">
@@ -168,12 +175,12 @@
             </div>
             {% endif %}
         </div>
-        <div class="profile-home-section">
-            <div class="profile-home-section-title-container">
-                <h5 class="profile-home-section-title">User Gear Comments</h5>
+        <div class="profile-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">User Gear Comments</h5>
             </div>
             <div class="profile-comments-container">
-                <div class="profile-recent-container">
+                <div class="profile-content-container">
                     {% for comment in recent_gear_comments %}
                     <div class="card card-border my-2 profile-card comment-card">
                         <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
