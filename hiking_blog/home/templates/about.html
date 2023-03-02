@@ -1,16 +1,23 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container mb-5">
     <div>
-        <h1>About This Site</h1>
+        <h1 class="section-font-one text-center">About Tamarack Treks</h1>
     </div>
     <div>
-        <p>This site is about hiking...Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa
-            qui officia deserunt mollit anim id est laborum.</p>
+        <p class="body-font">
+            Tamarack Treks is an online resource and community that aims to help you explore Western Montana in the
+            best way possible. Western Montana is home to myriad camping locations, hiking trails and recreational
+            destinations -- it can be overwhelming to narrow down where you want to explore. With community reviews
+            and local tips, we will help you find the right trails, camping spots, and gear you need to have a great
+            time.
+        </p>
+        <p class="body-font">
+            <span><a class="inline-link" href="{{ url_for('auth_bp.login') }}">Become a registered user for free.</a></span> Users can add their favorite gear, trails and
+            campsites to their profile. Contribute to the database by uploading your favorite trail and campsite photos.
+            We appreciate any and all contributions to the site.
+        </p>
     </div>
 </div>
 {% endblock %}}

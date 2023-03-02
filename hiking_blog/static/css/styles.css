@@ -135,7 +135,13 @@ body {
     transition-duration: 0.5s;
 }
 
-.more-link:hover {
+.inline-link {
+    color: #bc6c25;
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+.more-link:hover, .inline-link:hover {
     color: #dda15e;
     cursor: pointer;
 }
