@@ -204,7 +204,15 @@ body {
     transition-duration: 0.5s;
 }
 
-.carousel-font:hover {
+.carousel-caption-font {
+    display: inline-block;
+    font-size: 19px;
+    text-shadow: -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px -0.5px 0 #000;
+    color: #fefae0;
+    transition-duration: 0.5s;
+}
+
+.carousel-font:hover, carousel-caption-font:hover {
     color: #dda15e;
 }
 
