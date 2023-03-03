@@ -11,9 +11,9 @@
                 <h5 class="profile-title">All 5-star photos</h5>
             </div>
             {% if five_photos %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for pic in five_photos %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 favorite-trail-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=pic.rated_pic.parent_trail_posts.id) }}">
                         <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.rated_pic.img)  }}">
                         <div class="card-body">
@@ -35,9 +35,9 @@
                 <h5 class="profile-title">All 4-star photos</h5>
             </div>
             {% if four_photos %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for pic in four_photos %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 favorite-trail-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=pic.rated_pic.parent_trail_posts.id) }}">
                         <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.rated_pic.img)  }}">
                         <div class="card-body">
@@ -59,9 +59,9 @@
                 <h5 class="profile-title">All 3-star photos</h5>
             </div>
             {% if three_photos %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for pic in three_photos %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 favorite-trail-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=pic.rated_pic.parent_trail_posts.id) }}">
                         <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.rated_pic.img)  }}">
                         <div class="card-body">
@@ -83,9 +83,9 @@
                 <h5 class="profile-title">All 2-star photos</h5>
             </div>
             {% if two_photos %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for pic in two_photos %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 favorite-trail-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=pic.rated_pic.parent_trail_posts.id) }}">
                         <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.rated_pic.img)  }}">
                         <div class="card-body">
@@ -107,9 +107,9 @@
                 <h5 class="profile-title">All 1-star photos</h5>
             </div>
             {% if one_photos %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for pic in one_photos %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 favorite-trail-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=pic.rated_pic.parent_trail_posts.id) }}">
                         <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.rated_pic.img)  }}">
                         <div class="card-body">

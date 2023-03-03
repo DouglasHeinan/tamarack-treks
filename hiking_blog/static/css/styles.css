@@ -1165,6 +1165,14 @@ a.trail-carousel-font:hover {
     }
 }
 
+@media (max-width:768px) {
+    .view-all-links-align {
+        margin: 1em auto 0;
+        text-align: center;
+        width: 100%;
+    }
+}
+
 @media (max-width:576px) {
     body {
         padding-top: 3em;
@@ -1227,12 +1235,6 @@ a.trail-carousel-font:hover {
     .view-all-links-big-screen {
         display: flex;
         justify-content: flex-end;
-    }
-}
-
-@media (max-width:576px) {
-    .view-all-links-align {
-
     }
 }
 
@@ -1633,13 +1635,12 @@ a.trail-carousel-font:hover {
     .profile-title {
         margin: 0.5em 1em 0;
     }
-    .view-all-links-align {
-        margin: 0.5em auto 0;
-        text-align: center;
-        width: 100%;
-    }
     .favorite-gear-card, .favorite-trail-card {
         width: 40%;
+    }
+    .section-title-filter-button-container {
+        flex-direction: column;
+        margin-bottom: 1em;
     }
 }
 

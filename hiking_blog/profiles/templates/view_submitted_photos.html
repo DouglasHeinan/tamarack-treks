@@ -34,9 +34,9 @@
             </div>
             {% if date %}
             {% if photos %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for photo in photos %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 favorite-trail-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=photo.parent_trail_posts.id) }}">
                         <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img) }}">
                         <div class="card-body">
@@ -56,9 +56,9 @@
             {% endif %}
             {% else %}
             {% if photos %}
-            <div class="favorite-container">
+            <div class="profile-sub-container profile-content-container">
                 {% for photo in photos %}
-                <div class="card card-border my-2 favorite-card">
+                <div class="card card-border my-2 favorite-trail-card">
                     <a class="no-underline" href="{{ url_for('trail_bp.view_trail',db_id=photo.parent_trail_posts.id) }}">
                         <img class="favorite-card-img-top zoom-img img-fluid" src="{{ url_for('trail_bp.display_trail_pics', file_name=photo.img) }}">
                         <div class="card-body">
