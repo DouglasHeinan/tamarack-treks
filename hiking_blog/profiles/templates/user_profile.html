@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="page-wrapper">
-    <h3 class="section-font-one profile-title">Welcome to your profile, {{ user.username }}</h3>
+    <h3 class="section-font-one">Welcome to your profile, {{ user.username }}</h3>
     <div class="profile-sections">
         <div class="profile-trail-section">
             <div class="profile-title-container">
@@ -148,7 +148,7 @@
                     {% for comment in recent_trail_comments %}
                     <div class="card card-border my-2 profile-card comment-card">
                         <a class="no-underline comment-box" href="{{ url_for('trail_bp.view_trail',db_id=comment.trail_id) }}">
-                            <p class="body-font comment-date">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                            <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
                             <div class="comment-text-box">
                                 {% if comment.text|length < 100 %}
                                 <p class="bold-body-font">{{ comment.text }}</p>
@@ -183,7 +183,7 @@
                     {% for comment in recent_gear_comments %}
                     <div class="card card-border my-2 profile-card comment-card">
                         <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
-                            <p class="body-font comment-date">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                            <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
                             <div class="comment-text-box">
                                 <p class="bold-body-font">{{ comment.text }}</p>
                             </div>
