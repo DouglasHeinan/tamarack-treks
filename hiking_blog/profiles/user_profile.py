@@ -31,11 +31,24 @@ def user_profile_dashboard(user_id):
     )
 
 
-@user_profile_bp.route("/user_profile/<user_id>/comments")
-def user_profile_comments(user_id):
-    """Renders the user-profile comments page, displaying all comments made by the user."""
+@user_profile_bp.route("/user_profile/<user_id>/<sort_by>/view_comments")
+def view_submitted_comments(user_id, sort_by):
+    """Renders the user-profile submitted comments page, displaying all comments submitted by the user."""
     user = User.query.get(user_id)
-    return render_template("user_comments.html", user=user)
+    gear_comments = user.gear_page_comments
+    trail_comments = user.trail_page_comments
+    if sort_by == "date":
+        date = True
+    else:
+        date = False
+    ordered_gear_comments, ordered_trail_comments = get_ordered_comments(date, gear_comments, trail_comments)
+    return render_template(
+        "user_comments.html",
+        user=user,
+        gear_comments=ordered_gear_comments,
+        trail_comments=ordered_trail_comments,
+        date=date
+    )
 
 
 @user_profile_bp.route("/user_profile/<user_id>/<sort_by>/view_photos")
@@ -170,12 +183,27 @@ def get_ordered_photos(date, photos):
         return photos
 
 
+def get_ordered_comments(date, gear_comments, trail_comments):
+    if date:
+        gear_comments.sort(key=get_date_time_added)
+        trail_comments.sort(key=get_date_time_added)
+        return gear_comments, trail_comments
+    else:
+        gear_comments.sort(key=get_parent_post)
+        trail_comments.sort(key=get_parent_post)
+        return gear_comments, trail_comments
+
+
 def get_date_time_added(entry):
     return entry.date_time_added
 
 
 def get_community_rating(entry):
     return entry.community_rating
+
+
+def get_parent_post(entry):
+    return entry.parent_posts.name
 
 
 # -------------------------------------------PHOTO RATING FUNCTIONS----------------------------------------

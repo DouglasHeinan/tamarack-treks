@@ -19,13 +19,13 @@
                     <div class="dropdown-menu" aria-labelledby="gearCommentFilter">
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('MAKEFUNCTION') }}">
+                               href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='date') }}">
                                 Date Submitted
                             </a>
                         </div>
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('MAKEFUNCTION') }}">
+                               href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='gear') }}">
                                 Gear Item
                             </a>
                         </div>
@@ -70,13 +70,13 @@
                     <div class="dropdown-menu" aria-labelledby="trailCommentFilter">
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('MAKEFUNCTION') }}">
+                               href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='date') }}">
                                 Date Submitted
                             </a>
                         </div>
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('MAKEFUNCTION') }}">
+                               href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='gear') }}">
                                 Trail Page
                             </a>
                         </div>
@@ -87,7 +87,7 @@
             <div class="profile-sub-container profile-content-container">
                 {% for comment in trail_comments %}
                 <div class="card card-border my-2 profile-card comment-card">
-                    <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
+                    <a class="no-underline comment-box" href="{{ url_for('trail_bp.view_trail',db_id=comment.trail_id) }}">
                         {% if date %}
                         <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
                         {% else %}

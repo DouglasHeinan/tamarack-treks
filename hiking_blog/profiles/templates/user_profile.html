@@ -195,7 +195,7 @@
             {% if recent_trail_comments != [] and recent_gear_comments != [] %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">All user comments</a></h5>
+                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='date') }}">All user comments</a></h5>
                 </div>
             </div>
             {% endif %}
