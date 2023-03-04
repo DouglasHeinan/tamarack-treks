@@ -3,7 +3,7 @@
 <div class="page-wrapper">
     <h3 class="section-font-one">Welcome to your profile, {{ user.username }}</h3>
     <div class="profile-sections">
-        <div class="profile-gear-section">
+        <div class="profile-no-border-section">
             <div class="profile-title-container">
                 <h5 class="profile-title">Favorite gear</h5>
             </div>
@@ -139,6 +139,31 @@
             </div>
             {% endif %}
         </div>
+        <div class="profile-no-border-section">
+            <div class="profile-title-container">
+                <h5 class="profile-title">User Gear Comments</h5>
+            </div>
+            <div class="profile-comments-container">
+                <div class="profile-content-container">
+                    {% for comment in recent_gear_comments %}
+                    <div class="card card-border my-2 profile-card comment-card">
+                        <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
+                            <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                            <div class="comment-text-box">
+                                <p class="bold-body-font">{{ comment.text }}</p>
+                            </div>
+                            <h5 class="card-title text-center card-text">
+                                {{ comment.parent_posts.name }}
+                            </h5>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if recent_gear_comments == [] %}
+            <h5 class="small-section-font">No gear comments submitted</h5>
+            {% endif %}
+        </div>
         <div class="profile-section">
             <div class="profile-title-container">
                 <h5 class="profile-title">User Trail Comments</h5>
@@ -166,46 +191,11 @@
             </div>
             {% if recent_trail_comments == [] %}
             <h5 class="small-section-font">No trail comments submitted</h5>
-            {% else %}
+            {% endif %}
+            {% if recent_trail_comments != [] and recent_gear_comments != [] %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
                     <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">All user comments</a></h5>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-        <div class="profile-section">
-            <div class="profile-title-container">
-                <h5 class="profile-title">User Gear Comments</h5>
-            </div>
-            <div class="profile-comments-container">
-                <div class="profile-content-container">
-                    {% for comment in recent_gear_comments %}
-                    <div class="card card-border my-2 profile-card comment-card">
-                        <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
-                            <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
-                            <div class="comment-text-box">
-                                <p class="bold-body-font">{{ comment.text }}</p>
-                            </div>
-                            <h5 class="card-title text-center card-text">
-                                {{ comment.parent_posts.name }}
-                            </h5>
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% if recent_gear_comments == [] %}
-            <h5 class="small-section-font">No gear comments submitted</h5>
-            {% else %}
-            <div class="view-all-links-big-screen">
-                <div class="view-all-links-align">
-                    <h5>
-                        <a class="view-all-links"
-                           href="{{ url_for('user_profile_bp.user_profile_comments', user_id=user.id) }}">
-                            All user comments
-                        </a>
-                    </h5>
                 </div>
             </div>
             {% endif %}
@@ -222,5 +212,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
