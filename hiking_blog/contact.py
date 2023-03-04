@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
 import os
+import re
 
 CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
               'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
@@ -17,6 +18,7 @@ CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', '
               '!', '#', '$', '%', '&', '*', '+']
 PW_RESET_MESSAGE = "Here is your password reset code:"
 EMAIL = os.environ["EMAIL"]
+NO_TAGS = re.compile("<.*?>")
 
 
 contact_bp = Blueprint(
@@ -97,7 +99,7 @@ def send_html_mail(email, subject, message):
         connection.login(user=EMAIL, password=os.environ["EMAIL_PW"])
         connection.sendmail(from_addr=EMAIL,
                             to_addrs=email,
-                            msg=f"Subject:{subject}\n\n{message}")
+                            msg=f"Subject:{subject}\n\n{message}",)
     print("html mail sent")
 
 

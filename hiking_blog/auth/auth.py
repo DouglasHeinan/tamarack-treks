@@ -11,6 +11,7 @@ from hiking_blog.models import User
 from hiking_blog.contact import send_password_reset_email
 from better_profanity import profanity
 from datetime import timedelta, datetime
+import re
 
 
 DAYS_BEFORE_LOGOUT = timedelta(days=30)

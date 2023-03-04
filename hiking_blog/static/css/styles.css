@@ -854,6 +854,10 @@ a.trail-carousel-font:hover {
     margin: 0 auto 0.25em;
 }
 
+.comment-card-text {
+    margin: 0 0.25em;
+}
+
 .comment-parent-pairing {
     display: flex;
     flex-direction: column;
