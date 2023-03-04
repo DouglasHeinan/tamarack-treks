@@ -2,22 +2,21 @@
 
 {% block content %}
 
-
 <div class="page-wrapper">
     <div class="profile-sections">
         <h3 class="section-font-one">{{ user.username }}'s gear photos</h3>
         <div class="profile-section">
             <div class="profile-title-container">
                 <div class="section-title-filter-button-container">
-                    <h5 class="profile-title">All submitted photos</h5>
+                    <h5 class="profile-title">All submitted gear comments</h5>
                     <a class="btn btn-sm user-button dropdown-toggle"
-                        role="button" id="commentFilterDropdown"
+                        role="button" id="gearCommentFilter"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                         href="#">
                     Filter
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="commentFilterDropdown">
+                    <div class="dropdown-menu" aria-labelledby="gearCommentFilter">
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
                                href="{{ url_for('MAKEFUNCTION') }}">
@@ -53,65 +52,61 @@
                 </div>
                 {% endfor %}
             </div>
-
-
-
+            {% else %}
+            <h5 class="small-section-font">No gear comments submitted</h5>
+            {% endif %}
         </div>
-
-
-
-
         <div class="profile-section">
             <div class="profile-title-container">
                 <div class="section-title-filter-button-container">
-                    <h5 class="profile-title">All submitted photos</h5>
+                    <h5 class="profile-title">All submitted trail comments</h5>
                     <a class="btn btn-sm user-button dropdown-toggle"
-                        role="button" id="filterDropdown"
+                        role="button" id="trailCommentFilter"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                         href="#">
                     Filter
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                    <div class="dropdown-menu" aria-labelledby="trailCommentFilter">
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='date') }}">Date
-                                Submitted
+                               href="{{ url_for('MAKEFUNCTION') }}">
+                                Date Submitted
                             </a>
                         </div>
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='rating') }}">Community
-                                Rating
+                               href="{{ url_for('MAKEFUNCTION') }}">
+                                Trail Page
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-
-
+            {% if trail_comments %}
+            <div class="profile-sub-container profile-content-container">
+                {% for comment in trail_comments %}
+                <div class="card card-border my-2 profile-card comment-card">
+                    <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
+                        {% if date %}
+                        <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                        {% else %}
+                        <p class="body-font">{{ comment.trail_id.name }}</p>
+                        {% endif %}
+                        <div class="comment-text-box">
+                            <p class="bold-body-font">{{ comment.text }}</p>
+                        </div>
+                        <h5 class="card-title text-center card-text">
+                            {{ comment.parent_posts.name }}
+                        </h5>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h5 class="small-section-font">No gear comments submitted</h5>
+            {% endif %}
         </div>
     </div>
 </div>
-
-
-
-{% for comment in user.trail_page_comments %}
-<p>{{ comment.text }}</p>
-{% if comment.deleted_by %}
-<span class="text-danger">deleted</span>
-{% endif %}
-{% endfor %}
-{% else %}
-<p>You haven't posted any trail comments</p>
-{% endif %}
-
-{% if user.gear_page_comments %}
-{% for comment in user.gear_page_comments %}
-<p>{{ comment.text }}</p>
-{% endfor %}
-{% else %}
-<p>You haven't posted any gear comments</p>
-{% endif %}
-
 {% endblock %}
