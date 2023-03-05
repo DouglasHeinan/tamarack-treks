@@ -46,6 +46,9 @@
         {% endif %}
     {% endfor %}
     </ul>
+    <div class="bad-search-info">
+        <p class="bold-body-font">If you don't see what you're looking for, check the spelling of everything in the search field and maybe try a different keyword. It's also possible we haven't entered whatever you're searching for in our database. If you think we're missing something, <span><a class="inline-link" href="{{ url_for('contact_bp.contact') }}">let us know!</a></span></p>
+    </div>
 </div>
 {% endif %}
 {% endblock %}}

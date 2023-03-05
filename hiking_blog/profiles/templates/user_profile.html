@@ -151,7 +151,7 @@
                         <div class="comment-text-box">
                             <p class="bold-body-font">{{ comment.text }}</p>
                         </div>
-                        <h5 class="card-title text-center card-text">
+                        <h5 class="card-title text-center card-text comment-card-text">
                             {{ comment.parent_posts.name }}
                         </h5>
                     </a>
@@ -166,26 +166,24 @@
             <div class="profile-title-container">
                 <h5 class="profile-title">User Trail Comments</h5>
             </div>
-            <div class="profile-comments-container">
-                <div class="profile-content-container">
-                    {% for comment in recent_trail_comments %}
-                    <div class="card card-border my-2 profile-card comment-card">
-                        <a class="no-underline comment-box" href="{{ url_for('trail_bp.view_trail',db_id=comment.trail_id) }}">
-                            <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
-                            <div class="comment-text-box">
-                                {% if comment.text|length < 100 %}
-                                <p class="bold-body-font">{{ comment.text }}</p>
-                                {% else %}
-                                <p class="bold-body-font">{{ comment.text[:99] }}...</p>
-                                {% endif %}
-                            </div>
-                            <h5 class="card-title text-center card-text">
-                                {{ comment.parent_posts.name }}
-                            </h5>
-                        </a>
-                    </div>
-                    {% endfor %}
+            <div class="profile-content-container">
+                {% for comment in recent_trail_comments %}
+                <div class="card card-border my-2 profile-card comment-card">
+                    <a class="no-underline comment-box" href="{{ url_for('trail_bp.view_trail',db_id=comment.trail_id) }}">
+                        <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                        <div class="comment-text-box">
+                            {% if comment.text|length < 100 %}
+                            <p class="bold-body-font">{{ comment.text }}</p>
+                            {% else %}
+                            <p class="bold-body-font">{{ comment.text[:99] }}...</p>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title text-center card-text comment-card-text">
+                            {{ comment.parent_posts.name }}
+                        </h5>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
             {% if recent_trail_comments == [] %}
             <h5 class="small-section-font">No trail comments submitted</h5>
