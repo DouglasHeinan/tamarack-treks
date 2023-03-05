@@ -109,6 +109,7 @@ def add_trail_photo(trail_id):
     if form.validate_on_submit():
         message, result = check_file(form, trail_id)
         flash(message)
+        modal = True
         return result
     return render_template("add_trail_photo_form_page.html", form=form, trail_id=trail_id)
 
@@ -146,7 +147,7 @@ def check_file(form, trail_id):
         filename = secure_filename(file.filename)
         file.save(os.path.join(directory, filename))
         message = PICTURE_UPLOAD_SUCCESS
-        result = redirect(url_for("trail_bp.view_trail", db_id=trail_id))
+        result = redirect(url_for("trail_bp.view_trail", db_id=trail_id, modal=True))
     else:
         message = "Invalid file type."
         result = redirect(url_for("trail_bp.add_trail_pic", trail_id=trail_id))

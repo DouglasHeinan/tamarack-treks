@@ -106,12 +106,7 @@
             {% if messages %}
                 {% for message in messages %}
                     {% if message != None %}
-                    <div class="photo-modal">
-                        <div class="photo-modal-content">
-                            <span class="close-button">&times;</span>
-                            <p class="photo-submitted-msg body-font">{{ message }}</p>
-                        </div>
-                    </div>
+                    <p class="photo-submitted-msg body-font">{{ message }}</p>
                     {% endif %}
                 {% endfor %}
             {% endif %}

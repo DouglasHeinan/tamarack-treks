@@ -1053,6 +1053,10 @@ a.trail-carousel-font:hover {
 }
 
 /*-------------------SUBMITTED PIC------------------*/
+li.submitted-pic-list-entry:nth-last-of-type(1) {
+    border-bottom: none;
+}
+
 .submitted-pic-list-entry {
     max-width: 90vw;
     margin: 0 auto 2em;
