@@ -11,7 +11,7 @@
                 {% for favorite in recent_gear_favorites %}
                 <div class="card card-border my-2 pt-1 profile-card">
                     <a class="no-underline" href="{{ url_for('gear_bp.view_gear',db_id=favorite.id) }}">
-                        <img class="card-img zoom-img" src="{{ favorite.img }}">
+                        <img class="card-img zoom-img max-img-size" src="{{ favorite.img }}">
                         <div class="card-body">
                             <h5 class="card-title text-center card-text">
                                 {{ favorite.name }}
@@ -45,7 +45,7 @@
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">All favorites</a></h5>
+                    <h5><a class="view-all-links no-underline" href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">All favorites...</a></h5>
                 </div>
             </div>
             {% endif %}
@@ -90,7 +90,7 @@
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_rated_photos', user_id=user.id) }}">All rated photos</a></h5>
+                    <h5><a class="view-all-links no-underline" href="{{ url_for('user_profile_bp.view_rated_photos', user_id=user.id) }}">All rated photos...</a></h5>
                 </div>
             </div>
             {% endif %}
@@ -134,7 +134,7 @@
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5 class=""><a class="view-all-links" href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='date') }}">All submitted photos</a></h5>
+                    <h5 class=""><a class="view-all-links no-underline" href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='date') }}">All submitted photos...</a></h5>
                 </div>
             </div>
             {% endif %}
@@ -143,22 +143,20 @@
             <div class="profile-title-container">
                 <h5 class="profile-title">User Gear Comments</h5>
             </div>
-            <div class="profile-comments-container">
-                <div class="profile-content-container">
-                    {% for comment in recent_gear_comments %}
-                    <div class="card card-border my-2 profile-card comment-card">
-                        <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
-                            <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
-                            <div class="comment-text-box">
-                                <p class="bold-body-font">{{ comment.text }}</p>
-                            </div>
-                            <h5 class="card-title text-center card-text">
-                                {{ comment.parent_posts.name }}
-                            </h5>
-                        </a>
-                    </div>
-                    {% endfor %}
+            <div class="profile-content-container">
+                {% for comment in recent_gear_comments %}
+                <div class="card card-border my-2 profile-card comment-card">
+                    <a class="no-underline comment-box" href="{{ url_for('gear_bp.view_gear',db_id=comment.gear_id) }}">
+                        <p class="body-font">{{ (comment.date_time_added|string).split()[0] }}:</p>
+                        <div class="comment-text-box">
+                            <p class="bold-body-font">{{ comment.text }}</p>
+                        </div>
+                        <h5 class="card-title text-center card-text">
+                            {{ comment.parent_posts.name }}
+                        </h5>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
             {% if recent_gear_comments == [] %}
             <h5 class="small-section-font">No gear comments submitted</h5>
@@ -195,7 +193,7 @@
             {% if recent_trail_comments != [] and recent_gear_comments != [] %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links" href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='date') }}">All user comments</a></h5>
+                    <h5><a class="view-all-links no-underline" href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='date') }}">All user comments...</a></h5>
                 </div>
             </div>
             {% endif %}

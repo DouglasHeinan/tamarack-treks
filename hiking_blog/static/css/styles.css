@@ -267,14 +267,14 @@ body {
 }
 
 .view-all-links {
-    color: #283618;
+    color: #808080;
     text-transform: uppercase;
-    font-weight: bold;
     transition-duration: 0.5s;
+    font-size: 0.85em;
 }
 
 .view-all-links:hover {
-    color: #606c38;
+    color: #283618;
 }
 
 .view-all-links-align {
@@ -785,14 +785,14 @@ a.trail-carousel-font:hover {
 }
 
 .profile-section {
-    padding: 2em 0;
+    padding: 2.5em 0;
     border-bottom: 1px ridge #808080;
     width: 90%;
     margin: 0 auto;
 }
 
 .profile-no-border-section {
-    padding: 0.5em 0;
+    padding: 1.5em 0;
     width: 90%;
     margin: 0 auto;
 }
@@ -824,6 +824,10 @@ a.trail-carousel-font:hover {
 .profile-card {
     margin: 0 0.5em;
     width: 35%;
+}
+
+.max-img-size {
+    max-height: 30vh;
 }
 
 .comment-card {
@@ -870,9 +874,9 @@ a.trail-carousel-font:hover {
 }
 
 .profile-avatar-section {
-    margin-top: 1em;
+    padding-top: 1.5em;
     width: 80%;
-    margin: 1em auto 2em;
+    margin: 1em auto 3em;
 }
 
 .avatar-title-image {
@@ -1643,9 +1647,9 @@ a.trail-carousel-font:hover {
         margin: 0 auto;
         width: 100%;
     }
-    .profile-section {
-        padding-top: 0;
-        padding-bottom: 2em;
+    .profile-section, .profile-no-border-section {
+        padding-top: 1em;
+        padding-bottom: 1.5em;
     }
     .profile-title {
         margin: 0.5em 1em 0;
@@ -1656,6 +1660,9 @@ a.trail-carousel-font:hover {
     .section-title-filter-button-container {
         flex-direction: column;
         margin-bottom: 1em;
+    }
+    .profile-avatar-section {
+        padding-top: 0.5em;
     }
 }
 
@@ -1668,7 +1675,15 @@ a.trail-carousel-font:hover {
         flex-direction: column;
         align-items: center;
         padding-bottom: 2em;
+        padding-top: 2em;
         border-bottom: 1px ridge #080808;;
+    }
+    .profile-no-border-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 1.5em;
+        padding-top: 2em;
     }
     .profile-sections {
         text-align: center;
@@ -1687,6 +1702,9 @@ a.trail-carousel-font:hover {
     }
     .favorite-gear-card, .favorite-trail-card {
         width: 75%;
+    }
+    .profile-avatar-section {
+        padding-top: 1em;
     }
 }
 
