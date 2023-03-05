@@ -56,6 +56,7 @@ def view_trail(db_id):
             return redirect(url_for("auth_bp.login"))
         create_new_trail_comment(form, trail)
         form.comment_text.data = ""
+        return redirect(url_for('trail_bp.view_trail', db_id=db_id))
     return render_template("view_trail.html", trail=trail, form=form, current_user=current_user, user_rated_pic_ids=user_rated_pic_ids)
 
 

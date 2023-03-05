@@ -5,9 +5,11 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
-        <div class="text-center mt-3 mb-2">
-            <h3 class="text-danger"><strong>{{ message }}</strong></h3>
-        </div>
+            {% if message != None %}
+            <div class="text-center mt-3 mb-2">
+                <h3 class="text-danger"><strong>{{ message }}</strong></h3>
+            </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
 {% endwith %}

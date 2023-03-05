@@ -211,10 +211,10 @@
                     {% endif %}
                 </div>
                 <span class="comment-font">
-                    {% if current_user.username_approved %}
+                    {% if comment.commenter.username_approved %}
                     -{{ comment.commenter.username }}
                     {% else %}
-                    -temp_user_{{ current_user.id }}
+                    -temp_user_{{ comment.commenter.id }}
                     {% endif %}
                 </span>
                 <div>

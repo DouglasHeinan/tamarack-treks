@@ -70,7 +70,6 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm user-button" data-bs-dismiss="modal">Close</button>
                     </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -120,14 +119,14 @@
                     {% if comment.deleted_by %}
                         <p>This comment has been deleted by {{ comment.deleted_by }}</p>
                     {% else %}
-                        {{ comment.text|safe }}
+                        {{ comment.text }}
                     {% endif %}
                 </div>
                 <span>
-                    {% if current_user.username_approved %}
+                    {% if comment.commenter.username_approved %}
                     -{{ comment.commenter.username }}
                     {% else %}
-                    -temp_user_{{ current_user.id }}
+                    -temp_user_name_{{ comment.commenter.id }}
                     {% endif %}
                 </span>
                 <div>

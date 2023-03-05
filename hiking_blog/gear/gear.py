@@ -49,6 +49,7 @@ def view_gear(db_id):
             return redirect(url_for("auth_bp.login"))
         create_new_gear_comment(form, gear)
         form.comment_text.data = ""
+        return redirect(url_for('gear_bp.view_gear', db_id=db_id))
     return render_template("view_gear.html", gear=gear, form=form, current_user=current_user, info=info)
 
 
