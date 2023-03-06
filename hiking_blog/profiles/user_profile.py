@@ -81,8 +81,8 @@ def view_rated_photos(user_id):
     )
 
 
-@user_profile_bp.route("/user_profile/<user_id>/view_favorites")
-def view_favorites(user_id):
+@user_profile_bp.route("/user_profile/<user_id>/<sort_by>/view_favorites")
+def view_favorites(user_id, sort_by):
     """Renders the user-profile favorites page, displaying all database entries favorited by the user."""
     user = User.query.get(user_id)
     favorites = Favorites.query.filter_by(user_id=user_id).all()
@@ -93,10 +93,11 @@ def view_favorites(user_id):
             gear_favorites.append(favorite)
         else:
             trail_favorites.append(favorite)
+    ordered_gear_favorites, ordered_trail_favorites = get_ordered_favorites(gear_favorites, trail_favorites, sort_by)
     return render_template(
         "user_profile_favorites.html",
-        gear_favorites=gear_favorites,
-        trail_favorites=trail_favorites,
+        gear_favorites=ordered_gear_favorites,
+        trail_favorites=ordered_trail_favorites,
         user=user
     )
 
@@ -194,6 +195,16 @@ def get_ordered_comments(date, gear_comments, trail_comments):
         return gear_comments, trail_comments
 
 
+def get_ordered_favorites(gear_favorites, trail_favorites, sort_by):
+    if sort_by == "date":
+        gear_favorites.sort(key=get_date_time_added)
+        trail_favorites.sort(key=get_date_time_added)
+    else:
+        gear_favorites.sort(key=get_entry_name)
+        trail_favorites.sort(key=get_entry_name)
+    return gear_favorites, trail_favorites
+
+
 def get_date_time_added(entry):
     return entry.date_time_added
 
@@ -204,6 +215,10 @@ def get_community_rating(entry):
 
 def get_parent_post(entry):
     return entry.parent_posts.name
+
+
+def get_entry_name(entry):
+    return entry.name
 
 
 # -------------------------------------------PHOTO RATING FUNCTIONS----------------------------------------

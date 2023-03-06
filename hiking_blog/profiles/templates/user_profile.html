@@ -45,7 +45,7 @@
             {% else %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
-                    <h5><a class="view-all-links no-underline" href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id) }}">All favorites...</a></h5>
+                    <h5><a class="view-all-links no-underline" href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id, sort_by='date') }}">All favorites...</a></h5>
                 </div>
             </div>
             {% endif %}
