@@ -15,10 +15,32 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
-
         <div class="profile-section">
             <div class="profile-title-container">
-                <h5 class="profile-title">Favorite gear</h5>
+                <div class="section-title-filter-button-container">
+                    <h5 class="profile-title">Favorite Gear</h5>
+                    <a class="btn btn-sm user-button dropdown-toggle"
+                        role="button" id="favoriteFilterDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        href="#">
+                    Filter
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="favoriteFilterDropdown">
+                        <div class="dropdown-item">
+                            <a class="bold-body-font no-underline"
+                               href="{{ url_for('user_profile_bp.!!!!!!!!!!!!', user_id=user.id, sort_by='date') }}">Date
+                                Submitted
+                            </a>
+                        </div>
+                        <div class="dropdown-item">
+                            <a class="bold-body-font no-underline"
+                               href="{{ url_for('user_profile_bp.!!!!!!!!!!!!!!', user_id=user.id, sort_by='rating') }}">Community
+                                Rating
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
             {% if gear_favorites %}
             <div class="profile-sub-container profile-content-container">
