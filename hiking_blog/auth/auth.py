@@ -181,6 +181,8 @@ def unauthorized():
 def create_new_user(form, admin):
     """Creates a new user entry in the database."""
     new_user = User(
+        first_name=form.first_name,
+        last_name=form.last_name,
         username=form.username.data,
         email=form.email.data,
         is_admin=admin,

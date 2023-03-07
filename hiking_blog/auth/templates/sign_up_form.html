@@ -9,6 +9,14 @@
         {{ form.csrf_token }}
         <div class="non-bs-form-container">
             <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.first_name.label }}:</span>
+                {{ form.first_name }}
+            </div>
+            <div class="form-data-pairing">
+                <span class="form-font form-label">{{ form.last_name.label }}:</span>
+                {{ form.last_name }}
+            </div>
+            <div class="form-data-pairing">
                 <span class="form-font form-label">{{ form.username.label }}:</span>
                 {{ form.username }}
             </div>

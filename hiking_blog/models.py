@@ -12,6 +12,8 @@ class User(UserMixin, db.Model):
     """A class used to represent a user."""
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(100), nullable=False)
@@ -118,6 +120,7 @@ class TrailPictures(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     community_rating = db.Column(db.String, nullable=False)
     img = db.Column(db.String(250), nullable=False)
+    img_taker = db.Column(db.String(250), nullable=False)
 #--------------- Note to add unique constraint to img after finished with dev---------------------------
     date_time_added = db.Column(db.DateTime, nullable=False)
     poster_id = db.Column(db.Integer, db.ForeignKey("users.id"))
