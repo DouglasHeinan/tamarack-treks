@@ -651,6 +651,7 @@ def reject_username(user_id):
 def add_new_trail_photo(user, trail, photo, date):
     new_pic = TrailPictures(
         community_rating="Be the first to rate this photo!",
+        img_taker=user.first_name + "" + user.last_name,
         img=photo,
         poster_id=user.id,
         trail_id=trail.id,

@@ -173,7 +173,7 @@
         </div>
     </div>
     {% if current_user.is_admin %}
-    <div class="admin-edit-button">
+    <div class="admin-edit-button text-center">
         <a class="btn admin-button" href="{{ url_for('admin_bp.edit_trail', trail_id=trail.id) }}">
             Admin: Edit trail info!
         </a>
