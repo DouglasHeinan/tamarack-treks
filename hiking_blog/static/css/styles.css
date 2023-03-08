@@ -643,6 +643,16 @@ h5.listing-info:nth-child(odd) {
     transform: translate(-50%, -50%);
 }
 
+.image-credit {
+    z-index: 1;
+    font-size: 0.75em;
+    text-align: right;
+    color: white;
+    opacity: 0.4;
+    text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+
+}
+
 .trail-carousel-font {
     font-size: 0.75em;
     font-weight: bold;
