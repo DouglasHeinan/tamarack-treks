@@ -644,13 +644,13 @@ h5.listing-info:nth-child(odd) {
 }
 
 .image-credit {
-    z-index: 1;
     font-size: 0.75em;
-    text-align: right;
+    text-align: center;
     color: white;
     opacity: 0.4;
     text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
-
+    width: 20%;
+    margin: 0.5em auto 0;
 }
 
 .trail-carousel-font {

@@ -13,9 +13,6 @@
                 {% else %}
                 <div class="carousel-item carouselImage trail-img-container">
                 {% endif %}
-                    <div class="carousel-caption credit-caption image-credit">
-                        <span>Photo by {{ pic.img_taker }}</span>
-                    </div>
                     <img class="d-block w-100 trail-page-carousel-img" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.img) }}" alt="First slide">
                     <div class="carousel-caption trail-carousel-caption dropdown">
                         <a class="btn btn-sm trail-dropdown-btn dropdown-toggle"
@@ -89,6 +86,9 @@
                                 {% endif %}
                             </div>
                         </div>
+                    </div>
+                    <div class="credit-caption image-credit">
+                        <span>Photo by {{ pic.img_taker }}</span>
                     </div>
                 </div>
                 {% endfor %}
