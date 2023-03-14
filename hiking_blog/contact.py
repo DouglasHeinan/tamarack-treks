@@ -19,7 +19,7 @@ CHARACTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', '
 PW_RESET_MESSAGE = "Here is your password reset code:"
 EMAIL = os.environ["EMAIL"]
 NO_TAGS = re.compile("<.*?>")
-
+PW_RESET_SERIALIZER = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
 
 contact_bp = Blueprint(
     "contact_bp", __name__
@@ -105,10 +105,12 @@ def send_html_mail(email, subject, message):
 
 def send_password_reset_email(user_email):
     """Activated in the 'password_recovery' function, crafts and sends the password recovery email to the user."""
-    pw_reset_serializer = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+    # crypto.secure_bites or something----------------------------------------------------
+    # hmac secure? read up?----------------------------------------------------------------
+    # security best practices, read up.--------------------------------------------------
     pw_reset_url = url_for(
         "auth_bp.reset_with_token",
-        token=pw_reset_serializer.dumps(user_email, salt="pw-reset-salt"),
+        token=PW_RESET_SERIALIZER.dumps(user_email, salt="pw-reset-salt"),
         _external=True
     )
     html = render_template(

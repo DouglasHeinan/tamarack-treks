@@ -157,6 +157,7 @@ class Gear(db.Model):
     description = db.Column(db.Text, nullable=False)
     keywords = db.Column(db.String, nullable=False)
     gear_trail = db.Column(db.String, nullable=False)
+    # Make it's own table----------------------------------------------------
     moosejaw_url = db.Column(db.String(250))
     moosejaw_price = db.Column(db.String(50))
     moosejaw_link_dead = db.Column(db.Boolean, nullable=False)
@@ -169,6 +170,7 @@ class Gear(db.Model):
     backcountry_price = db.Column(db.String(50))
     backcountry_link_dead = db.Column(db.Boolean, nullable=False)
     backcountry_out_of_stock = db.Column(db.Boolean, nullable=False)
+    # End new table-----------------------------------------------------------
     date_time_added = db.Column(db.DateTime, nullable=False)
     gear_comments = relationship("GearComments", back_populates="parent_posts")
 
