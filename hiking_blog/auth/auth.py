@@ -76,8 +76,11 @@ def password_recovery():
     form = UsernameForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        send_password_reset_email(user.email)
-        return render_template("check_email.html")
+        if user:
+            send_password_reset_email(user.email)
+            return render_template("check_email.html")
+        else:
+            flash("Invalid username")
     return render_template("pw_recovery_form_page.html",
                            form=form,
                            form_action="auth_bp.password_recovery",
