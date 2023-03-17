@@ -130,6 +130,7 @@ def send_user_reminder(user, email):
 
 
 def send_username_rejected_notification(user):
+    """NEEDS DOCSTRING"""
     subject = "Username rejected."
     email_body = "Your username does not conform with our terms of use and has been rejected by the admin." \
                  " Please click the link below to submit an alternative username."
@@ -143,6 +144,7 @@ def send_username_rejected_notification(user):
 
 
 def send_dead_links():
+    """NEEDS DOCSTRING"""
     all_users = User.query.all()
     for user in all_users:
         if user.is_admin:

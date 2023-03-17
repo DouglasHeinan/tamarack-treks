@@ -8,7 +8,6 @@ from hiking_blog import db, login_manager
 
 def app_updates():
     """
-
     After setting up an application object so as to work within the Flask app context, this function automates some
     aspects of site maintenance. Specifically, it triggers a function that will delete all submitted photo files that
     are more than a month old, and a separate function to change the price of a piece of gear in the database. Further,
