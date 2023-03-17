@@ -19,7 +19,7 @@ class SignUpForm(FlaskForm):
     first_name = StringField("First Name", validators=[DataRequired()])
     last_name = StringField("Last Name", validators=[DataRequired()])
     username = StringField("Username", validators=[DataRequired()])
-    email = StringField("Email", validators=[DataRequired(), Email()])
+    email = StringField("Email", validators=[DataRequired(), Email(message="Please enter a valid email address.")])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=50)])
     verify_password = PasswordField("Verify Password", validators=[DataRequired()])
 
@@ -82,7 +82,7 @@ class AddNewTrailPhotoForm(FlaskForm):
 class ContactForm(FlaskForm):
     """A class used for the application's contact form."""
     name = StringField("Name", validators=[DataRequired()])
-    email = StringField("Email", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired(), Email(message="Please enter a valid email address.")])
     subject = StringField("Subject", validators=[DataRequired()])
     message = CKEditorField("Message", validators=[DataRequired()])
 

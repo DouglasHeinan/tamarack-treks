@@ -5,6 +5,15 @@
 <div class="container form-page-wrapper">
     <h2 class="mb-4 mt-5 section-font-one">Contact Us</h2>
     <h6 class="body-font mb-3">Thanks for reaching out. We'll respond as soon as we can.</h6>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <p class="text-danger"><strong>{{ message }}</strong></p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     {{ ckeditor.load() }}
     {{ ckeditor.config(name='message') }}
     <form method="POST" action="{{ url_for('contact_bp.contact') }}">
@@ -29,12 +38,5 @@
         </div>
         <input class="btn btn-sm user-button username-button" type="submit" value="Submit">
     </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-        <p class="text-danger"><strong>{{ message }}</strong></p>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
 </div>
 {% endblock %}

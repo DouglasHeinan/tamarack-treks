@@ -43,7 +43,7 @@ def contact():
         message = f"from user {form.name.data} at {form.email.data}:\n{message_body}"
         send_async_email(email, subject, message, send_email)
         return redirect(url_for("home_bp.home"))
-    return render_template("contact_form_page.html",form=form)
+    return render_template("contact_form_page.html", form=form)
 
 
 @contact_bp.route("/contact/username_recovery", methods=["GET", "POST"])
