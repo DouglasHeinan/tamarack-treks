@@ -14,6 +14,7 @@
                 <div class="carousel-item carouselImage trail-img-container">
                 {% endif %}
                     <img class="d-block w-100 trail-page-carousel-img" src="{{ url_for('trail_bp.display_trail_pics', file_name=pic.img) }}" alt="First slide">
+                    {% if current_user.is_authenticated %}
                     <div class="carousel-caption trail-carousel-caption dropdown">
                         <a class="btn btn-sm trail-dropdown-btn dropdown-toggle"
                            role="button"
@@ -87,6 +88,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                     <div class="credit-caption image-credit">
                         <span>Photo by {{ pic.img_taker }}</span>
                     </div>
