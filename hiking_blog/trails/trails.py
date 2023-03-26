@@ -51,7 +51,8 @@ def view_trail(db_id):
     if current_user.is_authenticated:
         user_rated_pics = RatedPhoto.query.filter_by(user_id=current_user.id).all()
         user_rated_pic_ids = [pic.photo_id for pic in user_rated_pics]
-    else: user_rated_pic_ids = []
+    else:
+        user_rated_pic_ids = []
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You must be logged in to comment.")
