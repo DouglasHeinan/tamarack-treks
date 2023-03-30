@@ -22,7 +22,7 @@ home_bp = Blueprint(
 )
 
 
-@home_bp.route("/")
+@home_bp.route("/tamarack-treks")
 def home():
     """
     Renders the home page.
