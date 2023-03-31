@@ -24,7 +24,7 @@ auth_bp = Blueprint(
 )
 
 
-@auth_bp.route("/auth/login", methods=["GET", "POST"])
+@auth_bp.route("/tamarack-treks/auth/login", methods=["GET", "POST"])
 def login():
     """
     Allows the user to enter their username and password to login.
@@ -50,7 +50,7 @@ def login():
     return render_template("login_form.html", form=form, logged_in=current_user.is_authenticated)
 
 
-@auth_bp.route("/auth/sign_up", methods=["GET", "POST"])
+@auth_bp.route("/tamarack-treks/auth/sign_up", methods=["GET", "POST"])
 def sign_up():
     """
     Allows a user without membership to the site to become a member.
@@ -70,7 +70,7 @@ def sign_up():
     return render_template("sign_up_form.html", form=form, logged_in=current_user.is_authenticated,)
 
 
-@auth_bp.route("/auth/password_recovery", methods=["GET", "POST"])
+@auth_bp.route("/tamarack-treks/auth/password_recovery", methods=["GET", "POST"])
 def password_recovery():
     """Allows user to submit their username to be used in resetting a forgotten password."""
     form = UsernameForm()
@@ -87,7 +87,7 @@ def password_recovery():
                            )
 
 
-@auth_bp.route("/auth/reset/<token>", methods=["GET", "POST"])
+@auth_bp.route("/tamarack-treks/auth/reset/<token>", methods=["GET", "POST"])
 def reset_with_token(token):
     """Confirms the user is validly attempting to reset their password."""
     try:
@@ -143,7 +143,7 @@ def change_password(user, token):
     return message, result
 
 
-@auth_bp.route("/auth/reset_username/<user_id>", methods=["GET", "POST"])
+@auth_bp.route("/tamarack-treks/auth/reset_username/<user_id>", methods=["GET", "POST"])
 def reset_username(user_id):
     """Allows the user to reset their username."""
     user = User.query.get(user_id)
@@ -158,7 +158,7 @@ def reset_username(user_id):
     return render_template("reset_username_form_page.html", form=form, user_id=user_id)
 
 
-@auth_bp.route("/auth/logout")
+@auth_bp.route("/tamarack-treks/auth/logout")
 @login_required
 def logout():
     """Logs the user out and redirects them to the home page."""

@@ -26,7 +26,7 @@ contact_bp = Blueprint(
 )
 
 
-@contact_bp.route("/contact/contact_admin", methods=["GET", "POST"])
+@contact_bp.route("/tamarack-treks/contact/contact_admin", methods=["GET", "POST"])
 def contact():
     """
     A function allowing the user to send information to the admin via email.
@@ -46,7 +46,7 @@ def contact():
     return render_template("contact_form_page.html", form=form)
 
 
-@contact_bp.route("/contact/username_recovery", methods=["GET", "POST"])
+@contact_bp.route("/tamarack-treks/contact/username_recovery", methods=["GET", "POST"])
 def username_recovery():
     """
     Takes user's email input and sends them an email with their username.

@@ -11,7 +11,7 @@ user_profile_bp = Blueprint(
 )
 
 
-@user_profile_bp.route("/user_profile/<user_id>")
+@user_profile_bp.route("/tamarack-treks/user_profile/<user_id>")
 def user_profile_dashboard(user_id):
     """Renders the user-profile dashboard"""
     user = User.query.get(user_id)
@@ -31,7 +31,7 @@ def user_profile_dashboard(user_id):
     )
 
 
-@user_profile_bp.route("/user_profile/<user_id>/<sort_by>/view_comments")
+@user_profile_bp.route("/tamarack-treks/user_profile/<user_id>/<sort_by>/view_comments")
 def view_submitted_comments(user_id, sort_by):
     """Renders the user-profile submitted comments page, displaying all comments submitted by the user."""
     user = User.query.get(user_id)
@@ -51,7 +51,7 @@ def view_submitted_comments(user_id, sort_by):
     )
 
 
-@user_profile_bp.route("/user_profile/<user_id>/<sort_by>/view_photos")
+@user_profile_bp.route("/tamarack-treks/user_profile/<user_id>/<sort_by>/view_photos")
 def view_submitted_photos(user_id, sort_by):
     """Renders the user-profile submitted photos page, displaying all photos submitted by the user."""
     user = User.query.get(user_id)
@@ -64,7 +64,7 @@ def view_submitted_photos(user_id, sort_by):
     return render_template("view_submitted_photos.html", user=user, photos=ordered_photos, date=date)
 
 
-@user_profile_bp.route("/user_profile/<user_id>/rated_photos")
+@user_profile_bp.route("/tamarack-treks/user_profile/<user_id>/rated_photos")
 def view_rated_photos(user_id):
     """Renders the user-profile rated photos page, displaying all photos rated by the user with their ratings."""
     rated_photos = RatedPhoto.query.filter_by(user_id=user_id).all()
@@ -81,7 +81,7 @@ def view_rated_photos(user_id):
     )
 
 
-@user_profile_bp.route("/user_profile/<user_id>/<sort_by>/view_favorites")
+@user_profile_bp.route("/tamarack-treks/user_profile/<user_id>/<sort_by>/view_favorites")
 def view_favorites(user_id, sort_by):
     """Renders the user-profile favorites page, displaying all database entries favorited by the user."""
     user = User.query.get(user_id)
@@ -222,7 +222,7 @@ def get_entry_name(entry):
 
 
 # -------------------------------------------PHOTO RATING FUNCTIONS----------------------------------------
-@user_profile_bp.route("/user_profile/<user_id>/rate_photo")
+@user_profile_bp.route("/tamarack-treks/user_profile/<user_id>/rate_photo")
 def rate_photo(user_id):
     """
     Allows user to submit a rating for a submitted photo.
@@ -317,7 +317,7 @@ def update_photo_rating(photo_id):
 
 
 # ----------------------------------FAVORITING FUNCTIONS-----------------------------------------------------
-@user_profile_bp.route("/user_profile/<user_id>/favorite_trail")
+@user_profile_bp.route("/tamarack-treks/user_profile/<user_id>/favorite_trail")
 def add_favorite(user_id):
     """
     Adds a new page to the user's favorites.

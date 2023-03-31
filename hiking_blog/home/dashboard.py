@@ -22,6 +22,12 @@ home_bp = Blueprint(
 )
 
 
+# -------------------- FOR DEVELOPMENT PURPOSES ONLY---------------
+# @home_bp.route("/")
+# def start():
+#     return redirect(url_for("home_bp.home"))
+
+
 @home_bp.route("/tamarack-treks")
 def home():
     """
@@ -52,13 +58,13 @@ def home():
     )
 
 
-@home_bp.route("/home/static/dev_pics/<file_name>")
+@home_bp.route("/tamarack-treks/home/static/dev_pics/<file_name>")
 def display_main_carousel_pics(file_name):
     """Displays the carousel pictures on the home page."""
     return send_from_directory("home/static/dev_pics/", file_name)
 
 
-@home_bp.route("/about")
+@home_bp.route("/tamarack-treks/about")
 def about():
     """Renders the about page."""
     return render_template("about.html")

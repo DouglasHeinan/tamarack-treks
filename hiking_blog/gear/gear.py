@@ -17,14 +17,14 @@ gear_bp = Blueprint(
 )
 
 
-@gear_bp.route("/gear/view_all_gear")
+@gear_bp.route("/tamarack-treks/gear/view_all_gear")
 def view_all_gear():
     """Collects all gear items from the database to display to the user."""
     all_gear = db.session.query(Gear).all()
     return render_template("view_all_gear.html", all_gear=all_gear)
 
 
-@gear_bp.route("/gear/view_gear/<int:db_id>", methods=["GET", "POST"])
+@gear_bp.route("/tamarack-treks/gear/view_gear/<int:db_id>", methods=["GET", "POST"])
 def view_gear(db_id):
     """
     Allows the user to view the information about a specific gear item.
@@ -53,7 +53,7 @@ def view_gear(db_id):
     return render_template("view_gear.html", gear=gear, form=form, current_user=current_user, info=info)
 
 
-@gear_bp.route("/gear/edit_comment/<comment_id>", methods=["GET", "POST"])
+@gear_bp.route("/tamarack-treks/gear/edit_comment/<comment_id>", methods=["GET", "POST"])
 def edit_gear_comment(comment_id):
     """Allows a user to edit one of
      their own comments on a piece of gear from the database."""
@@ -74,7 +74,7 @@ def edit_gear_comment(comment_id):
                            text_box="comment_text")
 
 
-@gear_bp.route("/gear/delete_comment/<comment_id>")
+@gear_bp.route("/tamarack-treks/gear/delete_comment/<comment_id>")
 def user_delete_gear_comment(comment_id):
     """
     Allows a user to delete one of their own comments on a piece of gear from the database.
@@ -95,7 +95,7 @@ def user_delete_gear_comment(comment_id):
     return redirect(url_for("gear_bp.view_gear", db_id=gear_id))
 
 
-@gear_bp.route("/gear/admin_delete/<comment_id>", methods=["GET", "POST"])
+@gear_bp.route("/tamarack-treks/gear/admin_delete/<comment_id>", methods=["GET", "POST"])
 @admin_only
 def admin_delete_gear_comment(comment_id):
     """

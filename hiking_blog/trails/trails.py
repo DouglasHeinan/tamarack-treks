@@ -23,14 +23,14 @@ trail_bp = Blueprint(
 )
 
 
-@trail_bp.route("/gear/view_all_trails")
+@trail_bp.route("/tamarack-treks/gear/view_all_trails")
 def view_all_trails():
     """Collects all trail items from the database to display to the user."""
     all_trails = db.session.query(Trails).all()
     return render_template("view_all_trails.html", all_trails=all_trails)
 
 
-@trail_bp.route("/<int:db_id>/view_trail", methods=["GET", "POST"])
+@trail_bp.route("/tamarack-treks/<int:db_id>/view_trail", methods=["GET", "POST"])
 def view_trail(db_id):
     """
     Allows the user to view the information  about a specific trail stored in the trails table of the database.
@@ -63,7 +63,7 @@ def view_trail(db_id):
     return render_template("view_trail.html", trail=trail, form=form, current_user=current_user, user_rated_pic_ids=user_rated_pic_ids)
 
 
-@trail_bp.route("/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
+@trail_bp.route("/tamarack-treks/trail/edit_comment/<comment_id>", methods=["GET", "POST"])
 def edit_trail_comment(comment_id):
     """Allows a user to edit one of their own comments on a piece of gear from the database."""
     db_id = request.args["trail_id"]
@@ -83,7 +83,7 @@ def edit_trail_comment(comment_id):
                            text_box="comment_text")
 
 
-@trail_bp.route("/trail/delete_comment/<comment_id>")
+@trail_bp.route("/tamarack-treks/trail/delete_comment/<comment_id>")
 def user_delete_trail_comment(comment_id):
     """Allows a user to delete one of their own comments on a piece of gear from the database."""
     trail_id = request.args["trail_id"]
@@ -93,7 +93,7 @@ def user_delete_trail_comment(comment_id):
     return redirect(url_for("trail_bp.view_trail", db_id=trail_id))
 
 
-@trail_bp.route("/trail/admin_delete/<comment_id>", methods=["GET", "POST"])
+@trail_bp.route("/tamarack-treks/trail/admin_delete/<comment_id>", methods=["GET", "POST"])
 @admin_only
 def admin_delete_trail_comment(comment_id):
     """Allows a user with admin privileges to delete a gear comment from the database."""
@@ -104,7 +104,7 @@ def admin_delete_trail_comment(comment_id):
     return next_page
 
 
-@trail_bp.route("/<int:trail_id>/add_trail_pic", methods=["GET", "POST"])
+@trail_bp.route("/tamarack-treks/<int:trail_id>/add_trail_pic", methods=["GET", "POST"])
 @login_required
 def add_trail_photo(trail_id):
     """Adds a new trail picture to the database."""
@@ -116,7 +116,7 @@ def add_trail_photo(trail_id):
     return render_template("add_trail_photo_form_page.html", form=form, trail_id=trail_id)
 
 
-@trail_bp.route("/trails/static/dev_pics/<file_name>")
+@trail_bp.route("/tamarack-treks/trails/static/dev_pics/<file_name>")
 def display_trail_pics(file_name):
     """Displays trail pics to the user."""
     return send_from_directory("trails/static/dev_pics/", file_name)

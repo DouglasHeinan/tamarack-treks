@@ -29,7 +29,7 @@ admin_bp = Blueprint(
 
 
 # ----------------------------------------MAIN PAGES----------------------------------------
-@admin_bp.route("/admin/dashboard")
+@admin_bp.route("/tamarack-treks/admin/dashboard")
 @admin_only
 @login_required
 def admin_dashboard():
@@ -47,7 +47,7 @@ def admin_dashboard():
     return render_template("admin_dashboard.html", user=current_user, pics_by_day=pics_by_day, new_users=new_users)
 
 
-@admin_bp.route("/admin/add_admin", methods=["GET", "POST"])
+@admin_bp.route("/tamarack-treks/admin/add_admin", methods=["GET", "POST"])
 @admin_only
 @login_required
 def add_admin():
@@ -77,7 +77,7 @@ def add_admin():
                            form_action="admin_bp.add_admin")
 
 
-@admin_bp.route("/admin/add_trail", methods=["GET", "POST"])
+@admin_bp.route("/tamarack-treks/admin/add_trail", methods=["GET", "POST"])
 @admin_only
 @login_required
 def add_trail():
@@ -100,7 +100,7 @@ def add_trail():
     return render_template("trail_form_page.html", form=form)
 
 
-@admin_bp.route("/admin/edit_trail/<int:trail_id>", methods=["GET", "POST"])
+@admin_bp.route("/tamarack-treks/admin/edit_trail/<int:trail_id>", methods=["GET", "POST"])
 @admin_only
 def edit_trail(trail_id):
     """
@@ -126,7 +126,7 @@ def edit_trail(trail_id):
     return render_template("edit_trail_form_page.html", form=form, trail_id=trail_id)
 
 
-@admin_bp.route("/<int:trail_id>/add_initial_trail_pics", methods=["GET", "POST"])
+@admin_bp.route("/tamarack-treks/<int:trail_id>/add_initial_trail_pics", methods=["GET", "POST"])
 @login_required
 def add_initial_trail_photos(trail_id):
     """
@@ -149,7 +149,7 @@ def add_initial_trail_photos(trail_id):
         return render_template("add_initial_trail_photos.html", form=form, trail_id=trail_id)
 
 
-@admin_bp.route("/admin/add_gear", methods=["GET", "POST"])
+@admin_bp.route("/tamarack-treks/admin/add_gear", methods=["GET", "POST"])
 @admin_only
 @login_required
 def add_gear():
@@ -172,7 +172,7 @@ def add_gear():
     return render_template("gear_form_page.html", form=form)
 
 
-@admin_bp.route("/admin/edit_gear/<int:gear_id>", methods=["GET", "POST"])
+@admin_bp.route("/tamarack-treks/admin/edit_gear/<int:gear_id>", methods=["GET", "POST"])
 @admin_only
 def edit_gear(gear_id):
     """
@@ -197,7 +197,7 @@ def edit_gear(gear_id):
     return render_template("edit_gear_form_page.html", form=form, gear_id=gear_id)
 
 
-@admin_bp.route("/admin/dead_links/")
+@admin_bp.route("/tamarack-treks/admin/dead_links/")
 @admin_only
 def dead_links():
     """
@@ -221,7 +221,7 @@ def dead_links():
     return render_template("view_dead_links.html", links=current_dead_links)
 
 
-@admin_bp.route("/admin/mark_out_of_stock/<gear_name>")
+@admin_bp.route("/tamarack-treks/admin/mark_out_of_stock/<gear_name>")
 @admin_only
 def mark_out_of_stock(gear_name):
     """
@@ -251,7 +251,7 @@ def mark_out_of_stock(gear_name):
 
 
 # ----------------------------------------TRAIL PHOTO FUNCTIONS----------------------------------------
-@admin_bp.route("/admin/submitted_trail_pics/<date>")
+@admin_bp.route("/tamarack-treks/admin/submitted_trail_pics/<date>")
 @login_required
 @admin_only
 def submitted_trail_pics(date):
@@ -283,7 +283,7 @@ def submitted_trail_pics(date):
     )
 
 
-@admin_bp.route("/admin/approve_submitted_photo/<date>/<user_trail>/<photo>")
+@admin_bp.route("/tamarack-treks/admin/approve_submitted_photo/<date>/<user_trail>/<photo>")
 @login_required
 @admin_only
 def approve_submitted_trail_pic(date, user_trail, photo):
@@ -313,7 +313,7 @@ def approve_submitted_trail_pic(date, user_trail, photo):
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
-@admin_bp.route("/admin/delete_submitted_photo/<date>/<user_trail>/<pic>")
+@admin_bp.route("/tamarack-treks/admin/delete_submitted_photo/<date>/<user_trail>/<pic>")
 @login_required
 @admin_only
 def delete_submitted_photo(date, user_trail, pic):
@@ -344,7 +344,7 @@ def delete_submitted_photo(date, user_trail, pic):
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
-@admin_bp.route("/admin/save_for_appeal/<date>/<user_trail>/<pic>")
+@admin_bp.route("/tamarack-treks/admin/save_for_appeal/<date>/<user_trail>/<pic>")
 @login_required
 @admin_only
 def save_for_appeal(date, user_trail, pic):
@@ -377,7 +377,7 @@ def save_for_appeal(date, user_trail, pic):
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
 
-@admin_bp.route("/admin/static/submitted_trail_pic/<date>/<user_trail>/<pic>")
+@admin_bp.route("/tamarack-treks/admin/static/submitted_trail_pic/<date>/<user_trail>/<pic>")
 @login_required
 @admin_only
 def static_submitted_trail_pic(date, user_trail, pic):
@@ -624,7 +624,7 @@ def unapproved_usernames():
     return new_users
 
 
-@admin_bp.route("/admin/approve_username/<user_id>")
+@admin_bp.route("/tamarack-treks/admin/approve_username/<user_id>")
 @login_required
 @admin_only
 def approve_username(user_id):
@@ -636,7 +636,7 @@ def approve_username(user_id):
     return redirect(url_for("admin_bp.admin_dashboard"))
 
 
-@admin_bp.route("/admin/reject_username/<user_id>")
+@admin_bp.route("/tamarack-treks/admin/reject_username/<user_id>")
 @login_required
 @admin_only
 def reject_username(user_id):
