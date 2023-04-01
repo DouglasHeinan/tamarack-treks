@@ -255,6 +255,10 @@ body {
 }
 
 /*-----------------MAIN PAGE CARDS------------------*/
+.card-display {
+    height: 45vh;
+}
+
 .card-text {
     font-size: 22px;
     text-transform: uppercase;
