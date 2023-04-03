@@ -336,7 +336,7 @@ def add_favorite(user_id):
     duplicate = create_new_favorite(favorite, user_id)
     if duplicate:
         flash("Already in your favorites.")
-        return redirect(url_for('user_profile_bp.view_favorites', user_id=user.id))
+        return redirect(url_for('user_profile_bp.view_favorites', user_id=user.id, sort_by='date'))
     else:
         return redirect(url_for('user_profile_bp.user_profile_dashboard', user_id=user.id))
 
