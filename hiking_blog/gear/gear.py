@@ -55,15 +55,14 @@ def view_gear(db_id):
 
 @gear_bp.route("/tamarack-treks/gear/edit_comment/<comment_id>", methods=["GET", "POST"])
 def edit_gear_comment(comment_id):
-    """Allows a user to edit one of
-     their own comments on a piece of gear from the database."""
+    """Allows a user to edit one of their own comments on a piece of gear from the database."""
     db_id = request.args["gear_id"]
     comment = GearComments.query.get(comment_id)
     form = CommentForm(
         comment_text=comment.text
     )
     if form.validate_on_submit():
-        comment.text = form.comment_text.data
+        comment.text = re.sub(NO_TAGS, '', form.comment_text.data)
         db.session.commit()
         form.comment_text.data = ""
         return redirect(url_for("gear_bp.view_gear", db_id=db_id))
