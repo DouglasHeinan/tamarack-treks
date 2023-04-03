@@ -192,7 +192,7 @@
             {% if recent_trail_comments == [] %}
             <h5 class="small-section-font">No trail comments submitted</h5>
             {% endif %}
-            {% if recent_trail_comments != [] and recent_gear_comments != [] %}
+            {% if recent_trail_comments != [] or recent_gear_comments != [] %}
             <div class="view-all-links-big-screen">
                 <div class="view-all-links-align">
                     <h5><a class="view-all-links no-underline" href="{{ url_for('user_profile_bp.view_submitted_comments', user_id=user.id, sort_by='date') }}">All user comments...</a></h5>

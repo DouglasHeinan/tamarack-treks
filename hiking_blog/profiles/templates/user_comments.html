@@ -6,6 +6,7 @@
     <div class="profile-sections">
         <h3 class="section-font-one">{{ user.username }}'s gear photos</h3>
         <div class="profile-section">
+            {% if gear_comments %}
             <div class="profile-title-container">
                 <div class="section-title-filter-button-container">
                     <h5 class="profile-title">All submitted gear comments</h5>
@@ -32,7 +33,6 @@
                     </div>
                 </div>
             </div>
-            {% if gear_comments %}
             <div class="profile-sub-container profile-content-container">
                 {% for comment in gear_comments %}
                 <div class="card card-border my-2 profile-card comment-card">
@@ -53,10 +53,11 @@
                 {% endfor %}
             </div>
             {% else %}
-            <h5 class="small-section-font">No gear comments submitted</h5>
+            <h5 class="small-section-font-two">No gear comments submitted</h5>
             {% endif %}
         </div>
         <div class="profile-section">
+            {% if trail_comments %}
             <div class="profile-title-container">
                 <div class="section-title-filter-button-container">
                     <h5 class="profile-title">All submitted trail comments</h5>
@@ -83,7 +84,6 @@
                     </div>
                 </div>
             </div>
-            {% if trail_comments %}
             <div class="profile-sub-container profile-content-container">
                 {% for comment in trail_comments %}
                 <div class="card card-border my-2 profile-card comment-card">
@@ -104,7 +104,7 @@
                 {% endfor %}
             </div>
             {% else %}
-            <h5 class="small-section-font">No gear comments submitted</h5>
+            <h5 class="small-section-font-two">No gear comments submitted</h5>
             {% endif %}
         </div>
     </div>

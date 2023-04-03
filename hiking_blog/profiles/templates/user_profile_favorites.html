@@ -29,13 +29,14 @@
                     <div class="dropdown-menu" aria-labelledby="favoriteFilterDropdown">
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id, sort_by='date') }}">Date
-                                Submitted
+                               href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id, sort_by='date') }}">
+                                Date Submitted
                             </a>
                         </div>
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('user_profile_bp.view_favorites', user_id=user.id, sort_by='alphabetical') }}">Community
+                               href="{{ url_for('user_profile_bp.view_favorites',
+                               user_id=user.id, sort_by='alphabetical') }}">
                                 Alphabetical
                             </a>
                         </div>

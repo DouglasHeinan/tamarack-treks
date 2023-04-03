@@ -19,14 +19,16 @@
                     <div class="dropdown-menu" aria-labelledby="filterDropdown">
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='date') }}">Date
-                                Submitted
+                               href="{{ url_for('user_profile_bp.view_submitted_photos',
+                               user_id=user.id, sort_by='date') }}">
+                                Date Submitted
                             </a>
                         </div>
                         <div class="dropdown-item">
                             <a class="bold-body-font no-underline"
-                               href="{{ url_for('user_profile_bp.view_submitted_photos', user_id=user.id, sort_by='rating') }}">Community
-                                Rating
+                               href="{{ url_for('user_profile_bp.view_submitted_photos',
+                               user_id=user.id, sort_by='rating') }}">
+                                Community Rating
                             </a>
                         </div>
                     </div>
