@@ -13,6 +13,7 @@ import shutil
 import os
 import errno
 import re
+import html
 
 ADMIN_DELETE_MESSAGE = "This comment has been deleted for inappropriate content."
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -666,6 +667,7 @@ def add_new_trail_photo(user, trail, photo, date):
 
 def update_gear_entry(gear, form):
     """Activated during the edit_gear and add_gear functions, assigns all values in the database."""
+    description_text = re.sub(NO_TAGS, '', form.description.data)
     gear.name = form.name.data
     gear.category = form.category.data
     gear.msrp = form.msrp.data
@@ -673,7 +675,7 @@ def update_gear_entry(gear, form):
     gear.dimensions = form.dimensions.data
     gear.img = form.img.data
     gear.rating = form.rating.data
-    gear.description = re.sub(NO_TAGS, '', form.description.data)
+    gear.description = html.unescape(description_text)
     gear.gear_trail = "Gear"
     gear.moosejaw_url = form.moosejaw_url.data
     gear.moosejaw_price = form.moosejaw_price.data
@@ -692,8 +694,9 @@ def update_gear_entry(gear, form):
 
 def update_trail_entry(trail, form):
     """Activated during the edit_trail and add_trail functions, assigns all values in the database."""
+    description_text = re.sub(NO_TAGS, '', form.description.data)
     trail.name = form.name.data
-    trail.description = re.sub(NO_TAGS, '', form.description.data)
+    trail.description = html.unescape(description_text)
     trail.gear_trail = "Trail"
     trail.latitude = form.latitude.data
     trail.longitude = form.longitude.data
