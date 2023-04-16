@@ -337,6 +337,9 @@ def delete_submitted_photo(date, user_trail, pic):
         The file name of the user submitted photo. Must use one of the ALLOWED_EXTENSIONS.
     """
     # ADD REASON FOR DELETION
+    # DELETE BUTTON SHOULD BE SELECT BTN
+    # ALL OPTIONS SHOULD GIVE SAME RETURN
+    # SELECTED OPTION SHOULD BE INCLUDED IN EMAIL
     to_delete = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
     save_pic = False
     create_photo_notification_email(user_trail, save_pic)
