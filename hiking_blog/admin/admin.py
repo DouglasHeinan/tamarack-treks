@@ -339,8 +339,8 @@ def delete_submitted_photo(date, user_trail, pic):
 
     reason = request.args["reason"]
     to_delete = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
-    save_pic = reason
-    create_photo_notification_email(user_trail, save_pic)
+    save_pic = False
+    create_photo_notification_email(user_trail, save_pic, reason)
     if os.path.exists(to_delete):
         os.remove(to_delete)
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
@@ -371,10 +371,11 @@ def save_for_appeal(date, user_trail, pic):
     pic : str
         The file name of the user submitted photo. Must use one of the ALLOWED_EXTENSIONS.
     """
-    # -------------------ADD RADIO BUTTONS FOR REASON WHY-------------------------------
+
+    reason = request.args["reason"]
     save_pic = "temp"
     print("about to move file")
-    move_file_and_email_user(user_trail, save_pic, date, pic)
+    move_file_and_email_user(user_trail, save_pic, date, pic, reason)
     print("done moving file")
     return redirect(url_for("admin_bp.submitted_trail_pics", date=date))
 
@@ -389,9 +390,9 @@ def static_submitted_trail_pic(date, user_trail, pic):
 
 
 # ----------------------------------------PHOTO-RELATED FUNCTIONS----------------------------------------
-def move_file_and_email_user(user_trail, save_pic, date, pic):
+def move_file_and_email_user(user_trail, save_pic, date, pic, reason):
     """Moves user-submitted photos to the appropriate directory and emails user of the photo's status."""
-    create_photo_notification_email(user_trail, save_pic)
+    create_photo_notification_email(user_trail, save_pic, reason)
     origin = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
     if save_pic == "keep":
         sorting_directory = "approved"
@@ -401,33 +402,45 @@ def move_file_and_email_user(user_trail, save_pic, date, pic):
     shutil.move(origin, target)
 
 
-def create_photo_notification_email(user_trail, save_pic):
+def create_photo_notification_email(user_trail, save_pic, reason):
     """Creates and sends the email that notifies the user of a change in their photo's status."""
     username = user_trail.split("^")[0]
     user = User.query.filter_by(username=username).first()
     user_email = user.email
     if save_pic == "temp":
         subject = "Your trail photo might have a problem"
-        message = "The administrators have flagged your photo for some reason. Your photo will be kept for thirty " \
-                  "days until it is removed from our servers. If you believe your photo has been flagged in error, " \
-                  "please contact us through our contact page with the subject 'photo error' in the next thirty days " \
-                  "and we will work with you to resolve the issue."
+        message = create_photo_flag_message(reason)
     elif save_pic == "keep":
         subject = "Your trail photo has been posted!"
         message = "Your photo has been approved by the admin and is now posted on the app."
     else:
         subject = "Your trail photo has been rejected."
-        message = create_photo_deletion_message(save_pic)
+        message = create_photo_deletion_message(reason)
     send_async_email(user_email, subject, message, send_email)
 
 
-def create_photo_deletion_message(save_pic):
+def create_photo_flag_message(reason):
+    msg_text = "Your photo will be kept for thirty days until it is removed from our servers. If you believe your " \
+               "photo has been flagged in error, please contact us through our contact page with the subject 'photo " \
+               "error' in the next thirty days and we will work with you to resolve the issue."
+    if reason == "wrong":
+        message = f"This photo may have been submitted for the wrong trail. {msg_text}"
+    elif reason == "bad":
+        message = f"This photo quality may be too poor to be displayed on our site. {msg_text}"
+    elif reason == "graphic":
+        message = f"The imagery in this photo may be too graphic for all ages. {msg_text}"
+    else:
+        message = f"This photo may not meet the standards of this site. {msg_text}"
+    return message
+
+
+def create_photo_deletion_message(reason):
     referral = "Please refer to our user photo submission guidelines for more info."
-    if save_pic == "wrong":
+    if reason == "wrong":
         message = f"This photo appears to have been submitted for the wrong trail. {referral}"
-    elif save_pic == "bad":
-        message = f"This photo quality is to poor to be displayed on our site. {referral}"
-    elif save_pic == "graphic":
+    elif reason == "bad":
+        message = f"This photo quality is too poor to be displayed on our site. {referral}"
+    elif reason == "graphic":
         message = f"The imagery in this photo is too graphic for all ages. {referral}"
     else:
         message = "This photo does not meet the standards of this site."
@@ -675,7 +688,8 @@ def add_new_trail_photo(user, trail, photo, date):
     db.session.commit()
     save_pic = "keep"
     user_trail = f"{user.username}^{trail.name}"
-    move_file_and_email_user(user_trail, save_pic, date, photo)
+    reason = None
+    move_file_and_email_user(user_trail, save_pic, date, photo, reason)
 
 
 def update_gear_entry(gear, form):

@@ -1097,6 +1097,12 @@ li.submitted-pic-list-entry:nth-last-of-type(1) {
     margin: 2.5em auto 1em;
 }
 
+.save-delete-text-header {
+    color: #283618;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 /*--------------------DEAD LINKS--------------------*/
 .dead-link-info {
     display: flex;

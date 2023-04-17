@@ -24,11 +24,34 @@
                            class="btn user-button btn-lg">
                             Post
                         </a>
-                        <a href="{{ url_for('admin_bp.save_for_appeal',
-                        date=date, user_trail=directory, pic=photo) }}"
-                           class="btn user-button btn-lg">
-                            Save
-                        </a>
+
+                        <div class="dropdown">
+                            <a class="btn user-button btn-lg dropdown-toggle"
+                               role="button"
+                               id="savePhotoDropdown"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false"
+                               href="#">
+                                Save
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="savePhotoDropdown">
+                                <h6 class="dropdown-header save-delete-text-header">
+                                    Choose a reason:
+                                </h6>
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.save_for_appeal', date=date, user_trail=directory, pic=photo, reason='wrong') }}">
+                                    Wrong trail
+                                </a>
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.save_for_appeal', date=date, user_trail=directory, pic=photo, reason='bad') }}">
+                                    Bad quality
+                                </a>
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.save_for_appeal', date=date, user_trail=directory, pic=photo, reason='graphic') }}">
+                                    Graphic imagery
+                                </a>
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.save_for_appeal', date=date, user_trail=directory, pic=photo, reason='other') }}">
+                                    Other
+                                </a>
+                            </div>
+                        </div>
 
                         <div class="dropdown">
                             <a class="btn admin-button btn-lg dropdown-toggle"
@@ -40,19 +63,19 @@
                                 Delete
                             </a>
                             <div class="dropdown-menu" aria-labelledby="deletePhotoDropdown">
-                                <h6 class="dropdown-header">
+                                <h6 class="dropdown-header save-delete-text-header">
                                     Choose a reason:
                                 </h6>
-                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='wrong') }}">
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='wrong') }}">
                                     Wrong trail
                                 </a>
-                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='bad') }}">
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='bad') }}">
                                     Bad quality
                                 </a>
-                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='graphic') }}">
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='graphic') }}">
                                     Graphic imagery
                                 </a>
-                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='other') }}">
+                                <a class="dropdown-item admin-text" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='other') }}">
                                     Other
                                 </a>
                             </div>
