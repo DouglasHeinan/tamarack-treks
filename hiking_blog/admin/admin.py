@@ -336,12 +336,10 @@ def delete_submitted_photo(date, user_trail, pic):
     pic : str
         The file name of the user submitted photo. Must use one of the ALLOWED_EXTENSIONS.
     """
-    # ADD REASON FOR DELETION
-    # DELETE BUTTON SHOULD BE SELECT BTN
-    # ALL OPTIONS SHOULD GIVE SAME RETURN
-    # SELECTED OPTION SHOULD BE INCLUDED IN EMAIL
+
+    reason = request.args["reason"]
     to_delete = f"hiking_blog/admin/static/submitted_trail_pics/{date}/{user_trail}/{pic}"
-    save_pic = False
+    save_pic = reason
     create_photo_notification_email(user_trail, save_pic)
     if os.path.exists(to_delete):
         os.remove(to_delete)
@@ -419,9 +417,21 @@ def create_photo_notification_email(user_trail, save_pic):
         message = "Your photo has been approved by the admin and is now posted on the app."
     else:
         subject = "Your trail photo has been rejected."
-        message = "The administrators have determined that your photo is inappropriate for this site and it has been " \
-                  "deleted from the server."
+        message = create_photo_deletion_message(save_pic)
     send_async_email(user_email, subject, message, send_email)
+
+
+def create_photo_deletion_message(save_pic):
+    referral = "Please refer to our user photo submission guidelines for more info."
+    if save_pic == "wrong":
+        message = f"This photo appears to have been submitted for the wrong trail. {referral}"
+    elif save_pic == "bad":
+        message = f"This photo quality is to poor to be displayed on our site. {referral}"
+    elif save_pic == "graphic":
+        message = f"The imagery in this photo is too graphic for all ages. {referral}"
+    else:
+        message = "This photo does not meet the standards of this site."
+    return message
 
 
 def check_files(trail_id, file_one, file_two, file_three):

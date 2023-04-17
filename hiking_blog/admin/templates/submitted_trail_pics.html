@@ -29,11 +29,35 @@
                            class="btn user-button btn-lg">
                             Save
                         </a>
-                        <a href="{{ url_for('admin_bp.delete_submitted_photo',
-                        date=date, user_trail=directory, pic=photo) }}"
-                           class="btn admin-button btn-lg">
-                            Delete
-                        </a>
+
+                        <div class="dropdown">
+                            <a class="btn admin-button btn-lg dropdown-toggle"
+                               role="button"
+                               id="deletePhotoDropdown"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false"
+                               href="#">
+                                Delete
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="deletePhotoDropdown">
+                                <h6 class="dropdown-header">
+                                    Choose a reason:
+                                </h6>
+                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='wrong') }}">
+                                    Wrong trail
+                                </a>
+                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='bad') }}">
+                                    Bad quality
+                                </a>
+                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='graphic') }}">
+                                    Graphic imagery
+                                </a>
+                                <a class="dropdown-item" href="{{ url_for('admin_bp.delete_submitted_photo', date=date, user_trail=directory, pic=photo, reason='other') }}">
+                                    Other
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </li>
             {% endfor %}
