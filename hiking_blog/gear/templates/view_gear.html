@@ -133,14 +133,14 @@
                     {% if comment.commenter_id == current_user.id and not comment.deleted_by %}
                     <span>
                         <a
-                            class="btn comment-edit-btn mt-3"
+                            class="btn btn-sm comment-edit-btn mt-3"
                             href="{{ url_for('gear_bp.edit_gear_comment', comment_id=comment.id, gear_id=gear.id) }}">
                                 Edit Post
                         </a>
                     </span>
                     <span>
                         <a
-                            class="btn comment-edit-btn mt-3"
+                            class="btn btn-sm comment-edit-btn mt-3"
                             href="{{ url_for('gear_bp.user_delete_gear_comment', comment_id=comment.id, gear_id=gear.id) }}">
                                 Delete Post
                         </a>
@@ -149,7 +149,7 @@
                     {% if current_user.is_admin and not comment.deleted_by %}
                     <span>
                         <a
-                            class="btn admin-button mt-3"
+                            class="btn btn-sm admin-button mt-3"
                             href="{{ url_for(
                             'gear_bp.admin_delete_gear_comment',
                             comment_id=comment.id,

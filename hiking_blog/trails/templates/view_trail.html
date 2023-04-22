@@ -221,14 +221,14 @@
                     {% if comment.commenter_id == current_user.id and not comment.deleted_by %}
                     <span>
                         <a
-                            class="btn comment-edit-btn mt-3"
+                            class="btn btn-sm comment-edit-btn mt-3"
                             href="{{ url_for('trail_bp.edit_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
                                 Edit Post
                         </a>
                     </span>
                     <span>
                         <a
-                            class="btn comment-edit-btn mt-3"
+                            class="btn btn-sm comment-edit-btn mt-3"
                             href="{{ url_for('trail_bp.user_delete_trail_comment', comment_id=comment.id, trail_id=trail.id) }}">
                                 Delete Post
                         </a>
@@ -237,7 +237,7 @@
                     {% if current_user.is_admin and not comment.deleted_by %}
                     <span>
                         <a
-                            class="btn admin-button mt-3"
+                            class="btn btn-sm admin-button mt-3"
                             href="{{ url_for(
                             'trail_bp.admin_delete_trail_comment',
                             comment_id=comment.id,
