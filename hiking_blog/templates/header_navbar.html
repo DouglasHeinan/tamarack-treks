@@ -42,20 +42,36 @@
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text" onclick="closeNav()"
-                           href="{{ url_for('home_bp.home') }}">Home</a>
+                        <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
+                           href="{{ url_for('home_bp.home') }}">
+                            <span data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse">
+                                Home
+                            </span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
-                           href="{{ url_for('gear_bp.view_all_gear') }}">Gear</a>
+                           href="{{ url_for('gear_bp.view_all_gear') }}">
+                            <span data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse">
+                                Gear
+                            </span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text"
-                           href="{{ url_for('trail_bp.view_all_trails') }}">Trails</a>
+                           href="{{ url_for('trail_bp.view_all_trails') }}">
+                            <span data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse">
+                                Trails
+                            </span>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link px-lg-3 py-3 py-lg-4 navbar-text disabled"
-                           href="#">Camping</a>
+                           href="#">
+                            <span data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse">
+                                Camping
+                            </span>
+                        </a>
                     </li>
                 </ul>
                 <form method="POST" action="{{ url_for('search_bp.search') }}" class="d-flex ms-auto">
