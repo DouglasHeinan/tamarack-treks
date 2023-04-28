@@ -17,9 +17,8 @@ def init_app():
 
     ckeditor = CKEditor()
     bootstrap = Bootstrap()
-    app = Flask("hiking_blog")
-    app.config.from_object("config.Config")
-    app.static_url_path = "/tamarack-treks/static"
+    app = Flask(__name__, static_url_path = "/tamarack-treks/static")
+    app.config.from_object("hiking_blog.config.Config")
 
     mail.create_mail(app)
     login_manager.create_login_manager(app)

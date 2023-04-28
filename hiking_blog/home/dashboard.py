@@ -44,8 +44,8 @@ def home():
         create_database()
         return redirect(url_for("home_bp.home"))
     # End of development only code.
-    recent_trails = db.session.query(Trails).order_by(Trails.date_time_added)[:-4:-1]
-    recent_gear = db.session.query(Gear).order_by(Gear.date_time_added)[:-4:-1]
+    recent_trails = db.session.query(Trails).order_by(Trails.date_time_added.desc())[0:3]
+    recent_gear = db.session.query(Gear).order_by(Gear.date_time_added.desc())[0:3]
     return render_template(
         "dashboard.html",
         all_trails=saved_trails,
