@@ -4,7 +4,7 @@
 This project is a demo outdoor enthusiast guide written in python.
 The user could use this app to:
 
-* Search for gear reviews and prices
+* Search for outdoor gear reviews and prices
 * Compare gear prices across multiple retail sites
 * Locate trails in the area
 
