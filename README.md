@@ -1,5 +1,5 @@
 # Tamarack Treks- Outdoor Gear and Trail Resource
-## A gear and trail resource for hikers and campers in southwestern Montana
+## A resource for hikers and campers in Montana
 
 This project is a demo outdoor enthusiast guide written in Python.
 
@@ -11,7 +11,8 @@ This webpage can be accessed at [douglasheinan.com/tamarack-treks](http://dougla
 This project was written mostly in Python. I wanted to create a fairly straightforward webpage that utilized a number
 of my skills. To that end: 
 * I utilized Flask's Application Factory pattern to create a multi-page web application
-* I created an effective Python search engine from scratch
+* I used the flask-login library to create standard user and admin functionality such as logins, profiles, and admin oversight
+* I created an effective Python full-text search engine with ranked results from scratch
 * I used SQLLite to create a database to store all gear and trail related information on my site
 * Using the Beautiful Soup library, I created a constantly running web scraper to automate database updates
 * I designed each web page myself using original CSS code and some Bootstrap
