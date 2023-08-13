@@ -52,6 +52,6 @@ extensively in this project, many of its weird idiosyncrasies are now second nat
 * Replace admin created reviews with user reviews
 
 ## Contact
-Creator: Doug Heinan
+Creator: Douglas Heinan
 
 Email: dougheinan@gmail.com
