@@ -27,9 +27,9 @@ hard lessons learned.
 * Password reset tokens were necessary, but I had never worked with them before. Figuring out how to implement them on 
 the fly was a challenge.
 
-* I'm extremely proud of the search engine I've built from the ground up. I haven't made a search engine before, so my 
-solution was to create an application that took a user-input string, turns that string into a list, cleans each word 
-in the list, and iterated through every entry in the database, 
+* I'm extremely proud of the search engine I've built from the ground up. I haven't built a search engine before, so my 
+solution was to create an application that takes a user-input string, turns that string into a list, cleans each word 
+in the list, and iterates through every entry in the database, 
 looking for matches. The application ranks the matches with a point system and arranges the list of returned results 
 from high to low.
 
@@ -41,7 +41,7 @@ main app.
 * I used this project as an opportunity to improve my CSS comprehension. Instead of relying heavily on Bootstrap like 
 I have in the past, I implemented original CSS solutions to personalize my site. 
 
-* I found Flask's Application Factory formula a little hard to wrap my head around at first. But now, having used it 
+* I found Flask's Application Factory formula a little hard to wrap my head around at first. Having used it 
 extensively in this project, many of its weird idiosyncrasies are now second nature to me.
 
 ## Future Features
@@ -53,4 +53,5 @@ extensively in this project, many of its weird idiosyncrasies are now second nat
 
 ## Contact
 Creator: Doug Heinan
+
 Email: dougheinan@gmail.com
