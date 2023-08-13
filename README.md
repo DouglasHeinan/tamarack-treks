@@ -6,7 +6,7 @@ and backpackers looking for community feedback and other information about the t
 necessary to hike them. Users are able to contribute trail photos, reviews, comments, find good prices on gear, get directions to local 
 trailheads and more.
 
-This website can be accessed at [douglasheinan.com/tamarack-treks](http://douglasheinan/tamarack-treks.com).
+This website can be accessed at [douglasheinan.com/tamarack-treks](http://douglasheinan.com/tamarack-treks.com).
 
 ## Key Features
 **Languages/technologies:** HTML, CSS, Javascript, Python, Flask, Jinja, SQLLite, Bootstrap
