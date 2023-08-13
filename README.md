@@ -8,15 +8,17 @@ trailheads and more.
 
 This website can be accessed at [douglasheinan.com/tamarack-treks](http://douglasheinan.com/tamarack-treks).
 
-## Key Features
-**Languages/technologies:** HTML, CSS, Javascript, Python, Flask, Jinja, SQLLite, Bootstrap
+![Screen shot of web page](README_IMG/scrn_shot.png)
 
-This project was written mostly in Python. I wanted to create a fairly straightforward webpage that utilized a number
+## Key Features
+**Languages/technologies:** HTML, CSS, Javascript, Python, Flask, Jinja, SQLite, Bootstrap
+
+This project was written mostly in Python. I wanted to create a fairly straightforward web app that utilized a number
 of my skills. To that end: 
 * I utilized Flask's Application Factory pattern to create a multi-page web application
 * I used the flask-login library to create standard user and admin functionality such as logins, profiles, and admin oversight
 * I created an effective Python full-text search engine with ranked results from scratch
-* I used SQLLite to create a database to store all gear and trail related information on my site
+* I used SQLite to create a database to store all gear and trail related information on my site
 * Using the Beautiful Soup library, I created a constantly running web scraper to automate database updates
 * I designed each web page using original CSS code and some Bootstrap
 
@@ -28,14 +30,14 @@ hard lessons learned.
 the fly was a challenge.
 
 * I'm extremely proud of the search engine I've built from the ground up. I haven't built a search engine before, so my 
-solution was to create an application that takes a user-input string, turns that string into a list, cleans each word 
+solution was to create a module that takes a user-input string, turns that string into a list, cleans each word 
 in the list, and iterates through every entry in the database, 
-looking for matches. The application ranks the matches with a point system and arranges the list of returned results 
+looking for matches. The module ranks the matches with a point system and arranges the list of returned results 
 from high to low.
 
 * I also created a program that automated the deletion of old/unnecessary image files and updated the prices of gear 
 items featured on the site. This was very time consuming because I tried a number of different approaches before 
-finding a solution. The solution I landed on was to create a whole new application that ran concurrently with the 
+finding a solution. The solution I landed on was to create a whole new process that ran concurrently with the 
 main app.
 
 * I used this project as an opportunity to improve my CSS comprehension. Instead of relying heavily on Bootstrap like 
@@ -48,7 +50,7 @@ extensively in this project, many of its weird idiosyncrasies are now second nat
 * Add user-ratings to gear and trail pages
 * Allow users to DM or otherwise connect with each other outside of comment fields
 * Add campsite listings and user reviews
-* Add application that takes in user filters to recommend campsite or hiking trail locations
+* Add component that takes in user filters to recommend campsite or hiking trail locations
 * Replace admin created reviews with user reviews
 
 ## Contact
