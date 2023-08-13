@@ -1,11 +1,14 @@
 # Tamarack Treks- Outdoor Gear and Trail Resource
 ## A resource for hikers and campers in Montana
 
-This project is a demo outdoor enthusiast guide written in Python.
+This project is a demo outdoor enthusiast guide. The notion is that this would be a family-friendly resource for hikers 
+and backpackers looking for community feedback and other information about the trails of western Montana and the gear 
+necessary to hike them. Users are able to share trail photos, find good prices on gear, get directions to local 
+trailheads and more.
 
 This webpage can be accessed at [douglasheinan.com/tamarack-treks](http://douglasheinan/tamarack-treks.com).
 
-## Something here about making it...
+## Key Features...
 **Languages/tech used:** HTML, CSS, Javascript, Python, Flask, Jinja, SQLLite, Bootstrap
 
 This project was written mostly in Python. I wanted to create a fairly straightforward webpage that utilized a number
