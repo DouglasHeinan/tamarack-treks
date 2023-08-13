@@ -1,15 +1,15 @@
-# Tamarack Treks- Outdoor Gear and Trail Resource
-## A resource for hikers and campers in Montana
+# Tamarack Treks
+## An outdoor gear and trail resource for hikers and campers in Montana
 
 This project is a demo outdoor enthusiast guide. The notion is that this would be a family-friendly resource for hikers 
 and backpackers looking for community feedback and other information about the trails of western Montana and the gear 
-necessary to hike them. Users are able to share trail photos, find good prices on gear, get directions to local 
+necessary to hike them. Users are able to contribute trail photos, reviews, comments, find good prices on gear, get directions to local 
 trailheads and more.
 
-This webpage can be accessed at [douglasheinan.com/tamarack-treks](http://douglasheinan/tamarack-treks.com).
+This website can be accessed at [douglasheinan.com/tamarack-treks](http://douglasheinan/tamarack-treks.com).
 
-## Key Features...
-**Languages/tech used:** HTML, CSS, Javascript, Python, Flask, Jinja, SQLLite, Bootstrap
+## Key Features
+**Languages/technologies:** HTML, CSS, Javascript, Python, Flask, Jinja, SQLLite, Bootstrap
 
 This project was written mostly in Python. I wanted to create a fairly straightforward webpage that utilized a number
 of my skills. To that end: 
@@ -24,22 +24,25 @@ of my skills. To that end:
 This is the first completely original, fully functional application I've ever made and, as such, there were *a lot* of
 hard lessons learned. 
 
-Getting password reset tokens to work was a giant pain. I knew nothing of using tokens when I started this project and 
-had to learn on the fly.
+* Password reset tokens were necessary, but I had never worked with them before. Figuring out how to implement them on 
+the fly was a challenge.
 
-The search engine was a big project that I am super proud of. I've never built one before and I didn't really look 
-anything up on how to build them effectively. I just sort of made up a search engine and I'm really happy with how it 
-works.
+* I'm extremely proud of the search engine I've built from the ground up. I haven't made a search engine before, so my 
+solution was to create an application that took a user-input string and iterated through every entry in the database, 
+looking for matches. The application ranks the matches with a point system and arranges the list of returned results 
+from high to low.
 
-Creating a program that automated the deletion of old/unnecessary image files was very time consuming. I had to 
-familiarize myself with some libraries I'd never heard of to get it all to work. Similarly, I would not have thought 
-when I started this thing that I'd be able to automate the process for web-scraping prices from several sites 
-effectively and accurately.
+* I also created a program that automated the deletion of old/unnecessary image files and updated the prices of gear 
+items featured on the site. This was very time consuming because I tried a number of different approaches before 
+finding a solution. The solution I landed on was to create a whole new application that ran concurrently with the 
+main app.
 
-I felt very unconfident in my CSS skills coming into this project. I feel making myself handle my own site design 
-instead of relying exclusively on Bootstrap (as was my original plan) gave me a lot more practice in a language I've 
-mostly been trying to avoid.
+* I used this project as an opportunity to improve my CSS comprehension. Instead of relying heavily on Bootstrap like 
+I have in the past, I implemented original CSS solutions to personalize my site. 
 
-I found Flask's Application Factory formula a little hard to wrap my head around at first. But now, having used it 
+* I found Flask's Application Factory formula a little hard to wrap my head around at first. But now, having used it 
 extensively in this project, many of its weird idiosyncrasies are now second nature to me.
 
+## Contact
+Creator: Doug Heinan
+Email: dougheinan@gmail.com
