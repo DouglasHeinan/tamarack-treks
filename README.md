@@ -28,7 +28,8 @@ hard lessons learned.
 the fly was a challenge.
 
 * I'm extremely proud of the search engine I've built from the ground up. I haven't made a search engine before, so my 
-solution was to create an application that took a user-input string and iterated through every entry in the database, 
+solution was to create an application that took a user-input string, turns that string into a list, cleans each word 
+in the list, and iterated through every entry in the database, 
 looking for matches. The application ranks the matches with a point system and arranges the list of returned results 
 from high to low.
 
@@ -42,6 +43,13 @@ I have in the past, I implemented original CSS solutions to personalize my site.
 
 * I found Flask's Application Factory formula a little hard to wrap my head around at first. But now, having used it 
 extensively in this project, many of its weird idiosyncrasies are now second nature to me.
+
+## Future Features
+* Add user-ratings to gear and trail pages
+* Allow users to DM or otherwise connect with each other outside of comment fields
+* Add campsite listings and user reviews
+* Add application that takes in user filters to recommend campsite or hiking trail locations
+* Replace admin created reviews with user reviews
 
 ## Contact
 Creator: Doug Heinan
