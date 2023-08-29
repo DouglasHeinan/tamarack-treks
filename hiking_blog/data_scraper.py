@@ -10,7 +10,7 @@ def app_updates():
     """
     After setting up an application object so as to work within the Flask app context, this function automates some
     aspects of site maintenance. Specifically, it triggers a function that will delete all submitted photo files that
-    are more than a month old, and a separate function to change the price of a piece of gear in the database. Further,
+    are more than a month old, and a separate function to update the price of a piece of gear in the database. Further,
     if the latter function fails to scrape the price from a database, this function triggers another function that will
     notify the admins of dead links that have been found.
     """
