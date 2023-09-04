@@ -4,6 +4,7 @@ import shutil
 import time
 import os
 from hiking_blog import db, login_manager
+# NOTES
 
 
 def app_updates():
